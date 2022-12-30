@@ -245,7 +245,6 @@
                                         </div>
                                     </div>
 
-
                                     @if(($harga_jual == null ? 0 : $harga_jual) >= ($harga_pokok == null ? 0 : $harga_pokok))
                                     <button wire:click.prevent='simpanProduk()' type="button" class="btn mb-1 mt-1 btn-success rounded-pill form-control">Perbarui</button>
                                     <button wire:click.prevent='simpanBaru()' type="button" class="btn mb-1 mt-1 btn-success rounded-pill form-control">Simpan & buat baru</button>
@@ -344,7 +343,7 @@
                                                     </td>
                                                     <td>
                                                         <button type="button" wire:click="editItem('{{ $data->id }}')" class="btn btn-sm btn-warning rounded-pill px-3">Ubah</button>
-                                                        <button onclick="confirm('Ini akan menghapus catalog di produk item jg') || event.stopImmediatePropagation()" wire:click="hapus('{{ $data->id }}')" type="button" class="btn btn-sm btn-danger rounded-pill px-3">Hapus</button>
+                                                        <button onclick="confirm('Ini akan menghapus catalog di produk item jg') || event.stopImmediatePropagation()" wire:click="hapusItem('{{ $data->id }}')" type="button" class="btn btn-sm btn-danger rounded-pill px-3">Hapus</button>
                                                     </td>
                                                 </tr>
                                                 @endforeach
@@ -491,7 +490,8 @@
                                         </b>
 
 
-                                        <button type="button" wire:click="tutupTambahItem()" class="mt-1 btn btn-danger mb-2">Tutup</button>
+                                        <button type="button" wire:click="simpanTambahItem()" class="mb-1 btn-block btn btn-success mb-2">Simpan</button>
+                                        <button type="button" wire:click="tutupTambahItem()" class="mt-1 btn-block btn btn-danger mb-2">Tutup</button>
                                     </div>
 
                                     @endif

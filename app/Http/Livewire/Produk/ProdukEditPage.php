@@ -41,10 +41,14 @@ class ProdukEditPage extends Component
         $this->tipe = $data->tipe;
         $this->merek_id = $data->merek_id;
         $this->merek_nama = $data->merek->nama;
+        $this->catalog_id = $data->catalog_id;
         $this->catalog_nama = $data->catalog->nama;
+        $this->kategori_id = $data->kategori_id;
         $this->kategori_nama = $data->kategori->nama;
+        $this->rak_id = $data->rak_id;
         $this->rak_nama = $data->rak->nama;
         $this->keterangan = $data->keterangan;
+        $this->supplier_id = $data->supplier_id;
         $this->supplier_nama = $data->supplier->nama;
 
         $this->produkItems = ProdukItem::where('produk_id', $id)->get();
@@ -177,20 +181,20 @@ class ProdukEditPage extends Component
             $this->supplier_show = true;
         }
     }
-    //
-    public function resetData()
-    {
-        $this->ID = null;
-        $this->nama = null;
-        $this->tipe = null;
-        $this->merek_id = null;
-        $this->catalog_id = null;
-        $this->kategori_id = null;
-        $this->rak_id = null;
-        $this->keterangan = null;
-        $this->supplier_id = null;
 
-    }
+    //
+    // public function resetData()
+    // {
+    //     $this->ID = null;
+    //     $this->nama = null;
+    //     $this->tipe = null;
+    //     $this->merek_id = null;
+    //     $this->catalog_id = null;
+    //     $this->kategori_id = null;
+    //     $this->rak_id = null;
+    //     $this->keterangan = null;
+    //     $this->supplier_id = null;
+    // }
 
     public function perbaruiProduk()
     {
@@ -206,8 +210,6 @@ class ProdukEditPage extends Component
             'keterangan' => $this->keterangan,
             'supplier_id' => $this->supplier_id,
         ]);
-
-        $this->resetData();
     }
 
     public function simpanProduk()
@@ -228,7 +230,7 @@ class ProdukEditPage extends Component
     {
         $this->perbaruiProduk();
         $this->emit('success', ['pesan' => 'Berhasil edit data']);
-        redirect()->to('produk/produk-edit/'. $this->Pid);  
+        redirect()->to($this->url);  
     }
 
     public function kembali()
@@ -239,10 +241,19 @@ class ProdukEditPage extends Component
 
 // ============================================================================
     //  aksi
-
     public function resetDataItem()
     {
-        # code...
+        $this->barcode1 = null;
+        $this->barcode2 = null;
+        $this->barcode3 = null;
+        $this->barcode4 = null;
+        $this->barcode5 = null;
+        $this->barcode6 = null;
+        $this->satuan_id = null;
+        $this->satuan_dasar = null;
+        $this->konversi = null;
+        $this->harga_jual = null;
+        $this->harga_pokok = null;
     }
 
     public function tambahItem()
@@ -256,14 +267,16 @@ class ProdukEditPage extends Component
 
     public function tutupTambahItem()
     {
-
+        $this->resetDataItem();
         $this->tambahItem = false;
-
     }
 
     public function simpanTambahItem()
     {
-
+        $item = ProdukItem::create([
+            'produk_id' => $this->ID,
+            
+        ]);
     }
 
     public function editItem($id)
@@ -274,5 +287,10 @@ class ProdukEditPage extends Component
     public function perbaruiItem()
     {
         $this->editID;
+    }
+
+    public function hapusItem($id)
+    {
+        dd($id);
     }
 }
