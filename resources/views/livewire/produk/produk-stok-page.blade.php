@@ -102,7 +102,7 @@
                                 <h3 class="card-title">Data</h3>
                                 <div class="card-tools">
                                     <div class="input-group input-group-sm" style="width: 150px;">
-                                        <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
+                                        <input type="text" wire:model='produkNama' class="form-control float-right" placeholder="Search">
                                         <div class="input-group-append">
                                             <button type="submit" class="btn btn-default">
                                                 <i class="fas fa-search"></i>
@@ -112,11 +112,11 @@
                                 </div>
                             </div>
                             <div class="card-body table-responsive p-0">
-                                <table class="table table-hover text-nowrap">
+                                <table class="table table-sm table-hover text-nowrap">
                                     <thead>
                                         <tr>
                                             <th>Produk item</th>
-                                            <th>St</th>
+                                            <th>Satuan</th>
                                             <th>Stok minimum</th>
                                             <th>Stok beli</th>
                                             <th>Stok terjual</th>
@@ -135,7 +135,10 @@
                                                 <a href="">
                                                     <img src="{{ Storage::url($data->img) }}" width="60" alt="">
                                                 </a>
-                                                {{ $data->nama }}
+                                                {{ $data->produk->nama }}
+                                            </td>
+                                            <td>
+                                                {{ $data->satuan->satuan }}
                                             </td>
                                             <td>
                                                 {{ $data->stok_minimum }}

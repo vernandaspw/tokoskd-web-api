@@ -310,22 +310,22 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ url('produk/produk-diskon', []) }}" class="nav-link
-                                @if(Request::is('produk/produk-diskon'))
-                                active
-                                @endif">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Produk diskon</p>
-                                <span class="right badge badge-danger"> ! </span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
                             <a href="{{ url('produk/produk-stok', []) }}" class="nav-link
                                 @if(Request::is('produk/produk-stok'))
                                 active
                                 @endif">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Produk stok</p>
+                                <span class="right badge badge-danger"> ! </span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ url('produk/produk-diskon', []) }}" class="nav-link
+                                @if(Request::is('produk/produk-diskon'))
+                                active
+                                @endif">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Produk diskon</p>
                                 <span class="right badge badge-danger"> ! </span>
                             </a>
                         </li>

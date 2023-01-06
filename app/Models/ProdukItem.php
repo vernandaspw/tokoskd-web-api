@@ -19,7 +19,7 @@ class ProdukItem extends Model
     {
         return $this->belongsTo(Produk::class, 'produk_id', 'id');
     }
-    
+
     // public function merek()
     // {
     //     return $this->belongsTo(Merek::class, 'merek_id', 'id');

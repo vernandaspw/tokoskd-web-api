@@ -43,7 +43,7 @@ class KasTKategoriSeeder extends Seeder
             ],
             [
                 'kas_t_jenis_id' => 1,
-                'nama' => 'penagihan hutang/cicilan uang',
+                'nama' => 'penagihan hutang',
             ],
 
             // =======================================================
@@ -96,7 +96,7 @@ class KasTKategoriSeeder extends Seeder
             // ---------------------------------------------------------
             [
                 'kas_t_jenis_id' => 2,
-                'nama' => 'pemberian hutang uang',
+                'nama' => 'pemberian hutang',
             ],
             // ==========================================================
 
