@@ -17,7 +17,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('pelanggan_id')->nullable()->constrained('pelanggans')->onUpdate('cascade')->onDelete('cascade');
             $table->foreignId('supplier_id')->nullable()->constrained('suppliers')->onUpdate('cascade')->onDelete('cascade');
-            $table->decimal('total', 12,2)->default(0);
+            $table->decimal('hutang', 12,2)->default(0);
+            // $table->boolean('islunas')->default(false);
             $table->timestamps();
         });
     }

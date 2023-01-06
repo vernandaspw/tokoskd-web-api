@@ -27,6 +27,11 @@ class ProdukSatuanPage extends Component
         $this->take += 15;
     }
 
-    
+    public function hapus($id)
+    {
+        $data= Produk::find($id)->delete();
+
+        $this->emit('success', ['pesan' => 'Berhasil hapus item']);
+    }
 
 }

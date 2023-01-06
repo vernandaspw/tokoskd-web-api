@@ -29,6 +29,8 @@ return new class extends Migration
             $table->string('an',30)->nullable();
             $table->string('npwp',50)->nullable();
             $table->longText('keterangan')->nullable();
+            $table->decimal('hutang_usaha', 12,2)->default(0);
+            $table->decimal('piutang_usaha', 12,2)->default(0);
             $table->timestamps();
         });
     }

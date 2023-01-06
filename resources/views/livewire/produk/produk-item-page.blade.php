@@ -23,9 +23,9 @@
                 <div class="mb-2">
                     @if ($tambahPage)
                     @else
-                    <button type="button" wire:click="tambahPage()" class="btn btn-primary rounded-pill">
+                    <a href="{{ url('produk/produk-create?url=produk/produk-satuan') }}" class="btn btn-primary rounded-pill">
                         Tambah
-                    </button>
+                    </a>
                     @endif
                 </div>
 
@@ -112,7 +112,7 @@
                                 </div>
                             </div>
                             <div class="card-body table-responsive p-0">
-                                <table class="table table-hover text-nowrap">
+                                <table class="table table-sm table-hover text-nowrap">
                                     <thead>
                                         <tr>
                                             <th>Produk item</th>
@@ -140,7 +140,7 @@
                                                 {{ $data->produk->nama }}</td>
                                             <td>{{ $data->produk->tipe }}</td>
                                             <td>
-                                                
+
                                                 {{ $data->produk->merek != null ? $data->produk->merek->nama : ''  }}
                                             </td>
                                             <td>
@@ -152,15 +152,15 @@
                                             <td>
                                                 {{ $data->produk->rak != null ? $data->produk->rak->nama : '' }}
                                             </td>
-                                            <td> 
+                                            <td>
                                                 {{ $data->satuan_dasar == true ? 'true' : 'false' }}
                                             </td>
-                                        
+
                                             <td>
                                                 {{ $data->satuan != null ? $data->satuan->satuan : '' }}
                                             </td>
                                             <td>
-                                                {{ $data->konversi }} 
+                                                {{ $data->konversi }}
                                             </td>
                                             <td>
                                                 @uang($data->harga_pokok)

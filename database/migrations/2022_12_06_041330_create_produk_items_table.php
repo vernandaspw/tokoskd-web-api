@@ -29,13 +29,15 @@ return new class extends Migration
             $table->decimal('konversi', 12,2)->default(1);
             $table->decimal('harga_pokok', 14,2)->default(0);
             $table->decimal('harga_jual',14,2)->default(0);
-            $table->decimal('stok_minimum', 12,2)->default(0);
-            $table->decimal('stok_beli', 14,2)->default(0);
-            $table->decimal('stok_jual', 14,2)->default(0);
-            $table->decimal('stok_buku', 14,2)->default(0);
-            $table->decimal('stok_fisik', 14,2)->default(0);
-            // $table->decimal('stok_opname', 14,2)->default(0);
-            // $table->timestamp('opname_at')->nullable();
+
+            $table->integer('stok_minimum')->default(0);
+            $table->integer('stok_beli')->default(0);
+            $table->integer('stok_terjual')->default(0);
+            $table->integer('stok_jual')->default(0);
+            $table->integer('stok_buku')->default(0);
+            $table->integer('stok_fisik')->default(0);
+            $table->decimal('stok_opname', 14,2)->default(0);
+            $table->timestamp('opname_at')->nullable();
             $table->decimal('diskon_harga_jual',14,2)->default(0);
             $table->decimal('diskon_persen', 4,2)->default(0);
             $table->decimal('diskon', 4,2)->default(0);

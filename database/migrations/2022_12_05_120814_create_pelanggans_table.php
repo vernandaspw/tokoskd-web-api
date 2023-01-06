@@ -25,6 +25,8 @@ return new class extends Migration
             $table->string('bank',20)->nullable();
             $table->string('norek',40)->nullable();
             $table->string('an',30)->nullable();
+            $table->decimal('hutang_usaha', 12,2)->default(0);
+            $table->decimal('piutang_usaha', 12,2)->default(0);
             $table->timestamps();
         });
     }

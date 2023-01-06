@@ -5,7 +5,7 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1 class="m-0">Produk satuan</h1>
+                        <h1 class="m-0">Produk Stok</h1>
 
                     </div><!-- /.col -->
                     <div class="col-sm-6">
@@ -116,17 +116,16 @@
                                     <thead>
                                         <tr>
                                             <th>Produk item</th>
-                                            <th>Tipe</th>
-                                            <th>Merek</th>
-                                            <th>Catalog</th>
-                                            <th>Kategori</th>
-                                            <th>Rak</th>
-                                            <th>Satuan</th>
-                                            <th>Satuan dasar</th>
-                                            <th>Konversi</th>
-                                            <th>Harga pokok</th>
-                                            <th>Harga jual</th>
-                                            <th></th>
+                                            <th>St</th>
+                                            <th>Stok minimum</th>
+                                            <th>Stok beli</th>
+                                            <th>Stok terjual</th>
+                                            <th>Stok jual</th>
+                                            <th>Stok buku</th>
+                                            <th>Stok fisik</th>
+                                            <th>Stok opname</th>
+                                            <th>tgl opname</th>
+                                            <th>Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -136,34 +135,31 @@
                                                 <a href="">
                                                     <img src="{{ Storage::url($data->img) }}" width="60" alt="">
                                                 </a>
-                                                {{ $data->nama }}</td>
-                                            <td>{{ $data->produk->tipe->nama }}</td>
-                                            <td>
-                                                {{ $data->produk->merek->nama }}
+                                                {{ $data->nama }}
                                             </td>
                                             <td>
-                                                {{ $data->produk->catalog->nama }}
+                                                {{ $data->stok_minimum }}
                                             </td>
                                             <td>
-                                                {{ $data->produk->kategori->nama }}
+                                                {{ $data->stok_beli }}
                                             </td>
                                             <td>
-                                                {{ $data->produk->rak->nama }}
+                                                {{ $data->stok_terjual }}
                                             </td>
                                             <td>
-                                                {{ $data->produk->satuan->nama }}
+                                                {{ $data->stok_jual }}
                                             </td>
                                             <td>
-                                                {{ $data->konversi }}
+                                                {{ $data->stok_buku }}
                                             </td>
                                             <td>
-                                                {{ $data->satuan_dasar }}
+                                                {{ $data->stok_fisik }}
                                             </td>
                                             <td>
-                                                {{ $data->harga_pokok }}
+                                                {{ $data->stok_opname }}
                                             </td>
                                             <td>
-                                                {{ $data->harga_jual }}
+                                                {{ $data->opname_at }}
                                             </td>
                                             <td>
                                                 <button wire:click="editPage('{{ $data->id }}')" type="button" class="btn btn-sm btn-warning rounded-pill px-3">Ubah</button>

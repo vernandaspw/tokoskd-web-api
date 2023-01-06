@@ -46,7 +46,7 @@
                                 </div>
                             </div>
                             <div class="card-body table-responsive p-0">
-                                <table class="table table-hover text-nowrap">
+                                <table class="table table-sm table-hover text-nowrap">
                                     <thead>
                                         <tr>
                                             <th>Produk</th>
@@ -86,7 +86,7 @@
                                                 {{ $data->supplier != null ? $data->supplier->nama : '' }}
                                             </td>
                                             <td>
-                                                <a href="{{ url('produk/produk-edit?url=produk/produk-satuan') }}" type="button" class="btn btn-sm btn-warning rounded-pill px-3">Ubah</a>
+                                                <a href="{{ url('produk/produk-edit/'. $data->id  .'?url=produk/produk-satuan') }}" type="button" class="btn btn-sm btn-warning rounded-pill px-3">Ubah</a>
                                                 <button onclick="confirm('Ini akan menghapus catalog di produk item jg') || event.stopImmediatePropagation()" wire:click="hapus('{{ $data->id }}')" type="button" class="btn btn-sm btn-danger rounded-pill px-3">Hapus</button>
                                             </td>
                                         </tr>

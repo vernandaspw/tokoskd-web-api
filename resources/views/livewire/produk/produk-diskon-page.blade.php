@@ -5,7 +5,7 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1 class="m-0">Produk satuan</h1>
+                        <h1 class="m-0">Produk Diskon</h1>
 
                     </div><!-- /.col -->
                     <div class="col-sm-6">
@@ -116,17 +116,15 @@
                                     <thead>
                                         <tr>
                                             <th>Produk item</th>
-                                            <th>Tipe</th>
-                                            <th>Merek</th>
-                                            <th>Catalog</th>
-                                            <th>Kategori</th>
-                                            <th>Rak</th>
                                             <th>Satuan</th>
-                                            <th>Satuan dasar</th>
-                                            <th>Konversi</th>
-                                            <th>Harga pokok</th>
-                                            <th>Harga jual</th>
-                                            <th></th>
+                                            <th>Harga_pokok</th>
+                                            <th>harga_jual</th>
+                                            <th>harga jual akhir</th>
+                                            <th>persen diskon</th>
+                                            <th>diskon</th>
+                                            <th>Tanggal</th>
+                                            <th>Jam</th>
+                                            <th>Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -136,34 +134,28 @@
                                                 <a href="">
                                                     <img src="{{ Storage::url($data->img) }}" width="60" alt="">
                                                 </a>
-                                                {{ $data->nama }}</td>
-                                            <td>{{ $data->produk->tipe->nama }}</td>
-                                            <td>
-                                                {{ $data->produk->merek->nama }}
-                                            </td>
-                                            <td>
-                                                {{ $data->produk->catalog->nama }}
-                                            </td>
-                                            <td>
-                                                {{ $data->produk->kategori->nama }}
-                                            </td>
-                                            <td>
-                                                {{ $data->produk->rak->nama }}
-                                            </td>
-                                            <td>
-                                                {{ $data->produk->satuan->nama }}
-                                            </td>
-                                            <td>
-                                                {{ $data->konversi }}
-                                            </td>
-                                            <td>
-                                                {{ $data->satuan_dasar }}
+                                                {{ $data->nama }}
                                             </td>
                                             <td>
                                                 {{ $data->harga_pokok }}
                                             </td>
                                             <td>
                                                 {{ $data->harga_jual }}
+                                            </td>
+                                            <td>
+                                                {{ $data->diskon_harga_jual }}
+                                            </td>
+                                            <td>
+                                                {{ $data->diskon_persen }}
+                                            </td>
+                                            <td>
+                                                {{ $data->diskon }}
+                                            </td>
+                                            <td>
+                                                {{ $data->diskon_start }} - {{ $data->diskon_end }}
+                                            </td>
+                                            <td>
+                                                {{ $data->jam_start }} - {{ $data->jam_end }}
                                             </td>
                                             <td>
                                                 <button wire:click="editPage('{{ $data->id }}')" type="button" class="btn btn-sm btn-warning rounded-pill px-3">Ubah</button>

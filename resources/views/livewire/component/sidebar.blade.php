@@ -79,11 +79,13 @@
                     </li>
                     <li class="nav-header">Quick</li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
+                        <a href="{{ url('penjualan/kasir') }}" class="nav-link @if(Request::is('penjualan/kasir*'))
+                        active
+                        @endif">
                             <i class="nav-icon fas fa-th"></i>
                             <p>
                                 Mode Kasir
-                                <span class="right badge badge-danger"> ! </span>
+                                {{-- <span class="right badge badge-danger"> ! </span> --}}
                             </p>
                         </a>
                     </li>
@@ -114,6 +116,45 @@
                             </p>
                         </a>
                     </li> --}}
+
+                    <li class="nav-header">Keuangan</li>
+                    <li class="nav-item">
+                        <a href="{{ url('kas/kas-ringkasan') }}" class="nav-link @if(Request::is('kas/kas-ringkasan'))
+                            active
+                            @endif">
+                            <i class="nav-icon fas fa-th"></i>
+                            <p>Kas</p>
+                        </a>
+                    </li>
+                    {{-- <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fas fa-th"></i>
+                            <p>
+                                HutangPiutang
+                                <span class="right badge badge-danger"> ! </span>
+                            </p>
+                        </a>
+                    </li> --}}
+                    <li class="nav-item">
+                        <a href="{{ url('piutang', []) }}" class="nav-link">
+                            <i class="nav-icon fas fa-th"></i>
+                            <p>
+                                Piutang usaha
+                                {{-- <span class="right badge badge-danger"> ! </span> --}}
+                            </p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ url('hutang') }}" class="nav-link">
+                            <i class="nav-icon fas fa-th"></i>
+                            <p>
+                                Hutang usaha
+                                {{-- <span class="right badge badge-danger"> ! </span> --}}
+                            </p>
+                        </a>
+                    </li>
+
+
                     <li class="nav-header">Menu</li>
                     <li class="nav-item @if(Request::is('master*'))
                     menu-open
@@ -156,178 +197,142 @@
                                     <p>Supplier</p>
                                 </a>
                             </li>
-                            {{-- <li class="nav-item">
-                                <a href="{{ url('#') }}" class="nav-link
-                                @if(Request::is('master/bank'))
+                            <li class="nav-item">
+                                <a href="{{ url('master/pelanggan', []) }}" class="nav-link
+                                @if(Request::is('master/pelanggan'))
                                 active
                                 @endif">
                                     <i class="far fa-circle nav-icon"></i>
-                                    <p>Bank</p>
+                                    <p>Pelanggan</p>
                                 </a>
-                            </li> --}}
-                            <li class="nav-item">
-                                <a href="{{ url('master/satuan') }}" class="nav-link
+                            </li>
+                            {{-- <li class="nav-item">
+                                <a href="{{ url('#') }}" class="nav-link
+                            @if(Request::is('master/bank'))
+                            active
+                            @endif">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Bank</p>
+                            </a>
+                    </li> --}}
+                    <li class="nav-item">
+                        <a href="{{ url('master/satuan') }}" class="nav-link
                                 @if(Request::is('master/satuan'))
                                 active
                                 @endif">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Satuan</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{ url('master/merek') }}" class="nav-link
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Satuan</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ url('master/merek') }}" class="nav-link
                                 @if(Request::is('master/merek'))
                                 active
                                 @endif">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Merek</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{ url('master/catalog') }}" class="nav-link
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Merek</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ url('master/catalog') }}" class="nav-link
                                 @if(Request::is('master/catalog'))
                                 active
                                 @endif">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Catalog</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{ url('master/kategori') }}" class="nav-link
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Catalog</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ url('master/kategori') }}" class="nav-link
                                 @if(Request::is('master/kategori'))
                                 active
                                 @endif">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Kategori</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{ url('master/rak') }}" class="nav-link
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Kategori</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ url('master/rak') }}" class="nav-link
                                 @if(Request::is('master/rak'))
                                 active
                                 @endif">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Rak</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="#" class="nav-link
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Rak</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link
                                 @if(Request::is('master/jenis-penjualan'))
                                 active
                                 @endif">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Jenis penjualan</p>
-                                    <span class="right badge badge-danger"> ! </span>
-                                </a>
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Jenis penjualan</p>
+                            <span class="right badge badge-danger"> ! </span>
+                        </a>
 
-                            </li>
-                        </ul>
                     </li>
-                    <li class="nav-item   @if(Request::is('kas*'))
-                    menu-open
-                    @endif">
-                        <a href="#" class="nav-link @if(Request::is('kas*'))
-                        active
-                        @endif">
-                            <i class="nav-icon fas fa-book"></i>
-                            <p>
-                                Kas
-                                <i class="right fas fa-angle-left"></i>
-                            </p>
-                        </a>
-                        <ul class="nav nav-treeview">
-                            <li class="nav-item">
-                                <a href="{{ url('kas/kas-ringkasan') }}" class="nav-link @if(Request::is('kas/kas-ringkasan'))
-                                active
-                                @endif">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Kas</p>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="nav-icon fas fa-book"></i>
-                            <p>
-                                Utang Piutang
-                                <i class="right fas fa-angle-left"></i>
-                            </p>
-                        </a>
-                        <ul class="nav nav-treeview">
-                            <li class="nav-item">
-                                <a href="#" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Utang Saya</p>
-                                    <span class="right badge badge-danger"> ! </span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="#" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Piutang</p>
-                                    <span class="right badge badge-danger"> ! </span>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="nav-item
+                </ul>
+                </li>
+
+
+
+                <li class="nav-item
                     @if(Request::is('produk*'))
                                 menu-open
                                 @endif">
-                        <a href="#" class="nav-link
+                    <a href="#" class="nav-link
                         @if(Request::is('produk*'))
                                 active
                                 @endif">
-                            <i class="nav-icon fas fa-book"></i>
-                            <p>
-                                Produk
-                                <i class="right fas fa-angle-left"></i>
-                            </p>
-                        </a>
-                        <ul class="nav nav-treeview">
-                            <li class="nav-item">
-                                <a href="{{ url('produk/produk-satuan') }}" class="nav-link
+                        <i class="nav-icon fas fa-book"></i>
+                        <p>
+                            Produk
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ url('produk/produk-satuan') }}" class="nav-link
                                 @if(Request::is('produk/produk-satuan'))
                                 active
                                 @endif">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Produk satuan</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{ url('produk/produk-item') }}" class="nav-link
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Produk satuan</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ url('produk/produk-item') }}" class="nav-link
                                 @if(Request::is('produk/produk-item'))
                                 active
                                 @endif">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Produk item</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{ url('produk/produk-diskon', []) }}" class="nav-link
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Produk item</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ url('produk/produk-diskon', []) }}" class="nav-link
                                 @if(Request::is('produk/produk-diskon'))
                                 active
                                 @endif">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Produk diskon</p>
-                                        <span class="right badge badge-danger"> ! </span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{ url('produk/produk-stok', []) }}" class="nav-link
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Produk diskon</p>
+                                <span class="right badge badge-danger"> ! </span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ url('produk/produk-stok', []) }}" class="nav-link
                                 @if(Request::is('produk/produk-stok'))
                                 active
                                 @endif">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Produk stok</p>
-                                        <span class="right badge badge-danger"> ! </span>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Produk stok</p>
+                                <span class="right badge badge-danger"> ! </span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
 
-                    {{-- <li class="nav-item">
+                {{-- <li class="nav-item">
                         <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-book"></i>
                             <p>
@@ -347,131 +352,133 @@
 
                         </ul>
                     </li> --}}
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="nav-icon fas fa-book"></i>
-                            <p>
-                                Pembelian
-                                <i class="right fas fa-angle-left"></i>
-                            </p>
-                        </a>
-                        <ul class="nav nav-treeview">
-                            <li class="nav-item">
-                                <a href="#" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Pesanan pembelian</p>
-                                    <span class="right badge badge-danger"> ! </span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="#" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Pembelian</p>
-                                    <span class="right badge badge-danger"> ! </span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="#" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Retur pembelian</p>
-                                    <span class="right badge badge-danger"> ! </span>
-                                </a>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-book"></i>
+                        <p>
+                            Pembelian
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Pesanan pembelian</p>
+                                <span class="right badge badge-danger"> ! </span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Pembelian</p>
+                                <span class="right badge badge-danger"> ! </span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Retur pembelian</p>
+                                <span class="right badge badge-danger"> ! </span>
+                            </a>
 
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="nav-icon fas fa-book"></i>
-                            <p>
-                                Penjualan
-                                <i class="right fas fa-angle-left"></i>
-                            </p>
-                        </a>
-                        <ul class="nav nav-treeview">
-                            <li class="nav-item">
-                                <a href="#" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Pesanan Penjualan</p>
-                                    <span class="right badge badge-danger"> ! </span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="#" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Penjualan</p>
-                                    <span class="right badge badge-danger"> ! </span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="#" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Mode Kasir</p>
-                                    <span class="right badge badge-danger"> ! </span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="#" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Retur Penjualan</p>
-                                    <span class="right badge badge-danger"> ! </span>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-
-
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="nav-icon fas fa-book"></i>
-                            <p>
-                                SDM
-                                <i class="right fas fa-angle-left"></i>
-                            </p>
-                        </a>
-                        <ul class="nav nav-treeview">
-                            <li class="nav-item">
-                                <a href="#" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Ringkasan</p>
-                                    <span class="right badge badge-danger"> ! </span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="#" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Karyawan</p>
-                                    <span class="right badge badge-danger"> ! </span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="#" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Gaji</p>
-                                    <span class="right badge badge-danger"> ! </span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="#" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Kehadiran</p>
-                                    <span class="right badge badge-danger"> ! </span>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-book"></i>
+                        <p>
+                            Penjualan
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Pesanan Penjualan</p>
+                                <span class="right badge badge-danger"> ! </span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Penjualan</p>
+                                <span class="right badge badge-danger"> ! </span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ url('penjualan/kasir') }}" class="nav-link @if(Request::is('penjualan/kasir*'))
+                                active
+                                @endif">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Mode Kasir</p>
+                                <span class="right badge badge-danger"> ! </span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Retur Penjualan</p>
+                                <span class="right badge badge-danger"> ! </span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
 
 
-                    <li class="nav-header">More</li>
-                    <li class="nav-item">
-                        <a href="javascript:void(0)" onclick="confirm('Anda yakin ingin logout?') || event.stopImmediatePropagation()" wire:click='logout' class="nav-link bg-danger">
-                            <i class="nav-icon fas fa-arrow-up "></i>
-                            <p class="text">Logout</p>
-                        </a>
-                    </li>
-                    <div class="" style="padding-bottom: 40px"></div>
-                    <li class="nav-header text-warning">Apps by Vernanda | V.1.0</li>
-                    <li class="nav-header mb-1 text-warning"></li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-book"></i>
+                        <p>
+                            SDM
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Ringkasan</p>
+                                <span class="right badge badge-danger"> ! </span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Karyawan</p>
+                                <span class="right badge badge-danger"> ! </span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Gaji</p>
+                                <span class="right badge badge-danger"> ! </span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Kehadiran</p>
+                                <span class="right badge badge-danger"> ! </span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+
+                <li class="nav-header">More</li>
+                <li class="nav-item">
+                    <a href="javascript:void(0)" onclick="confirm('Anda yakin ingin logout?') || event.stopImmediatePropagation()" wire:click='logout' class="nav-link bg-danger">
+                        <i class="nav-icon fas fa-arrow-up "></i>
+                        <p class="text">Logout</p>
+                    </a>
+                </li>
+                <div class="" style="padding-bottom: 40px"></div>
+                <li class="nav-header text-warning">Apps by Vernanda | V.1.0</li>
+                <li class="nav-header mb-1 text-warning"></li>
                 </ul>
             </nav>
             <!-- /.sidebar-menu -->

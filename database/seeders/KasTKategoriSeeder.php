@@ -56,10 +56,7 @@ class KasTKategoriSeeder extends Seeder
                 'kas_t_jenis_id' => 2,
                 'nama' => 'biaya ongkos kirim',
             ],
-            [
-                'kas_t_jenis_id' => 2,
-                'nama' => 'biaya operasional',
-            ],
+
             [
                 'kas_t_jenis_id' => 2,
                 'nama' => 'biaya upah kerja',
@@ -67,6 +64,22 @@ class KasTKategoriSeeder extends Seeder
             [
                 'kas_t_jenis_id' => 2,
                 'nama' => 'biaya gaji karyawan',
+            ],
+            [
+                'kas_t_jenis_id' => 2,
+                'nama' => 'biaya operasional',
+            ],
+            [
+                'kas_t_jenis_id' => 2,
+                'nama' => 'biaya listrik',
+            ],
+            [
+                'kas_t_jenis_id' => 2,
+                'nama' => 'biaya air',
+            ],
+            [
+                'kas_t_jenis_id' => 2,
+                'nama' => 'biaya sewa',
             ],
             [
                 'kas_t_jenis_id' => 2,

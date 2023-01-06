@@ -29,9 +29,14 @@ class ProdukEditPage extends Component
     public $merek_nama, $catalog_nama, $kategori_nama, $rak_nama, $supplier_nama;
 
     // field item, tambah / edit
-    public $barcode1, $barcode2, $barcode3, $barcode4, $barcode5, $barcode6, $satuan_id, $satuan_dasar = 1, $konversi = 1, $harga_pokok, $harga_jual;
+
+    public $barcode1, $barcode2, $barcode3, $barcode4, $barcode5, $barcode6, $satuan_id, $satuan_dasar = 0, $konversi = 1, $harga_pokok, $harga_jual;
     public $editID;
     public $tambahItem = false, $editItem = false;
+
+    public $e_barcode1, $e_barcode2, $e_barcode3, $e_barcode4, $e_barcode5, $e_barcode6, $e_satuan_id, $e_satuan_dasar = 0, $e_konversi = 1, $e_harga_pokok, $e_harga_jual;
+
+    public $satuanDasar;
 
     public function mount($id)
     {
@@ -40,18 +45,16 @@ class ProdukEditPage extends Component
         $this->nama = $data->nama;
         $this->tipe = $data->tipe;
         $this->merek_id = $data->merek_id;
-        $this->merek_nama = $data->merek->nama;
+        $this->merek_nama = $data->merek ? $data->merek->nama : null;
         $this->catalog_id = $data->catalog_id;
-        $this->catalog_nama = $data->catalog->nama;
+        $this->catalog_nama = $data->catalog ? $data->catalog->nama : null;
         $this->kategori_id = $data->kategori_id;
-        $this->kategori_nama = $data->kategori->nama;
+        $this->kategori_nama = $data->kategori ? $data->kategori->nama : null;
         $this->rak_id = $data->rak_id;
-        $this->rak_nama = $data->rak->nama;
+        $this->rak_nama = $data->rak ? $data->rak->nama : null;
         $this->keterangan = $data->keterangan;
         $this->supplier_id = $data->supplier_id;
-        $this->supplier_nama = $data->supplier->nama;
-
-        $this->produkItems = ProdukItem::where('produk_id', $id)->get();
+        $this->supplier_nama = $data->supplier ? $data->supplier->nama : null;
     }
 
     public function render()
@@ -94,6 +97,10 @@ class ProdukEditPage extends Component
         $this->satuans = Satuan::get();
 
         $this->produk = Produk::with('produk_item')->find($this->id);
+        $this->produkItems = ProdukItem::where('produk_id', $this->ID)->orderBy('satuan_dasar', 'DESC')->get();
+
+        $d = ProdukItem::where('produk_id', $this->ID)->where('satuan_dasar', true)->first();
+        $this->satuanDasar = $d != null ? $d->satuan->satuan : null;
 
         return view('livewire.produk.produk-edit-page')->extends('layouts.app')->section('content');
     }
@@ -199,7 +206,7 @@ class ProdukEditPage extends Component
     public function perbaruiProduk()
     {
         $P = Produk::find($this->ID);
-        
+
         $P->update([
             'nama' => $this->nama,
             'tipe' => $this->tipe,
@@ -216,27 +223,27 @@ class ProdukEditPage extends Component
     {
         $this->perbaruiProduk();
         $this->emit('success', ['pesan' => 'Berhasil edit data']);
-        // redirect()->to($this->url);  
+        // redirect()->to($this->url);
     }
 
     public function simpanBaru()
     {
         $this->perbaruiProduk();
         $this->emit('success', ['pesan' => 'Berhasil edit data']);
-        redirect()->to('produk/produk-create');  
+        redirect()->to('produk/produk-create');
     }
 
     public function simpanClose()
     {
         $this->perbaruiProduk();
         $this->emit('success', ['pesan' => 'Berhasil edit data']);
-        redirect()->to($this->url);  
+        redirect()->to($this->url);
     }
 
     public function kembali()
     {
-        $this->resetData();
-        redirect()->to($this->url);  
+        // $this->resetData();
+        redirect()->to($this->url);
     }
 
 // ============================================================================
@@ -259,6 +266,7 @@ class ProdukEditPage extends Component
     public function tambahItem()
     {
         if ($this->tambahItem == false) {
+            $this->resetDataItem();
             $this->tambahItem = true;
         } else {
             $this->tambahItem = false;
@@ -275,22 +283,73 @@ class ProdukEditPage extends Component
     {
         $item = ProdukItem::create([
             'produk_id' => $this->ID,
-            
+            'barcode1' => $this->barcode1,
+            'barcode2' => $this->barcode2,
+            'barcode3' => $this->barcode3,
+            'barcode4' => $this->barcode4,
+            'barcode5' => $this->barcode5,
+            'barcode6' => $this->barcode6,
+            'satuan_id' => $this->satuan_id,
+            'satuan_dasar' => $this->satuan_dasar,
+            'konversi' => $this->konversi,
+            'harga_pokok' => $this->harga_pokok,
+            'harga_jual' => $this->harga_jual
         ]);
+
+        $this->resetDataItem();
+
+        $this->emit('success', ['pesan' => 'Berhasil tambah item']);
     }
+    // edit
 
     public function editItem($id)
     {
         $this->editItem = true;
+        $item = ProdukItem::find($id);
+        $this->editID = $id;
+        $this->barcode1 = $item->barcode1;
+        $this->barcode2 = $item->barcode2;
+        $this->barcode3 = $item->barcode3;
+        $this->barcode4 = $item->barcode4;
+        $this->barcode5 = $item->barcode5;
+        $this->barcode6 = $item->barcode6;
+        $this->satuan_id = $item->satuan_id;
+        $this->satuan_dasar = $item->satuan_dasar;
+        $this->konversi = $item->konversi;
+        $this->harga_pokok= $item->harga_pokok;
+        $this->harga_jual = $item->harga_jual;
     }
 
     public function perbaruiItem()
     {
-        $this->editID;
+        ProdukItem::find($this->editID)->update([
+            'barcode1' => $this->barcode1,
+            'barcode2' => $this->barcode2,
+            'barcode3' => $this->barcode3,
+            'barcode4' => $this->barcode4,
+            'barcode5' => $this->barcode5,
+            'barcode6' => $this->barcode6,
+            'satuan_id' => $this->satuan_id,
+            'satuan_dasar' => $this->satuan_dasar,
+            'konversi' => $this->konversi,
+            'harga_pokok' => $this->harga_pokok,
+            'harga_jual' => $this->harga_jual,
+        ]);
+
+        $this->emit('success', ['pesan' => 'Berhasil edit item']);
+        $this->editID = null;
     }
 
     public function hapusItem($id)
     {
-        dd($id);
+    $data= ProdukItem::find($id)->delete();
+
+    $this->emit('success', ['pesan' => 'Berhasil hapus item']);
+    }
+
+    public function tutupEditItem()
+    {
+        $this->resetDataItem();
+        $this->editItem = false;
     }
 }

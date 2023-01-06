@@ -20,11 +20,13 @@ class SupplierPage extends Component
     public $ID;
     public $img, $nama, $fax, $phone, $telp, $email, $provinsi, $kota, $alamat, $bank, $norek, $an, $npwp, $keterangan;
     public $newImg;
+
     public function render()
     {
         $this->akun = Supplier::latest()->take($this->take)->get();
         return view('livewire.master.supplier-page')->extends('layouts.app')->section('content');
     }
+    
     public function next()
     {
         $this->take += 10;
@@ -164,7 +166,7 @@ class SupplierPage extends Component
         $this->resetData();
         $this->editPage = false;
         $this->emit('success', ['pesan' => 'Berhasil simpan data']);
-        
+
         $storage = Storage::disk('public');
         if ($storage) {
             foreach ($storage->allFiles('livewire-tmp') as $filePathname) {

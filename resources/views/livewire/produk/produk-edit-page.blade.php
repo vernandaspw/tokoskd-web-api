@@ -316,7 +316,13 @@
                                                             {{ $data->barcode6 }}
                                                         </div>
                                                     </td>
-                                                    <td>
+                                                    <td class="
+                                                    @if($data->satuan_dasar == true)
+                                                    text-success
+                                                    @else
+                                                    text-muted
+                                                    @endif
+                                                    ">
                                                         {{ $data->satuan_dasar == true ? 'true' : 'false' }}
                                                     </td>
 
@@ -324,7 +330,8 @@
                                                         {{ $data->satuan != null ? $data->satuan->satuan : '' }}
                                                     </td>
                                                     <td>
-                                                        {{ $data->konversi }}
+
+                                                        {{ $data->konversi }} {{ $satuanDasar }}
                                                     </td>
                                                     <td>
                                                         @uang($data->harga_pokok)
@@ -343,7 +350,7 @@
                                                     </td>
                                                     <td>
                                                         <button type="button" wire:click="editItem('{{ $data->id }}')" class="btn btn-sm btn-warning rounded-pill px-3">Ubah</button>
-                                                        <button onclick="confirm('Ini akan menghapus catalog di produk item jg') || event.stopImmediatePropagation()" wire:click="hapusItem('{{ $data->id }}')" type="button" class="btn btn-sm btn-danger rounded-pill px-3">Hapus</button>
+                                                        <button onclick="confirm('Ini akan menghapus di produk item') || event.stopImmediatePropagation()" wire:click="hapusItem('{{ $data->id }}')" type="button" class="btn btn-sm btn-danger rounded-pill px-3">Hapus</button>
                                                     </td>
                                                 </tr>
                                                 @endforeach
@@ -363,6 +370,11 @@
                                     <div class="">
                                         <b>
                                             <h5>Edit Item</h5>
+                                        </b>
+                                    </div>
+                                    <div class="">
+                                        <b>
+                                            <h5>Tambah Item</h5>
                                         </b>
                                     </div>
                                     <div class="">
@@ -388,6 +400,12 @@
                                         </div>
                                     </div>
                                     <div class="mt-2">
+                                        <label class="container">Satuan dasar
+                                            <input wire:model='satuan_dasar' type="checkbox" checked="checked">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                    <div class="mt-2">
                                         <label for="" class="m-0">Satuan</label>
                                         <select required id="satuan_id" wire:model='satuan_id' class="form-control form-control-sm">
                                             <option value="">Pilih</option>
@@ -395,10 +413,12 @@
                                             <option value="{{ $data->id }}">{{ $data->satuan }}</option>
                                             @endforeach
                                         </select>
-                                        <div class="text-muted" style="font-size: 13px">
-                                            - item ini adalah item satuan paling dasar
-                                            <div>- tambah item baru setelah klik simpan edit</div>
-                                        </div>
+
+                                    </div>
+                                    <div class="mt-2">
+                                        <label for="" class="m-0">Konversi</label>
+
+                                        <input wire:model='konversi' type="number" class="form-control form-control-sm" placeholder="jumlah konversi..">
                                     </div>
                                     <div class="mt-2">
                                         <label for="" class="m-0">Harga pokok : @uang($harga_pokok == null ? 0 : $harga_pokok)</label>
@@ -415,14 +435,17 @@
                                             <div class="@if(($harga_jual  == null ? 0 : $harga_jual) - ($harga_pokok == null ? 0 : $harga_pokok) <= 0)
                                     text-danger
                                     @else
-                                    text-success 
+                                    text-success
                                     @endif">Untung @uang(($harga_jual == null ? 0 : $harga_jual) - ($harga_pokok == null ? 0 : $harga_pokok))</div>
                                         </div>
                                     </b>
 
+                                    @if(($harga_jual == null ? 0 : $harga_jual) - ($harga_pokok == null ? 0 : $harga_pokok) <= 0) <button type="button" wire:click="perbaruiItem()" class="mt-1 disabled btn btn-success mb-2">Perbarui</button>
+                                        @else
+                                        <button type="button" wire:click="perbaruiItem()" class="mt-1 btn btn-success mb-2">Perbarui</button>
+                                        @endif
 
-                                    <button type="button" wire:click="perbaruiItem()" class="mt-1 btn btn-success mb-2">Perbarui</button>
-                                    <button type="button" wire:click="tutupEditItem()" class="mt-2 btn btn-white mb-2">Tutup</button>
+                                        <button type="button" wire:click="tutupEditItem()" class="mt-2 btn btn-white mb-2">Tutup</button>
 
                                 </div>
                                 @else
@@ -456,6 +479,16 @@
                                                 <input wire:model='barcode6' type="text" class="form-control form-control-sm" placeholder="barcode 6">
                                             </div>
                                         </div>
+                                        @if($satuanDasar)
+
+                                        @else
+                                        <div class="mt-2">
+                                            <label class="container">Satuan dasar
+                                                <input wire:model='satuan_dasar' type="checkbox" checked="checked">
+                                                <span class="checkmark"></span>
+                                            </label>
+                                        </div>
+                                        @endif
                                         <div class="mt-2">
                                             <label for="" class="m-0">Satuan</label>
                                             <select required id="satuan_id" wire:model='satuan_id' class="form-control form-control-sm">
@@ -464,10 +497,12 @@
                                                 <option value="{{ $data->id }}">{{ $data->satuan }}</option>
                                                 @endforeach
                                             </select>
-                                            <div class="text-muted" style="font-size: 13px">
-                                                - item ini adalah item satuan paling dasar
-                                                <div>- tambah item baru setelah klik simpan edit</div>
-                                            </div>
+
+                                        </div>
+                                        <div class="mt-2">
+                                            <label for="" class="m-0">Konversi</label>
+
+                                            <input wire:model='konversi' type="number" class="form-control form-control-sm" placeholder="jumlah konversi..">
                                         </div>
                                         <div class="mt-2">
                                             <label for="" class="m-0">Harga pokok : @uang($harga_pokok == null ? 0 : $harga_pokok)</label>
@@ -484,16 +519,17 @@
                                                 <div class="@if(($harga_jual  == null ? 0 : $harga_jual) - ($harga_pokok == null ? 0 : $harga_pokok) <= 0)
                                             text-danger
                                             @else
-                                            text-success 
+                                            text-success
                                             @endif">Untung @uang(($harga_jual == null ? 0 : $harga_jual) - ($harga_pokok == null ? 0 : $harga_pokok))</div>
                                             </div>
                                         </b>
+                                        @if(($harga_jual == null ? 0 : $harga_jual) - ($harga_pokok == null ? 0 : $harga_pokok) <= 0) <button disabled type="button" wire:click="simpanTambahItem()" class="mb-1 btn-block btn btn-success mb-2">Simpan</button>
+                                            @else
+                                            <button type="button" wire:click="simpanTambahItem()" class="mb-1 btn-block btn btn-success mb-2">Simpan</button>
+                                            @endif
 
-
-                                        <button type="button" wire:click="simpanTambahItem()" class="mb-1 btn-block btn btn-success mb-2">Simpan</button>
-                                        <button type="button" wire:click="tutupTambahItem()" class="mt-1 btn-block btn btn-danger mb-2">Tutup</button>
+                                            <button type="button" wire:click="tutupTambahItem()" class="mt-1 btn-block btn btn-danger mb-2">Tutup</button>
                                     </div>
-
                                     @endif
                                 </div>
                                 @endif
@@ -519,6 +555,78 @@
     }
 
 </style>
+
+@push('style')
+<style>
+    /* The container */
+    .container {
+        display: block;
+        position: relative;
+        padding-left: 25px;
+        margin-bottom: 10px;
+        cursor: pointer;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+
+    /* Hide the browser's default checkbox */
+    .container input {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+        height: 0;
+        width: 0;
+    }
+
+    /* Create a custom checkbox */
+    .checkmark {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 20px;
+        width: 20px;
+        background-color: #eee;
+    }
+
+    /* On mouse-over, add a grey background color */
+    .container:hover input~.checkmark {
+        background-color: #ccc;
+    }
+
+    /* When the checkbox is checked, add a blue background */
+    .container input:checked~.checkmark {
+        background-color: #2196F3;
+    }
+
+    /* Create the checkmark/indicator (hidden when not checked) */
+    .checkmark:after {
+        content: "";
+        position: absolute;
+        display: none;
+    }
+
+    /* Show the checkmark when checked */
+    .container input:checked~.checkmark:after {
+        display: block;
+    }
+
+    /* Style the checkmark/indicator */
+    .container .checkmark:after {
+        left: 9px;
+        top: 5px;
+        width: 5px;
+        height: 10px;
+        border: solid white;
+        border-width: 0 3px 3px 0;
+        -webkit-transform: rotate(45deg);
+        -ms-transform: rotate(45deg);
+        transform: rotate(45deg);
+    }
+
+</style>
+@endpush
 
 @push('script')
 <script>

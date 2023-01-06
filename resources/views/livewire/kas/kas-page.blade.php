@@ -157,10 +157,9 @@
 
                     @foreach ($kasTunai as $data)
                     <div class="col-xl-3 col-lg-4 col-md-5 col-6">
-                        <a href="{{ url('kas/kas', $data->id) }}" class="card text-white bg-success">
+                        <a href="{{ url('kas/kas', $data->id) }}" class="card bg-white">
                             <div class="card-body">
-                                <div class="">{{ $data->no == null ? 0 : $data->no }}</div>
-                                <div class="">{{ $data->nama }}</div>
+                                <div class="">{{ $data->no == null ? 0 : $data->no.'.' }} {{ $data->nama }}</div>
                                 <div class="">@uang($data->saldo)</div>
                             </div>
                         </a>
@@ -175,10 +174,10 @@
 
                     @foreach ($kasTunaiKasir as $data)
                     <div class="col-xl-3 col-lg-4 col-md-5 col-6">
-                        <a href="{{ url('kas/kas', $data->id) }}" class="card text-white bg-success">
+                        <a href="{{ url('kas/kas', $data->id) }}" class="card bg-white">
                             <div class="card-body">
-                                <div class="">{{ $data->no == null ? 0 : $data->no }}</div>
-                                <div class="">{{ $data->nama }}</div>
+
+                                <div class="">{{ $data->no == null ? 0 : $data->no.'.' }} {{ $data->nama }}</div>
                                 <div class="">@uang($data->saldo)</div>
                             </div>
                         </a>
@@ -190,13 +189,11 @@
                     <b>Kas Bank</b>
                 </div>
                 <div class="row mt-3">
-
                     @foreach ($kasBank as $data)
                     <div class="col-xl-3 col-lg-4 col-md-5 col-6">
-                        <a href="{{ url('kas/kas', $data->id) }}" class="card text-white bg-success">
+                        <a href="{{ url('kas/kas', $data->id) }}" class="card bg-white">
                             <div class="card-body">
-                                <div class="">{{ $data->no == null ? 0 : $data->no }}</div>
-                                <div class="">{{ $data->nama }}</div>
+                                <div class="">{{ $data->no == null ? 0 : $data->no.'.' }} {{ $data->nama }}</div>
                                 <div class="">@uang($data->saldo)</div>
                             </div>
                         </a>
@@ -251,7 +248,7 @@
                                         </div>
                                     </div>
                                     <div class="card-body table-responsive p-0">
-                                        <table class="table table-hover text-nowrap">
+                                        <table class="table  table-sm table-hover text-nowrap">
                                             <thead>
                                                 <tr>
                                                     <th>ID</th>

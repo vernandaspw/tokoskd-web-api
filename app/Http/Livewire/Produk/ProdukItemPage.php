@@ -97,9 +97,9 @@ class ProdukItemPage extends Component
 
     public function hapus($id)
     {
-        $data = Kategori::find($id);
-        $data->delete();
+        $data= ProdukItem::find($id)->delete();
 
-        $this->emit('success', ['pesan' => 'Berhasil hapus data']);
+        $this->emit('success', ['pesan' => 'Berhasil hapus item']);
     }
+
 }

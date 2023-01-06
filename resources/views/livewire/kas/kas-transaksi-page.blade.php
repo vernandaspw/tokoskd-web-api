@@ -62,7 +62,7 @@
                                         <select required wire:model='kas_id' id="kas_id" class="form-control">
                                             <option value="">Pilih</option>
                                             @foreach ($kas as $data)
-                                            <option value="{{ $data->id }}">{{ $data->tipe }} - {{ $data->nama }}</option>
+                                            <option value="{{ $data->id }}">{{ $data->tipe }} - {{ $data->nama }} - @uang($data->saldo)</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -103,7 +103,7 @@
                                         <select required wire:model='kas_id' id="kas_id" class="form-control">
                                             <option value="">Pilih</option>
                                             @foreach ($kas as $data)
-                                            <option value="{{ $data->id }}">{{ $data->tipe }} - {{ $data->nama }}</option>
+                                            <option value="{{ $data->id }}">{{ $data->tipe }} - {{ $data->nama }} - @uang($data->saldo)</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -144,7 +144,7 @@
                                         <select required wire:model='kas_id' id="kas_id" class="form-control">
                                             <option value="">Pilih</option>
                                             @foreach ($kas as $data)
-                                            <option value="{{ $data->id }}">{{ $data->tipe }} - {{ $data->nama }}</option>
+                                            <option value="{{ $data->id }}">{{ $data->tipe }} - {{ $data->nama }} - @uang($data->saldo)</option>
                                             @endforeach
                                         </select>
                                     </div>
