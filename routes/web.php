@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\StrukController;
 use App\Http\Livewire\Akun\Akun;
 use App\Http\Livewire\Auth\Login;
 use App\Http\Livewire\Dashboard\DashboardUtama;
@@ -21,6 +22,7 @@ use App\Http\Livewire\Master\RakPage;
 use App\Http\Livewire\Master\SatuanPage;
 use App\Http\Livewire\Master\Supplier;
 use App\Http\Livewire\Master\SupplierPage;
+use App\Http\Livewire\Penjualan\KasirDetailPage;
 use App\Http\Livewire\Penjualan\KasirPage;
 use App\Http\Livewire\Piutang\PiutangPage;
 use App\Http\Livewire\Piutang\PiutangPelangganPage;
@@ -30,7 +32,9 @@ use App\Http\Livewire\Produk\ProdukDiskonPage;
 use App\Http\Livewire\Produk\ProdukEditPage;
 use App\Http\Livewire\Produk\ProdukItemPage;
 use App\Http\Livewire\Produk\ProdukSatuanPage;
+use App\Http\Livewire\Produk\ProdukStokDetail;
 use App\Http\Livewire\Produk\ProdukStokPage;
+use App\Models\AppModel;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -85,9 +89,11 @@ Route::middleware(['islogin'])->group(function () {
 
     Route::get('produk/produk-diskon', ProdukDiskonPage::class);
     Route::get('produk/produk-stok', ProdukStokPage::class);
+    Route::get('produk/produk-stok-detail/{id}', ProdukStokDetail::class);
 
 
     Route::get('penjualan/kasir', KasirPage::class);
+    Route::get('penjualan/kasir/{id}', KasirDetailPage::class);
 
     Route::get('hutang', HutangPage::class);
     Route::get('hutang/hutang-pelanggan', HutangPelangganPage::class);
@@ -96,4 +102,7 @@ Route::middleware(['islogin'])->group(function () {
     Route::get('piutang', PiutangPage::class);
     Route::get('piutang/piutang-pelanggan', PiutangPelangganPage::class);
     Route::get('piutang/piutang-supplier', PiutangSupplierPage::class);
+
+
+    Route::get('penjualan/struk/{id}', [StrukController::class, 'index'])->name('struk');
 });

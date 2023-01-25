@@ -19,6 +19,7 @@ return new class extends Migration
             $table->enum('tipe', ['tunai', 'tunai kasir', 'bank', 'ewallet']);
             $table->string('nama', 30);
             $table->decimal('saldo', 19, 2)->nullable();
+            $table->decimal('saldo_selisih', 19, 2)->nullable();
             $table->string('bank', 30)->nullable();
             $table->string('norek', 50)->nullable();
             $table->string('an', 40)->nullable();

@@ -14,6 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('piutang_data', function (Blueprint $table) {
+            // ga kepake
             $table->id();
             $table->foreignId('pelanggan_id')->nullable()->constrained('pelanggans')->onUpdate('cascade')->onDelete('cascade');
             $table->foreignId('supplier_id')->nullable()->constrained('suppliers')->onUpdate('cascade')->onDelete('cascade');

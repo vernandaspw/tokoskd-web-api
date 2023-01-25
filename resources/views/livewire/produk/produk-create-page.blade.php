@@ -27,7 +27,7 @@
                                 <form wire:submit.prevent='simpan'>
                                     <div class="mb-1">
                                         <label for="nama" class="mb-0 mt-1">Nama <span class="text-danger">*wajib</span></label>
-                                        <input required wire:model='nama' type="text" class="form-control form-control-sm" placeholder="Nama">
+                                        <input autofocus required wire:model='nama' type="text" class="form-control form-control-sm" placeholder="Nama">
                                     </div>
                                     <div class="mb-1">
                                         <label for="tipe" class="mb-0 mt-1">tipe <span class="text-danger">*wajib</span></label>
@@ -252,7 +252,7 @@
                                     <div class="">
                                         <label for="" class="m-0">Barcode </label>
                                         <div class="">
-                                    
+
                                             <input wire:model='barcode1' type="text" class="form-control form-control-sm" placeholder="barcode 1">
                                         </div>
                                         <div class="">
@@ -285,35 +285,35 @@
                                         </div>
                                     </div>
                                     <div class="mt-2">
-                                        <label for="" class="m-0">Harga pokok : @uang($harga_pokok == null ? 0 : $harga_pokok)</label> 
+                                        <label for="" class="m-0">Harga pokok : @uang($harga_pokok == null ? 0 : $harga_pokok)</label>
 
                                         <input wire:model='harga_pokok' type="number" class="form-control form-control-sm" placeholder="harga pokok..">
                                     </div>
                                     <div class="mt-2">
                                         <label for="" class="m-0">Harga jual : @uang($harga_jual  == null ? 0 : $harga_jual)</label>
                                         <input wire:model='harga_jual' type="number" required class="form-control form-control-sm" placeholder="harga jual..">
-                                      
+
                                     </div>
                                    <b> <div class="mt-2 mb-3">
                                     <div class="@if(($harga_jual  == null ? 0 : $harga_jual) - ($harga_pokok == null ? 0 : $harga_pokok) <= 0)
                                     text-danger
                                     @else
-                                    text-success 
+                                    text-success
                                     @endif">Untung @uang(($harga_jual  == null ? 0 : $harga_jual) - ($harga_pokok == null ? 0 : $harga_pokok))</div>
                                 </div></b>
-                                    
+
                                     @if(($harga_jual  == null ? 0 : $harga_jual) >= ($harga_pokok == null ? 0 : $harga_pokok))
                                     <button wire:click.prevent='simpanBaru()' type="button" class="btn mb-1 mt-1 btn-success rounded-pill form-control">Simpan & baru</button>
                                     <button wire:click.prevent='simpanClose()' type="button" class="btn mb-1 mt-1 btn-success rounded-pill form-control">Simpan & kembali</button>
                                     <button wire:click.prevent='simpanEdit()' type="button" class="btn mb-1 mt-1 btn-success rounded-pill form-control">Simpan & Edit</button>
-                                    
+
                                     @else
                                     <button type="button" disabled class="btn mb-1 mt-1 btn-danger   rounded-pill form-control">Harga jual merugi</button>
                                     @endif
                                     <button type="reset"  class="btn btn-secondary mb-3 rounded-pill form-control">Reset</button>
                                     <button type="button" wire:click="kembali()" class="btn btn-light rounded-pill form-control">Kembali</button>
-                                   
-                                    
+
+
                                 </form>
                             </div>
                         </div>

@@ -16,4 +16,9 @@ class Kasir extends Model
     {
         return $this->belongsTo(Kas::class, 'kas_id', 'id');
     }
+
+    public function kasir_report()
+    {
+        return $this->hasMany(KasirReport::class, 'kasir_id', 'id');
+    }
 }

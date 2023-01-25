@@ -27,7 +27,7 @@ class UserSeeder extends Seeder
                 'code_expired_at' => null,
                 'code_resend_at' => null,
                 'last_seen_at' => null,
-                'role' => 'admin',
+                'role' => 'superadmin',
                 'isaktif' => true,
                 'created_at' => now(),
 

@@ -29,8 +29,8 @@ class ProdukCreatePage extends Component
 
     public $produkItem = [];
 
-    public $barcode1, $barcode2, $barcode3, $barcode4, $barcode5, $barcode6, $satuan_id, $satuan_dasar = 1, $konversi = 1,  $harga_pokok, $harga_jual;
-  
+    public $barcode1, $barcode2, $barcode3, $barcode4, $barcode5, $barcode6, $satuan_id, $konversi = 1,  $harga_pokok, $harga_jual;
+
     public function merek_id($id)
     {
         $this->merek_id = $id;
@@ -116,7 +116,7 @@ class ProdukCreatePage extends Component
         }
     }
 
-    
+
 
     public function render()
     {
@@ -171,7 +171,7 @@ class ProdukCreatePage extends Component
         $this->rak_id = null;
         $this->keterangan = null;
         $this->supplier_id = null;
-        
+
         $this->barcode1 = null;
         $this->barcode2 = null;
         $this->barcode3 = null;
@@ -212,18 +212,18 @@ class ProdukCreatePage extends Component
         $this->Pid = $P->id;
         ProdukItem::create([
             'produk_id' => $P->id,
-            'barcode1' => $this->barcode1,  
+            'barcode1' => $this->barcode1,
             'barcode2' => $this->barcode2,
             'barcode3' => $this->barcode3,
             'barcode4' => $this->barcode4,
             'barcode5' => $this->barcode5,
             'barcode6' => $this->barcode6,
             'satuan_id' => $this->satuan_id,
-            'satuan_dasar' => true,
+
             'konversi' => 1,
             'harga_pokok' => $this->harga_pokok != null ? $this->harga_pokok : 0,
-            'harga_jual' => $this->harga_jual != null ? $this->harga_jual : 0 
-        ]);        
+            'harga_jual' => $this->harga_jual != null ? $this->harga_jual : 0
+        ]);
         // $storage = Storage::disk('public');
         // if ($storage) {
         //     foreach ($storage->allFiles('livewire-tmp') as $filePathname) {
@@ -233,34 +233,34 @@ class ProdukCreatePage extends Component
 
         $this->resetData();
 
-      
+
     }
 
     public function simpanBaru()
     {
         $this->simpan();
         $this->emit('success', ['pesan' => 'Berhasil buat data']);
-        // redirect()->to($this->url);  
+        // redirect()->to($this->url);
     }
 
     public function simpanClose()
     {
         $this->simpan();
         $this->emit('success', ['pesan' => 'Berhasil buat data']);
-        redirect()->to($this->url);  
+        redirect()->to($this->url);
     }
 
     public function simpanEdit()
     {
         $this->simpan();
         $this->emit('success', ['pesan' => 'Berhasil buat data']);
-        redirect()->to('produk/produk-edit/'. $this->Pid);  
+        redirect()->to('produk/produk-edit/'. $this->Pid);
     }
 
     public function kembali()
     {
         $this->resetData();
-        redirect()->to($this->url);  
+        redirect()->to($this->url);
     }
 
 }

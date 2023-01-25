@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class SatuanSeeder extends Seeder
 {
@@ -14,6 +15,26 @@ class SatuanSeeder extends Seeder
      */
     public function run()
     {
-        //
+        DB::table('satuans')->insert([
+            [
+                'satuan' => 'pcs',
+            ],
+            [
+                'nama' => 'pak',
+            ],
+            [
+                'nama' => 'dus',
+            ],
+            [
+                'nama' => 'set',
+            ],
+            [
+                'nama' => 'sak',
+            ],
+            [
+                'nama' => 'rim',
+            ]
+
+        ]);
     }
 }

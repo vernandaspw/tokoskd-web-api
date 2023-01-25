@@ -20,10 +20,32 @@
 
         <section class="content">
             <div class="container-fluid">
+                @if($tutupKas_id)
+                <div class="col-md-3">
+                    <div class="card">
+                        <div class="card-header">
+                            Buka kas {{ $namaKasir }}
+                        </div>
+                        <div class="card-body">
+                            <div class="">
+                                <form wire:click='buka_kas_simpan'>
+                                    <div class="mb-1">
+                                        <label for="" class="m-0">
+                                            Kas Awal
+                                        </label>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @else
                 <div class="mb-3">
+                    @if(auth()->user()->role == 'superadmin' || auth()->user()->role == 'admin')
                     @if($createPage)
                     @else
                     <button class="btn btn-primary" wire:click='createPage()'>Buat kasir baru</button>
+                    @endif
                     @endif
                 </div>
 
@@ -63,10 +85,18 @@
                 </div>
                 <div class="mb-5 row">
                     @forelse ($kasiractive as $data)
-                    <div class="col-xl-3 col-lg-4 col-md-5 col-6">
+                    <div class="col-xl-3 col-lg-4 col-md-5 col-12">
                         <div class="card bg-white">
                             <div class="card-header">
-                                {{ $data->nama }}
+
+                                <div class="d-flex justify-content-between">
+                                    <div class="">
+                                        {{ $data->nama }}
+                                    </div>
+                                    <div class="">
+
+                                    </div>
+                                </div>
                             </div>
                             <div class="card-body">
                                 <div class="">
@@ -78,21 +108,27 @@
 
                             </div>
                             <div class="card-footer">
-                                <button class="btn btn-success">
-                                    Buka
-                                </button>
-                                {{-- <button class="btn btn-warning">
-                    Riwayat
-                </button> --}}
-                                <button class="btn btn-warning">
-                                    Ubah
-                                </button>
-                                <button class="btn btn-info">
-                                    Laporan
-                                </button>
-                                <button class="btn btn-secondary">
-                                    View
-                                </button>
+
+
+                                <div class="d-flex justify-content-between">
+                                    <div class="">
+                                        <button wire:click="kasir_detail('{{ $data->id }}')" class="btn btn-primary">
+                                            Buka
+                                        </button>
+                                        {{-- <button class="btn btn-warning">
+                                            Ubah
+                                        </button> --}}
+
+                                    </div>
+                                    <div class="">
+                                        <button class="btn btn-info">
+                                            Laporan
+                                        </button>
+                                        <button wire:click="tutup_kas_toggle('{{ $data->id }}')" class="btn btn-danger">
+                                            Tutup kas
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -128,9 +164,7 @@
                                 <button class="btn btn-success">
                                     Buka
                                 </button>
-                                {{-- <button class="btn btn-warning">
-                    Riwayat
-                </button> --}}
+
                                 <button class="btn btn-warning">
                                     Ubah
                                 </button>
@@ -147,6 +181,7 @@
                     Belum ada
                     @endforelse
                 </div>
+                @endif
                 @endif
             </div>
         </section>

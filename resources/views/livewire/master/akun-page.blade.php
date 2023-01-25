@@ -56,10 +56,10 @@
                                         <select wire:model='role' id="role" class="form-control">
                                             <option value="">Pilih</option>
                                             <option value="admin">Admin</option>
-                                            <option value="kepala toko">Kepala toko</option>
+                                            {{-- <option value="kepala toko">Kepala toko</option> --}}
                                             <option value="staff">Staff</option>
-                                            <option value="checker">Checker</option>
-                                            <option value="kasir">kasir</option>
+                                            {{-- <option value="checker">Checker</option> --}}
+                                            {{-- <option value="kasir">kasir</option> --}}
                                         </select>
                                     </div>
                                     <div class="mb-1">
@@ -106,10 +106,10 @@
                                         <select wire:model='role' required id="role" class="form-control">
                                             <option value="">Pilih</option>
                                             <option value="admin">Admin</option>
-                                            <option value="kepala toko">Kepala toko</option>
+                                            {{-- <option value="kepala toko">Kepala toko</option> --}}
                                             <option value="staff">Staff</option>
-                                            <option value="checker">Checker</option>
-                                            <option value="kasir">kasir</option>
+                                            {{-- <option value="checker">Checker</option> --}}
+                                            {{-- <option value="kasir">kasir</option> --}}
                                         </select>
                                     </div>
                                     <button type="submit" class="btn mb-1 mt-1 btn-success rounded-pill form-control">Simpan</button>

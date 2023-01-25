@@ -27,7 +27,13 @@ class DatabaseSeeder extends Seeder
             KasTJenisSeeder::class,
             KasTKategoriSeeder::class,
             KasSeeder::class,
-            JadwalKerjaSeeder::class
+            JadwalKerjaSeeder::class,
+
+
+            StokJenisSeeder::class,
+            StokKategoriSeeder::class,
+
+            SatuanSeeder::class
         ]);
     }
 }

@@ -54,7 +54,7 @@
 
     @livewireStyles
 
-@stack('style')
+    @stack('style')
 
 </head>
 
@@ -66,7 +66,13 @@ dark-mode
         @auth
         <livewire:component.navbar />
 
-        <livewire:component.sidebar />
+        @if(auth()->user()->role == 'superadmin')
+        <livewire:component.sidebar-superadmin />
+        @elseif(auth()->user()->role == 'admin')
+        <livewire:component.sidebar-admin />
+        @elseif(auth()->user()->role == 'staff')
+        <livewire:component.sidebar-staff />
+        @endif
 
         @yield('content')
         {{-- <footer class="main-footer">
@@ -118,7 +124,7 @@ dark-mode
     <!-- Bootstrap 4 -->
     <script src="{{ asset('vendor/AdminLTE-3.2.0/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     <!-- ChartJS -->
-    <script src="{{ asset('vendor/AdminLTE-3.2.0/plugins/chart.js/Chart.min.js') }}"></script>
+    {{-- <script src="{{ asset('vendor/AdminLTE-3.2.0/plugins/chart.js/Chart.min.js') }}"></script> --}}
     <!-- Sparkline -->
     <script src="{{ asset('vendor/AdminLTE-3.2.0/plugins/sparklines/sparkline.js') }}"></script>
     <!-- JQVMap -->
@@ -151,17 +157,17 @@ dark-mode
     <script src="{{ asset('vendor/MDB-Free_4.20.0/js/bootstrap.min.js') }}"></script>
     <script src="{{ asset('vendor/MDB-Free_4.20.0/js/mdb.min.js') }}"></script>
     <script src="{{ asset('vendor/MDB-Free_4.20.0/js/addons/datatables.min.js') }}"></script> --}}
-<!-- Select2 -->
-{{-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    <!-- Select2 -->
+    {{-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
 integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
 crossorigin="anonymous"></script> --}}
 
-{{-- SELECT2 --}}
-<script src="{{ asset('vendor/jquery-3.5.1.slim.min.js') }}"></script>
-<script src="{{ asset('vendor/AdminLTE-3.2.0/plugins/select2/js/select2.full.min.js') }}"></script>
-{{-- SELECT2 END --}}
+    {{-- SELECT2 --}}
+    <script src="{{ asset('vendor/jquery-3.5.1.slim.min.js') }}"></script>
+    <script src="{{ asset('vendor/AdminLTE-3.2.0/plugins/select2/js/select2.full.min.js') }}"></script>
+    {{-- SELECT2 END --}}
 
-@stack('script')
+    @stack('script')
 
 
     <script>

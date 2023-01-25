@@ -67,7 +67,7 @@
                                                 {{ $data->nama }}</td>
                                             <td>{{ $data->tipe }}</td>
                                             <td>@foreach ($data->produk_item as $item)
-                                                {{ $item->satuan->satuan }}
+                                                {{ $item->satuan->satuan }},
                                                 @endforeach
                                             </td>
                                             <td>

@@ -25,14 +25,17 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Blade::directive('uang', function ($expression) {
-            return "Rp. {{ number_format($expression,0,',','.'); }}";
+            return "Rp.{{ number_format($expression,0,',','.'); }}";
+        });
+        Blade::directive('nominal', function ($expression) {
+            return "{{ number_format($expression,0,',','.');}}";
         });
         Blade::directive('uangold', function ($expression) {
-            return "Rp.  number_format($expression,0,',','.');";
+            return "Rp.number_format($expression,0,',','.');";
         });
 
         Blade::directive('diskon', function ($expression) {
-            return "{{ number_format($expression,0,',','.'); }} %";
+            return "{{ number_format($expression,0,',','.');}}%";
         });
 
         Blade::directive('rating', function ($expression) {

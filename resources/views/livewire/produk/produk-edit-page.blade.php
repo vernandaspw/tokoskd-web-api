@@ -269,11 +269,14 @@
                                 <div class="mb-2 d-flex justify-content-between">
                                     <h5>Produk Item</h5>
                                     <div class="">
+                                        <button type="button" wire:click="generateHargaPokok()" class="btn btn-info">Generate Harga Pokok</button>
+                                        <button type="button" wire:click="generateHargaJual()" class="btn btn-success">Generate Harga Jual</button>
                                         @if($tambahItem)
 
 
                                         @else
-                                        <button type="button" wire:click="tambahItem()" class="btn btn-success">Tambah item</button>
+
+                                        <button type="button" wire:click="tambahItem()" class="btn btn-primary">Tambah item</button>
                                         @endif
                                     </div>
                                 </div>
@@ -283,7 +286,7 @@
                                             <thead>
                                                 <tr>
                                                     <th>Barcode</th>
-                                                    <th>Satuan dasar</th>
+
                                                     <th>Satuan</th>
                                                     <th>Konversi</th>
                                                     <th>Harga pokok</th>
@@ -316,15 +319,7 @@
                                                             {{ $data->barcode6 }}
                                                         </div>
                                                     </td>
-                                                    <td class="
-                                                    @if($data->satuan_dasar == true)
-                                                    text-success
-                                                    @else
-                                                    text-muted
-                                                    @endif
-                                                    ">
-                                                        {{ $data->satuan_dasar == true ? 'true' : 'false' }}
-                                                    </td>
+
 
                                                     <td>
                                                         {{ $data->satuan != null ? $data->satuan->satuan : '' }}
@@ -399,12 +394,7 @@
                                             <input wire:model='barcode6' type="text" class="form-control form-control-sm" placeholder="barcode 6">
                                         </div>
                                     </div>
-                                    <div class="mt-2">
-                                        <label class="container">Satuan dasar
-                                            <input wire:model='satuan_dasar' type="checkbox" checked="checked">
-                                            <span class="checkmark"></span>
-                                        </label>
-                                    </div>
+
                                     <div class="mt-2">
                                         <label for="" class="m-0">Satuan</label>
                                         <select required id="satuan_id" wire:model='satuan_id' class="form-control form-control-sm">
@@ -479,16 +469,7 @@
                                                 <input wire:model='barcode6' type="text" class="form-control form-control-sm" placeholder="barcode 6">
                                             </div>
                                         </div>
-                                        @if($satuanDasar)
 
-                                        @else
-                                        <div class="mt-2">
-                                            <label class="container">Satuan dasar
-                                                <input wire:model='satuan_dasar' type="checkbox" checked="checked">
-                                                <span class="checkmark"></span>
-                                            </label>
-                                        </div>
-                                        @endif
                                         <div class="mt-2">
                                             <label for="" class="m-0">Satuan</label>
                                             <select required id="satuan_id" wire:model='satuan_id' class="form-control form-control-sm">

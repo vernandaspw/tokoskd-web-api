@@ -43,7 +43,8 @@
                                     <h6>@uang(10000)</h6>
                                 </div>
                             </div>
-                            {{-- <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a> --}}
+                            {{-- <a href="#" class="small-box-footer">More info <i
+                                    class="fas fa-arrow-circle-right"></i></a> --}}
                         </div>
                     </div>
                     <div class="col-lg-3 col-12">
@@ -70,7 +71,8 @@
                                     <h6>@uang(10000)</h6>
                                 </div>
                             </div>
-                            {{-- <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a> --}}
+                            {{-- <a href="#" class="small-box-footer">More info <i
+                                    class="fas fa-arrow-circle-right"></i></a> --}}
                         </div>
                     </div>
                     <div class="col-lg-3 col-12">
@@ -97,7 +99,8 @@
                                     <h6>@uang(10000)</h6>
                                 </div>
                             </div>
-                            {{-- <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a> --}}
+                            {{-- <a href="#" class="small-box-footer">More info <i
+                                    class="fas fa-arrow-circle-right"></i></a> --}}
                         </div>
                     </div>
                     <div class="col-lg-3 col-12">
@@ -123,7 +126,8 @@
                                     <h6>@uang(10000)</h6>
                                 </div>
                             </div>
-                            {{-- <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a> --}}
+                            {{-- <a href="#" class="small-box-footer">More info <i
+                                    class="fas fa-arrow-circle-right"></i></a> --}}
                         </div>
                     </div>
                     <div class="col-lg-3 col-12">
@@ -145,7 +149,8 @@
                                     </div>
                                 </div>
                             </div>
-                            {{-- <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a> --}}
+                            {{-- <a href="#" class="small-box-footer">More info <i
+                                    class="fas fa-arrow-circle-right"></i></a> --}}
                         </div>
                     </div>
                     <div class="col-lg-3 col-12">
@@ -171,7 +176,8 @@
                                     <h6>@uang(10000)</h6>
                                 </div>
                             </div>
-                            {{-- <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a> --}}
+                            {{-- <a href="#" class="small-box-footer">More info <i
+                                    class="fas fa-arrow-circle-right"></i></a> --}}
                         </div>
                     </div>
                     <div class="col-lg-3 col-12">
@@ -187,19 +193,21 @@
                                         </div>
                                     </div>
                                     <div class="">
-                                   <div class="">
-                                    @uang(20000)
-                                   </div>
+                                        <div class="">
+                                            @uang(20000)
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            {{-- <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a> --}}
+                            {{-- <a href="#" class="small-box-footer">More info <i
+                                    class="fas fa-arrow-circle-right"></i></a> --}}
                         </div>
                     </div>
                 </div>
 
 
-                <div class="row">
+
+                {{-- <div class="row">
                     <div class="col-lg-3 col-6">
                         <!-- small box -->
                         <div class="small-box bg-success">
@@ -260,7 +268,34 @@
                         </div>
                     </div>
                     <!-- ./col -->
+                </div> --}}
+                <hr>
+                <div class="row">
+                    <div class="col-lg-6 col-12">
+                        <div class="">
+                            <b>Arus Penjualan / Untung Bersih per produk</b>
+                        </div>
+                        <div>
+                            <canvas id="myChart" height="90"></canvas>
+                        </div>
+                    </div>
+
                 </div>
+
+                <hr>
+                <div class="row">
+                    <div class="col-lg-12 col-12">
+                        <div class="">
+                            <b>Pendapatan bersih penjualan (Untung persih per produk - total pengeluaran usaha)</b>
+                        </div>
+                        <div>
+                            <canvas id="pendapatan_bersih_penjualan" height="70"></canvas>
+                        </div>
+                    </div>
+
+                </div>
+
+
             </div>
         </section>
     </div>
@@ -273,5 +308,89 @@
     .card-text {
         font-size: 14px;
     }
-
 </style>
+
+
+
+@push('script')
+    <script src="{{ asset('vendor/chart-4.2.0/dist/chart.umd.js') }}"></script>
+
+    <script>
+        new Chart(document.getElementById('myChart'), {
+            type: 'bar',
+            data: {
+                labels: ["{{ date('F Y', strtotime('-12 month')) }}",
+                    "{{ date('F Y', strtotime('-11 month')) }}",
+                    "{{ date('F Y', strtotime('-10 month')) }}",
+                    "{{ date('F Y', strtotime('-09 month')) }}",
+                    "{{ date('F Y', strtotime('-08 month')) }}",
+                    "{{ date('F Y', strtotime('-07 month')) }}",
+                    "{{ date('F Y', strtotime('-06 month')) }}",
+                    "{{ date('F Y', strtotime('-05 month')) }}",
+                    "{{ date('F Y', strtotime('-04 month')) }}",
+                    "{{ date('F Y', strtotime('-03 month')) }}",
+                    "{{ date('F Y', strtotime('-02 month')) }}",
+                    "{{ date('F Y', strtotime('-01 month')) }}",
+                    "{{ date('F Y') }}"
+                ],
+                datasets: [{
+                        label: 'Masuk',
+                        data: [70, 10, 100],
+                        borderColor: '#2b7501',
+                        backgroundColor: '#aac799',
+                        borderWidth: 1
+                    },
+
+                ]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        new Chart(document.getElementById('pendapatan_bersih_penjualan'), {
+            type: 'bar',
+            data: {
+                labels: ["{{ date('F Y', strtotime('-12 month')) }}",
+                    "{{ date('F Y', strtotime('-11 month')) }}",
+                    "{{ date('F Y', strtotime('-10 month')) }}",
+                    "{{ date('F Y', strtotime('-09 month')) }}",
+                    "{{ date('F Y', strtotime('-08 month')) }}",
+                    "{{ date('F Y', strtotime('-07 month')) }}",
+                    "{{ date('F Y', strtotime('-06 month')) }}",
+                    "{{ date('F Y', strtotime('-05 month')) }}",
+                    "{{ date('F Y', strtotime('-04 month')) }}",
+                    "{{ date('F Y', strtotime('-03 month')) }}",
+                    "{{ date('F Y', strtotime('-02 month')) }}",
+                    "{{ date('F Y', strtotime('-01 month')) }}",
+                    "{{ date('F Y') }}"
+                ],
+                datasets: [{
+                        label: 'Masuk',
+                        data: [70],
+                        borderColor: '#2b7501',
+                        backgroundColor: '#aac799',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Keluar',
+                        data: [50],
+                        borderColor: '#FF6384',
+                        backgroundColor: '#FFB1C1',
+                    }
+                ]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+@endpush

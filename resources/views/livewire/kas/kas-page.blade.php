@@ -159,7 +159,8 @@
                     <div class="col-xl-3 col-lg-4 col-md-5 col-6">
                         <a href="{{ url('kas/kas', $data->id) }}" class="card bg-white">
                             <div class="card-body">
-                                <div class="">{{ $data->no == null ? 0 : $data->no.'.' }} {{ $data->nama }}</div>
+                                <div class="">{{ $data->no == null ? 0 : $data->no . '.' }} {{ $data->nama }}
+                                </div>
                                 <div class="">@uang($data->saldo)</div>
                             </div>
                         </a>
@@ -171,13 +172,13 @@
                     <b>Kas Tunai dikasir</b>
                 </div>
                 <div class="row mt-3">
-
                     @foreach ($kasTunaiKasir as $data)
                     <div class="col-xl-3 col-lg-4 col-md-5 col-6">
                         <a href="{{ url('kas/kas', $data->id) }}" class="card bg-white">
                             <div class="card-body">
 
-                                <div class="">{{ $data->no == null ? 0 : $data->no.'.' }} {{ $data->nama }}</div>
+                                <div class="">{{ $data->no == null ? 0 : $data->no . '.' }} {{ $data->nama }}
+                                </div>
                                 <div class="">@uang($data->saldo)</div>
                             </div>
                         </a>
@@ -193,7 +194,8 @@
                     <div class="col-xl-3 col-lg-4 col-md-5 col-6">
                         <a href="{{ url('kas/kas', $data->id) }}" class="card bg-white">
                             <div class="card-body">
-                                <div class="">{{ $data->no == null ? 0 : $data->no.'.' }} {{ $data->nama }}</div>
+                                <div class="">{{ $data->no == null ? 0 : $data->no . '.' }} {{ $data->nama }}
+                                </div>
                                 <div class="">@uang($data->saldo)</div>
                             </div>
                         </a>
@@ -310,7 +312,7 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                    @if($takeKasTransaksi <= $kasTransaksi->count())
+                                    @if ($takeKasTransaksi <= $kasTransaksi->count())
                                         <button type="button" class="mt-3 btn btn-info btn-block" wire:click='takeKasTransaksi()'>
                                             Lanjut
                                         </button>

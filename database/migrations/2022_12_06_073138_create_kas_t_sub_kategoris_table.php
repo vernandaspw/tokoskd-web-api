@@ -14,6 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('kas_t_sub_kategoris', function (Blueprint $table) {
+            // ga kepake
             $table->id();
             $table->enum('tipe', ['masuk', 'keluar']);
             $table->foreignId('kas_t_kategoris_id')->nullable()->constrained('kas_t_kategoris')->onUpdate('cascade')->onDelete('set null');

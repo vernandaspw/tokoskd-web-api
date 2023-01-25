@@ -4,6 +4,8 @@ namespace App\Http\Livewire\Penjualan;
 
 use App\Models\Kasir;
 use App\Models\Kas\Kas;
+use App\Models\KasirLog;
+use Carbon\Carbon;
 use Livewire\Component;
 
 class KasirPage extends Component
@@ -14,9 +16,11 @@ class KasirPage extends Component
 
     public $editID;
 
+    public $kasiractive = [], $kasirdeactive = [];
+
     public function render()
     {
-        $this->kasiractive = Kasir::where('isaktif', true)->latest()->get();
+        $this->kasiractive = Kasir::with('kasir_report')->where('isaktif', true)->latest()->get();
 
         $this->kasirdeactive = Kasir::where('isaktif', false)->latest()->get();
 
@@ -77,5 +81,27 @@ class KasirPage extends Component
         ]);
 
         $this->emit('success', ['pesan' => 'Berhasil edit data']);
+    }
+
+    public $tutupKas_id, $namaKasir;
+
+    public function tutup_kas_toggle($id)
+    {
+        $this->tutupKas_id = $id;
+        $this->namaKasir = Kasir::find($id)->nama;
+    }
+
+    public function kasir_detail($id)
+    {
+        $kasirlog = KasirLog::where('kasir_id', $id)->whereDate('created_at', Carbon::today())->where('user_id', auth()->user()->id)->first();
+
+        if ($kasirlog == null) {
+            KasirLog::create([
+                'kasir_id' => $id,
+                'user_id' => auth()->user()->id,
+            ]);
+        }
+
+        redirect()->to('penjualan/kasir/'.$id);
     }
 }

@@ -32,6 +32,10 @@ class KasTKategoriSeeder extends Seeder
                 'kas_t_jenis_id' => 1,
                 'nama' => 'pendapatan diluar usaha',
             ],
+            [
+                'kas_t_jenis_id' => 1,
+                'nama' => 'terima selisih kas',
+            ],
             // ------------------------------------------------------
             [
                 'kas_t_jenis_id' => 1,
@@ -93,6 +97,10 @@ class KasTKategoriSeeder extends Seeder
                 'kas_t_jenis_id' => 2,
                 'nama' => 'pembayaran hutang usaha',
             ],
+            [
+                'kas_t_jenis_id' => 2,
+                'nama' => 'selisih kas',
+            ],
             // ---------------------------------------------------------
             [
                 'kas_t_jenis_id' => 2,
@@ -103,7 +111,12 @@ class KasTKategoriSeeder extends Seeder
             [
                 'kas_t_jenis_id' => null,
                 'nama' => 'transfer',
-            ]
+            ],
+            [
+                'kas_t_jenis_id' => null,
+                'nama' => 'tutup kasir',
+            ],
+
         ]);
     }
 }

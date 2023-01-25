@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\AppModel;
+
 return [
 
     /*
@@ -54,7 +56,8 @@ return [
     |
     */
 
-    'asset_url' => env('APP_URL'),
+    // 'asset_url' => env('APP_URL'),
+    'asset_url' => AppModel::getIP()['app_url'],
 
     /*
     |--------------------------------------------------------------------------
@@ -69,6 +72,7 @@ return [
     */
 
     'app_url' => null,
+    // 'app_url' => env('APP_URL'),
 
     /*
     |--------------------------------------------------------------------------

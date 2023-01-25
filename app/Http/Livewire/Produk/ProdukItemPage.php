@@ -18,7 +18,7 @@ class ProdukItemPage extends Component
 
     public function render()
     {
-        $this->produkItems = ProdukItem::with('produk')->latest()->take($this->take)->get();
+        $this->produkItems = ProdukItem::with('produk')->latest()->take($this->take)->orderBy('produk_id', 'ASC')->orderBy('konversi', 'ASC')->get();
         // dd($this->produkItems);
         return view('livewire.produk.produk-item-page')->extends('layouts.app')->section('content');
     }

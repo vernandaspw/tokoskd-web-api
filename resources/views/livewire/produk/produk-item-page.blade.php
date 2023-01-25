@@ -121,7 +121,7 @@
                                             <th>Catalog</th>
                                             <th>Kategori</th>
                                             <th>Rak</th>
-                                            <th>Satuan dasar</th>
+
                                             <th>Satuan</th>
                                             <th>Konversi</th>
                                             <th>Harga pokok</th>
@@ -152,9 +152,7 @@
                                             <td>
                                                 {{ $data->produk->rak != null ? $data->produk->rak->nama : '' }}
                                             </td>
-                                            <td>
-                                                {{ $data->satuan_dasar == true ? 'true' : 'false' }}
-                                            </td>
+
 
                                             <td>
                                                 {{ $data->satuan != null ? $data->satuan->satuan : '' }}

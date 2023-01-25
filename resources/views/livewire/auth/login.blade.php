@@ -7,6 +7,9 @@
                     <a href="{{ url('/') }}" class="h1"><b>TOKO </b>SKD</a>
                 </div>
                 <div class="card-body">
+                    <div class="mb-1 text-center">
+                        {{ $app['app_url'] }}
+                    </div>
                     <p class="login-box-msg">Sign in to start your session</p>
                     <form wire:submit.prevent='login'>
                         <div class="input-group mb-3">

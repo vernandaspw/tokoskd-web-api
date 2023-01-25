@@ -22,6 +22,7 @@ return new class extends Migration
             $table->longText('alamat')->nullable();
             $table->string('telp', 16)->nullable();
             $table->string('npwp', 50)->nullable();
+            $table->string('pajak', 4,2)->default(0);
             $table->boolean('absen_masuk_keluar')->default(false);
             $table->timestamps();
         });

@@ -130,8 +130,8 @@ class PiutangPelangganPage extends Component
         try {
             $pel = Pelanggan::find($this->d_id);
             $kas = Kas::find($this->d_kas_id);
-            if ($kas->saldo == 0 || $this->d_jumlah == 0) {
-                $this->emit('error', ['pesan' => 'Kas atau jumlah tidak boleh 0']);
+            if ($this->d_jumlah == 0) {
+                $this->emit('error', ['pesan' => 'atau jumlah tidak boleh 0']);
             } elseif ($pel->piutang_usaha < $this->d_jumlah) {
                 $this->emit('error', ['pesan' => 'Jumlah tidak boleh melebihi piutang saat ini']);
             } else {

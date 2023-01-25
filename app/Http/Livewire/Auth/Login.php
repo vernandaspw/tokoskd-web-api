@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Auth;
 
+use App\Models\AppModel;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Livewire\Component;
@@ -12,6 +13,7 @@ class Login extends Component
 
     public function render()
     {
+        $this->app = AppModel::getIP();
         return view('livewire.auth.login')->extends('layouts.app')->section('content');
     }
 

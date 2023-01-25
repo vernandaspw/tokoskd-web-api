@@ -27,6 +27,8 @@ return new class extends Migration
             $table->decimal('harga_beli_awal', 13,2)->nullable();
             $table->decimal('harga_beli_akhir', 13,2)->nullable();
 
+            $table->enum('status', ['tidak diperbarui', 'perlu diperbarui', 'telah diperbarui'])->nullable();
+            $table->foreignId('user_id')->nullable()->constrained('users')->onUpdate('cascade')->onDelete('set null');
             $table->timestamps();
         });
     }

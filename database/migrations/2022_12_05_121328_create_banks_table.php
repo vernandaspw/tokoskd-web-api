@@ -14,6 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('banks', function (Blueprint $table) {
+            // ga kepake
             $table->id();
             $table->string('nama_bank', 50);
             $table->string('norek', 50);

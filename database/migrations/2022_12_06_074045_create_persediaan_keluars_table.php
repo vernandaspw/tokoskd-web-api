@@ -14,6 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('persediaan_keluars', function (Blueprint $table) {
+                   // hapus
             $table->id();
             $table->foreignId('produk_id')->constrained('produks')->onUpdate('cascade')->onDelete('cascade');
             $table->foreignId('produk_item_id')->constrained('produk_items')->onUpdate('cascade')->onDelete('cascade');

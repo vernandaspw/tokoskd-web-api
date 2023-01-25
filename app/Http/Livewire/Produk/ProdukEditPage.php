@@ -30,13 +30,77 @@ class ProdukEditPage extends Component
 
     // field item, tambah / edit
 
-    public $barcode1, $barcode2, $barcode3, $barcode4, $barcode5, $barcode6, $satuan_id, $satuan_dasar = 0, $konversi = 1, $harga_pokok, $harga_jual;
+    public $barcode1, $barcode2, $barcode3, $barcode4, $barcode5, $barcode6, $satuan_id, $konversi = 1, $harga_pokok, $harga_jual;
     public $editID;
     public $tambahItem = false, $editItem = false;
 
-    public $e_barcode1, $e_barcode2, $e_barcode3, $e_barcode4, $e_barcode5, $e_barcode6, $e_satuan_id, $e_satuan_dasar = 0, $e_konversi = 1, $e_harga_pokok, $e_harga_jual;
+    public $e_barcode1, $e_barcode2, $e_barcode3, $e_barcode4, $e_barcode5, $e_barcode6, $e_satuan_id, $e_konversi = 1, $e_harga_pokok, $e_harga_jual;
 
     public $satuanDasar;
+
+    public function generateHargaPokok()
+    {
+        $id = $this->ID;
+        $produk = Produk::with('produk_item')->find($id);
+        $min = $produk->produk_item->min('konversi');
+        $max = $produk->produk_item->max('konversi');
+        // dd($produk);
+
+        foreach ($produk->produk_item as $data) {
+            $dataMax = $produk->produk_item->where('konversi', $max)->first();
+            $dataMin = $produk->produk_item->where('konversi', $min)->first();
+
+            // cek data max
+            if ($data->id == $dataMax->id) {
+                // merubah harga jual , jika harga jual dibawah harga pokok
+                if ($data->harga_pokok > $data->harga_jual) {
+                    $dataMax->update([
+                        'harga_jual' => $dataMax->harga_pokok,
+                    ]);
+                }
+            } else {
+                $data->update([
+                    'harga_pokok' =>  $dataMax->harga_pokok / $dataMax->konversi * $data->konversi,
+                ]);
+
+            }
+        }
+
+        $this->emit('success', ['pesan' => 'Berhasil generate harga']);
+    }
+
+    public function generateHargaJual()
+    {
+        $id = $this->ID;
+        $produk = Produk::find($id);
+        $min = $produk->produk_item->min('konversi');
+        $max = $produk->produk_item->max('konversi');
+
+        foreach ($produk->produk_item as $data) {
+            $dataMax = $produk->produk_item->where('konversi', $max)->first();
+            $dataMin = $produk->produk_item->where('konversi', $min)->first();
+
+            if ($data->id == $dataMax->id) {
+                // merubah harga jual , jika harga jual dibawah harga pokok
+                if ($data->harga_pokok > $data->harga_jual) {
+                    $data->update([
+                        'harga_jual' => $dataMax->harga_pokok,
+                    ]);
+                }
+            } else {
+                if ($data->harga_pokok > $data->harga_jual) {
+                    $hargaTerbaru = $dataMax->harga_pokok;
+                } else {
+                    $hargaTerbaru = $dataMax->harga_jual;
+                }
+                $data->update([
+                    'harga_jual' => $hargaTerbaru / $dataMax->konversi * $data->konversi,
+                ]);
+            }
+        }
+
+        $this->emit('success', ['pesan' => 'Berhasil generate harga']);
+    }
 
     public function mount($id)
     {
@@ -97,10 +161,10 @@ class ProdukEditPage extends Component
         $this->satuans = Satuan::get();
 
         $this->produk = Produk::with('produk_item')->find($this->id);
-        $this->produkItems = ProdukItem::where('produk_id', $this->ID)->orderBy('satuan_dasar', 'DESC')->get();
+        $this->produkItems = ProdukItem::where('produk_id', $this->ID)->orderBy('konversi', 'ASC')->get();
 
-        $d = ProdukItem::where('produk_id', $this->ID)->where('satuan_dasar', true)->first();
-        $this->satuanDasar = $d != null ? $d->satuan->satuan : null;
+        // $d = ProdukItem::where('produk_id', $this->ID)->where('satuan_dasar', true)->first();
+        // $this->satuanDasar = $d != null ? $d->satuan->satuan : null;
 
         return view('livewire.produk.produk-edit-page')->extends('layouts.app')->section('content');
     }
@@ -257,7 +321,7 @@ class ProdukEditPage extends Component
         $this->barcode5 = null;
         $this->barcode6 = null;
         $this->satuan_id = null;
-        $this->satuan_dasar = null;
+
         $this->konversi = null;
         $this->harga_jual = null;
         $this->harga_pokok = null;
@@ -290,10 +354,10 @@ class ProdukEditPage extends Component
             'barcode5' => $this->barcode5,
             'barcode6' => $this->barcode6,
             'satuan_id' => $this->satuan_id,
-            'satuan_dasar' => $this->satuan_dasar,
+
             'konversi' => $this->konversi,
             'harga_pokok' => $this->harga_pokok,
-            'harga_jual' => $this->harga_jual
+            'harga_jual' => $this->harga_jual,
         ]);
 
         $this->resetDataItem();
@@ -314,9 +378,9 @@ class ProdukEditPage extends Component
         $this->barcode5 = $item->barcode5;
         $this->barcode6 = $item->barcode6;
         $this->satuan_id = $item->satuan_id;
-        $this->satuan_dasar = $item->satuan_dasar;
+
         $this->konversi = $item->konversi;
-        $this->harga_pokok= $item->harga_pokok;
+        $this->harga_pokok = $item->harga_pokok;
         $this->harga_jual = $item->harga_jual;
     }
 
@@ -330,7 +394,7 @@ class ProdukEditPage extends Component
             'barcode5' => $this->barcode5,
             'barcode6' => $this->barcode6,
             'satuan_id' => $this->satuan_id,
-            'satuan_dasar' => $this->satuan_dasar,
+
             'konversi' => $this->konversi,
             'harga_pokok' => $this->harga_pokok,
             'harga_jual' => $this->harga_jual,
@@ -342,9 +406,9 @@ class ProdukEditPage extends Component
 
     public function hapusItem($id)
     {
-    $data= ProdukItem::find($id)->delete();
+        $data = ProdukItem::find($id)->delete();
 
-    $this->emit('success', ['pesan' => 'Berhasil hapus item']);
+        $this->emit('success', ['pesan' => 'Berhasil hapus item']);
     }
 
     public function tutupEditItem()
