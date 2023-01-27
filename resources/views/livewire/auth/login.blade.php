@@ -4,7 +4,7 @@
             <!-- /.login-logo -->
             <div class="card card-outline card-primary">
                 <div class="card-header text-center">
-                    <a href="{{ url('/') }}" class="h1"><b>TOKOs </b>SKD</a>
+                    <a href="{{ url('/') }}" class="h1"><b>TOKO </b>SKD</a>
                 </div>
                 <div class="card-body">
                     <div class="mb-1 text-center">
