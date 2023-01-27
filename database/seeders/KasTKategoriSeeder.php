@@ -49,6 +49,10 @@ class KasTKategoriSeeder extends Seeder
                 'kas_t_jenis_id' => 1,
                 'nama' => 'penagihan hutang',
             ],
+            [
+                'kas_t_jenis_id' => 1,
+                'nama' => 'saldo awal',
+            ],
 
             // =======================================================
 

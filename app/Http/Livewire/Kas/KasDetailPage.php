@@ -29,13 +29,14 @@ class KasDetailPage extends Component
     {
 
         $transfer = KasTKategori::where('nama', 'transfer')->first()->id;
+        $tutupkasir = KasTKategori::where('nama', 'tutup kasir')->first()->id;
 
         $jenisMasuk = KasTJenis::where('nama', 'masuk')->first()->id;
         $this->saldoMasukTotal = KasTransaksi::where('kas_id', $this->kasID)->where('kas_t_jenis_id', $jenisMasuk)->get()->sum('nominal');
-        $this->saldoMasuk = KasTransaksi::where('kas_id', $this->kasID)->where('kas_t_jenis_id', $jenisMasuk)->where('kas_t_kategori_id', '!=', $transfer)->get()->sum('nominal');
+        $this->saldoMasuk = KasTransaksi::where('kas_id', $this->kasID)->where('kas_t_jenis_id', $jenisMasuk)->where('kas_t_kategori_id', '!=', $transfer)->where('kas_t_kategori_id', '!=', $tutupkasir)->get()->sum('nominal');
         $jenisKeluar = KasTJenis::where('nama', 'keluar')->first()->id;
         $this->saldoKeluarTotal = KasTransaksi::where('kas_id', $this->kasID)->where('kas_t_jenis_id', $jenisKeluar)->get()->sum('nominal');
-        $this->saldoKeluar = KasTransaksi::where('kas_id', $this->kasID)->where('kas_t_jenis_id', $jenisKeluar)->where('kas_t_kategori_id', '!=', $transfer)->get()->sum('nominal');
+        $this->saldoKeluar = KasTransaksi::where('kas_id', $this->kasID)->where('kas_t_jenis_id', $jenisKeluar)->where('kas_t_kategori_id', '!=', $transfer)->get()->where('kas_t_kategori_id', '!=', $tutupkasir)->sum('nominal');
 
         $this->kasTransaksi = KasTransaksi::with('kas', 'jenis', 'kategori', 'user')->where('kas_id', $this->kasID)->latest()->take($this->takeKasTransaksi)->get();
         return view('livewire.kas.kas-detail-page')->extends('layouts.app')->section('content');

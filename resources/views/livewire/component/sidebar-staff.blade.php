@@ -69,42 +69,7 @@
                                     <span class="right badge badge-danger"> ! </span>
                                 </a>
                             </li>
-                            <li class="nav-item">
-                                <a href="{{ url('/', []) }}" class="nav-link  @if(Request::is('/dashboard-minggu'))
-                                active
-                                @endif">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Minggu</p>
-                                    <span class="right badge badge-danger"> ! </span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{ url('/', []) }}" class="nav-link  @if(Request::is('/dashboard-bulan'))
-                                active
-                                @endif">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Bulan</p>
-                                    <span class="right badge badge-danger"> ! </span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{ url('/', []) }}" class="nav-link  @if(Request::is('/dashboard-Tahun'))
-                                active
-                                @endif">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Tahun</p>
-                                    <span class="right badge badge-danger"> ! </span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{ url('/', []) }}" class="nav-link  @if(Request::is('/dashboard-day'))
-                                active
-                                @endif">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Bulan</p>
-                                    <span class="right badge badge-danger"> ! </span>
-                                </a>
-                            </li>
+
 
                         </ul>
                     </li>
@@ -321,7 +286,6 @@
                                     <p>Retur pembelian</p>
                                     <span class="right badge badge-danger"> ! </span>
                                 </a>
-
                             </li>
                         </ul>
                     </li>
@@ -334,36 +298,36 @@
                             </p>
                         </a>
                         <ul class="nav nav-treeview">
-                            <li class="nav-item">
+                            {{-- <li class="nav-item">
                                 <a href="#" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Pesanan Penjualan</p>
                                     <span class="right badge badge-danger"> ! </span>
                                 </a>
-                            </li>
-                            <li class="nav-item">
+                            </li> --}}
+                            {{-- <li class="nav-item">
                                 <a href="#" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Penjualan</p>
                                     <span class="right badge badge-danger"> ! </span>
                                 </a>
-                            </li>
+                            </li> --}}
                             <li class="nav-item">
                                 <a href="{{ url('penjualan/kasir') }}" class="nav-link @if(Request::is('penjualan/kasir*'))
                                 active
                                 @endif">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Mode Kasir</p>
-                                    <span class="right badge badge-danger"> ! </span>
+                                    {{-- <span class="right badge badge-danger"> ! </span> --}}
                                 </a>
                             </li>
-                            <li class="nav-item">
+                            {{-- <li class="nav-item">
                                 <a href="#" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Retur Penjualan</p>
                                     <span class="right badge badge-danger"> ! </span>
                                 </a>
-                            </li>
+                            </li> --}}
                         </ul>
                     </li>
 

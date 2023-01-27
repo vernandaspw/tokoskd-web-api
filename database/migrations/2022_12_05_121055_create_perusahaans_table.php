@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('npwp', 50)->nullable();
             $table->string('pajak', 4,2)->default(0);
             $table->boolean('absen_masuk_keluar')->default(false);
+            // $table->boolean('mode_kasir')
             $table->timestamps();
         });
     }

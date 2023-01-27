@@ -30,11 +30,12 @@
                                 Buat kas
                             </button>
                             @endif
-                        </div>
-                        <div class="">
-                            <a href="{{ url('kas/kas-transaksi', []) }}" class="btn btn-primary rounded-pill">
+                            <a href="{{ url('kas/kas-transaksi', []) }}" class="btn btn-success rounded-pill">
                                 Buat transaksi
                             </a>
+                        </div>
+                        <div class="">
+
                             {{-- <button type="button" wire:click="tambahPage()" class="btn btn-success rounded-pill">
                                 Masuk
                             </button>
@@ -162,6 +163,7 @@
                                 <div class="">{{ $data->no == null ? 0 : $data->no . '.' }} {{ $data->nama }}
                                 </div>
                                 <div class="">@uang($data->saldo)</div>
+                                <div class="mt-3">Selisih: @uang($data->saldo_selisih)</div>
                             </div>
                         </a>
                     </div>
@@ -180,6 +182,15 @@
                                 <div class="">{{ $data->no == null ? 0 : $data->no . '.' }} {{ $data->nama }}
                                 </div>
                                 <div class="">@uang($data->saldo)</div>
+                                <div class="mt-3 @if($data->saldo_selisih > 0)
+                                    text-success
+                                    @else
+                                    text-danger
+                                @endif">Selisih: @uang($data->saldo_selisih) @if($data->saldo_selisih > 0)
+                                    +
+                                    @else
+                                    -
+                                @endif</div>
                             </div>
                         </a>
                     </div>

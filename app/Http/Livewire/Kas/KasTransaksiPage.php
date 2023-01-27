@@ -21,7 +21,7 @@ class KasTransaksiPage extends Component
 
     public function render()
     {
-        $this->kas = Kas::where('isaktif', true)->orderBy('no', 'ASC')->get();
+        $this->kas = Kas::where('isaktif', true)->get();
 
         $jenisMasuk = KasTJenis::where('nama', 'masuk')->first();
         $this->jenisMasuk_id = $jenisMasuk->id;

@@ -96,15 +96,7 @@
                                     <span class="right badge badge-danger"> ! </span>
                                 </a>
                             </li>
-                            <li class="nav-item">
-                                <a href="{{ url('/', []) }}" class="nav-link  @if(Request::is('/dashboard-day'))
-                                active
-                                @endif">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Bulan</p>
-                                    <span class="right badge badge-danger"> ! </span>
-                                </a>
-                            </li>
+
 
                         </ul>
                     </li>

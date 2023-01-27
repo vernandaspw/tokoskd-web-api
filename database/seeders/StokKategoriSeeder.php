@@ -29,6 +29,8 @@ class StokKategoriSeeder extends Seeder
                 'stok_jenis_id' => 1,
                 'nama' => 'rakitan',
             ],
+
+            
             // keluar
             [
                 'stok_jenis_id' => 2,

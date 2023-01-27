@@ -298,17 +298,7 @@
                                     <p>Rak</p>
                                 </a>
                             </li>
-                            <li class="nav-item">
-                                <a href="#" class="nav-link
-                                @if(Request::is('master/jenis-penjualan'))
-                                active
-                                @endif">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Jenis penjualan</p>
-                                    <span class="right badge badge-danger"> ! </span>
-                                </a>
 
-                            </li>
                         </ul>
                     </li>
 
@@ -453,7 +443,7 @@
                                 @endif">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Mode Kasir</p>
-                                    <span class="right badge badge-danger"> ! </span>
+                                    {{-- <span class="right badge badge-danger"> ! </span> --}}
                                 </a>
                             </li>
                             <li class="nav-item">

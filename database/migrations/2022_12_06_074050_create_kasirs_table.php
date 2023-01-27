@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('nama', 20);
             $table->foreignId('kas_id')->constrained('kas')->onUpdate('cascade')->onDelete('cascade');
             $table->boolean('isaktif')->default(true);
+            $table->boolean('mode_bebas')->default(false);
             $table->timestamps();
         });
     }

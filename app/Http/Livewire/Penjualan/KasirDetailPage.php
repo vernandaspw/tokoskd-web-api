@@ -6,14 +6,23 @@ use App\Models\AppModel;
 use App\Models\CardItem;
 use App\Models\Catalog;
 use App\Models\Kasir;
+use App\Models\Kas\Kas;
+use App\Models\Kas\KasTJenis;
+use App\Models\Kas\KasTKategori;
+use App\Models\Kas\KasTransaksi;
 use App\Models\Kategori;
 use App\Models\Merek;
 use App\Models\Pelanggan;
 use App\Models\Penjualan\Penjualan;
 use App\Models\Penjualan\PenjualanItem;
+use App\Models\Piutang;
+use App\Models\Produk;
 use App\Models\ProdukItem;
 use App\Models\Rak;
 use App\Models\RiwayatHarga;
+use App\Models\StokJenis;
+use App\Models\StokKategori;
+use App\Models\StokTransaksi;
 use Livewire\Component;
 
 class KasirDetailPage extends Component
@@ -654,7 +663,10 @@ class KasirDetailPage extends Component
         if ($this->diterima < $this->total_pembayaran) {
             $this->emit('error', ['pesan' => 'Uang pembayaran kurang']);
             return 'error';
-        } else {
+        } elseif ($this->total_harga == 0) {
+            $this->emit('error', ['pesan' => 'Pilih produk']);
+            return 'error';
+        }else {
 
             $no_penjualan = date('Y') . date('m') . date('d') . date('H') . date('i') . date('s') . rand(0001, 9999);
             $cek_no_penjualan = Penjualan::where('no_penjualan', $no_penjualan)->first();
@@ -666,7 +678,7 @@ class KasirDetailPage extends Component
             $kasir = Kasir::find($this->kasirID);
             $kas_id = $kasir->kas_id;
 
-            $omset = $this->total_harga + $this->pajak + $this->ongkir;
+            $omset = $this->total_harga + $this->ongkir;
             $untung = $this->total_harga - $this->total_harga_pokok;
 
             $penjualan = Penjualan::create([
@@ -696,51 +708,65 @@ class KasirDetailPage extends Component
                 'status' => 'success',
             ]);
 
+            // update kas berdasarkan jumlah pendapatan
+            $kaskasir = Kas::find($kas_id);
+            $kaskasir->update([
+                'saldo' => $kaskasir->saldo + $this->total_harga + $this->ongkir + $this->pajak,
+            ]);
+
+            $jenis = KasTJenis::where('nama', 'masuk')->first();
+            $kategori = KasTKategori::where('nama', 'penjualan')->first();
+            KasTransaksi::create([
+                'kas_t_jenis_id' => $jenis->id,
+                'kas_t_kategori_id' => $kategori->id,
+                'kas_id' => $kas_id,
+                'nominal' => $this->total_harga + $this->ongkir + $this->pajak,
+                'keterangan' => 'penjualan',
+                'user_id' => auth()->user()->id,
+            ]);
+
             // jika memiliki tagihan utang, buat transaksi piutang usaha
+            // hutang pel dikurangi
             if ($this->tagihan_utang > 0) {
                 $pel = Pelanggan::find($pelanggan_id);
                 $kas = Kas::find($kas_id);
-                if ($this->d_jumlah == 0) {
-                    $this->emit('error', ['pesan' => 'atau jumlah tidak boleh 0']);
-                } elseif ($pel->piutang_usaha < $this->d_jumlah) {
-                    $this->emit('error', ['pesan' => 'Jumlah tidak boleh melebihi piutang saat ini']);
+                if ($pel->piutang_usaha < $this->tagihan_utang) {
+                    $this->emit('error', ['pesan' => 'Jumlah tidak boleh melebihi utang pelanggan saat ini']);
                 } else {
                     $kas->update([
-                        'saldo' => $kas->saldo + $this->d_jumlah,
+                        'saldo' => $kas->saldo + $this->tagihan_utang,
                     ]);
                     $jenis = KasTJenis::where('nama', 'masuk')->first();
                     $kategori = KasTKategori::where('nama', 'penagihan hutang')->first();
                     $kasT = KasTransaksi::create([
                         'kas_t_jenis_id' => $jenis->id,
                         'kas_t_kategori_id' => $kategori->id,
-                        'kas_id' => $this->d_kas_id,
-                        'nominal' => $this->d_jumlah,
-                        'keterangan' => 'tagih piutang ' . $this->d_nama,
+                        'kas_id' => $kas_id,
+                        'nominal' => $this->tagihan_utang,
+                        'keterangan' => 'tagih utang',
                         'user_id' => auth()->user()->id,
                     ]);
 
                     Piutang::create([
-                        'pelanggan_id' => $this->d_id,
+                        'pelanggan_id' => $pelanggan_id,
                         'jenis' => 'kurang',
-                        'kas_id' => $this->d_kas_id,
+                        'kas_id' => $kas_id,
                         'kas_transaksi_id' => $kasT->id,
-                        'jumlah' => $this->d_jumlah,
-                        'keterangan' => $this->d_keterangan,
+                        'penjualan_id' => $penjualan->id,
+                        'kasir_id' => $this->kasirID,
+                        'jumlah' => $this->tagihan_utang,
+                        'keterangan' => null,
                         'user_id' => auth()->user()->id,
                     ]);
 
                     $pel->update([
-                        'piutang_usaha' => $pel->piutang_usaha - $this->d_jumlah,
+                        'piutang_usaha' => $pel->piutang_usaha - $this->tagihan_utang,
                     ]);
-
-                    $this->resetData();
-                    $this->emit('success', ['pesan' => 'Berhasil bayar piutang']);
-                    $this->kurangPage = false;
                 }
             }
 
             // penjualan Item
-            $cardItem = CardItem::where('user_id', auth()->user()->id);
+            $cardItem = CardItem::where('user_id', auth()->user()->id)->get();
 
             foreach ($cardItem as $item) {
                 $penjualanItem = PenjualanItem::create([
@@ -762,14 +788,81 @@ class KasirDetailPage extends Component
                     'total_harga' => $item->total_harga,
                     'untung' => $item->untung,
                 ]);
+
+                // KELOLA STOK
+                // kurangi stok pada produkItem
+                $produkitem = ProdukItem::find($item->produk_item_id);
+                $produk = Produk::find($produkitem->produk->id);
+
+                $jenis = StokJenis::where('nama', 'keluar')->first();
+                $stok_kategori = StokKategori::where('nama', 'penjualan')->first();
+
+                if ($produk->tipe == 'INV') {
+                    $min = $produk->produk_item->min('konversi');
+                    $max = $produk->produk_item->max('konversi');
+
+                    // perubahan stok
+                    foreach ($produk->produk_item as $data) {
+                        $dasar = $produk->produk_item->where('konversi', $min)->first();
+                        $konversiDasar = $data->find($item->produk_item_id);
+                        $hasil = $item->qty * $konversiDasar->konversi;
+
+                        if ($data->id == $item->produk_item_id) {
+
+                            $st = StokTransaksi::create([
+                                'produk_id' => $produkitem->produk->id,
+                                'produk_item_id' => $data->id,
+                                'stok_jenis_id' => $jenis->id,
+                                'stok_kategori_id' => $stok_kategori->id,
+                                'jumlah' => $hasil,
+                                'catatan' => null,
+                                'user_id' => auth()->user()->id,
+                            ]);
+                        }
+
+                        if ($data->id == $dasar->id) {
+                            $data->update([
+                                'stok_jual' => $data->stok_jual - $hasil,
+                                'stok_buku' => $data->stok_buku - $hasil,
+                            ]);
+                        } else {
+                            $data->update([
+                                'stok_jual' => $dasar->stok_jual / $data->konversi,
+                                'stok_buku' => $dasar->stok_buku / $data->konversi,
+                            ]);
+                        }
+                    }
+                } elseif ($produk->tipe == 'rakitan') {
+                    $produkitem->update([
+                        'stok_jual' => $produkitem->stok_jual - $item->qty,
+                        'stok_buku' => $produkitem->stok_buku - $item->qty,
+                    ]);
+                    $jenis = StokJenis::where('nama', 'keluar')->first();
+                    $st = StokTransaksi::create([
+                        'produk_id' => $produkitem->produk->id,
+                        'produk_item_id' => $produkitem->id,
+                        'stok_jenis_id' => $jenis->id,
+                        'stok_kategori_id' => $stok_kategori->id,
+                        'jumlah' => $item->qty,
+                        'catatan' => null,
+                        'user_id' => auth()->user()->id,
+                    ]);
+                }
             }
 
+            $this->pelanggan_id = null;
+            $this->pelanggan_phone = null;
+            $this->pelanggan_nama = null;
+            $this->pelanggan_piutang_usaha = null;
+            $this->pelanggan_hutang_usaha = null;
+            $this->ongkir = 0;
             foreach ($cardItem as $item) {
                 $item->delete();
             }
 
-            redirect()->to('penjualan/kasir/', $this->kasirID);
-            return ['transaksi_id' => '333435'];
+            redirect()->to('penjualan/kasir/' . $this->kasirID);
+            // $this->bayar_tunai_close();
+            return ['transaksi_id' => $penjualan->no_penjualan];
         }
 
     }

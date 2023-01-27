@@ -688,7 +688,7 @@ Harga pokok @uang($data->harga_pokok)
                         <div class="mt-2">
                             <div class="d-flex">
                                 <button type="button" wire:click='bayar_tunai_cetak_struk()'   class="btn btn-primary form-control mr-1">Simpan dan cetak struk</button>
-                                <button type="button" wire:click='bayar_tunai_cetak_nota()'  class="btn btn-info form-control ml-1">Simpan dan cetak Nota</button>
+                                {{-- <button type="button" wire:click='bayar_tunai_cetak_nota()'  class="btn btn-info form-control ml-1">Simpan dan cetak Nota</button> --}}
                             </div>
                             <button type="button"  wire:click='bayar_tunai()' class="btn btn-warning mt-2 form-control">Simpan (tanpa cetak struk)</button>
                             {{-- <a type="button" href="{{ url('struk') }}" class="btn btn-warning mt-2 form-control">cetak</a> --}}
@@ -847,12 +847,12 @@ Harga pokok @uang($data->harga_pokok)
 
         function cetakStruk(url, title) {
             // popupCenter(url, title, 720, 675);
-            popupCenter(url, title, 1000, 800);
+            popupCenter(url, title, 900, 700);
         }
 
         function popupCenter(url, title, w, h) {
-            var left = (screen.width ) ;
-            var top = (screen.height ) ;
+            var left = (screen.width - w) / 2;
+            var top = (screen.height - h) / 4;
             var myWindow = window.open(url, title,
             'resizable=yes, width=' + w + ', height=' + h + ', top='
             + top + ', left=' + left);

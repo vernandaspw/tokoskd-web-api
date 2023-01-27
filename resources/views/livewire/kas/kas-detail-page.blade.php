@@ -26,15 +26,16 @@
                         <div class="">
                             @if ($editPage)
                             @else
-                            <button type="button" wire:click="editPage({{ $kas->id }})" class="btn btn-primary rounded-pill">
+                            {{-- <button type="button" wire:click="editPage({{ $kas->id }})" class="btn btn-primary rounded-pill">
                                 Edit kas
-                            </button>
+                            </button> --}}
                             @endif
-                        </div>
-                        <div class="">
-                            <a href="{{ url('kas/kas-transaksi', []) }}" class="btn btn-primary rounded-pill">
+                            <a href="{{ url('kas/kas-transaksi', []) }}" class="btn btn-success rounded-pill">
                                 Buat transaksi
                             </a>
+                        </div>
+                        <div class="">
+
                         </div>
                     </div>
                 </div>
@@ -120,8 +121,8 @@
                                 <div class="card-body p-3 text-center">
                                     <h4>Masuk</h4>
                                  @uang($saldoMasukTotal)
-                                 <div class="">
-                                    Kecuali TF: @uang($saldoMasuk)
+                                 <div class="mt-2">
+                                    Kecuali TF & tutup kasir: @uang($saldoMasuk)
                                  </div>
                                 </div>
                             </div>
@@ -131,8 +132,8 @@
                                 <div class="card-body p-3 text-center">
                                     <h4>Keluar</h4>
                                     @uang($saldoKeluarTotal)
-                                    <div class="">
-                                        Kecuali TF: @uang($saldoKeluar)
+                                    <div class="mt-2">
+                                        Kecuali TF & tutup kasir: @uang($saldoKeluar)
                                     </div>
                                 </div>
                             </div>

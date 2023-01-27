@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Penjualan\Penjualan;
+use App\Models\KasirReport;
 use Illuminate\Http\Request;
 
-class StrukController extends Controller
+class StrukKasirLaporanTutupKas extends Controller
 {
     public function index($id)
     {
-        $data = Penjualan::where('no_penjualan', $id)->first();
+        $data = KasirReport::find($id)->first();
         // dd($data);
         return view('struk', compact('data'));
     }
