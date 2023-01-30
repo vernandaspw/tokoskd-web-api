@@ -19,12 +19,12 @@ return new class extends Migration
             $table->foreignId('produk_id')->nullable()->constrained('produks')->onUpdate('cascade')->onDelete('set null');
             $table->foreignId('produk_item_id')->nullable()->constrained('produk_items')->onUpdate('cascade')->onDelete('set null');
             $table->foreignId('satuan_id')->nullable()->constrained('satuans')->onUpdate('cascade')->onDelete('set null');
-            $table->decimal('qty', 12,2)->default(0);
-            $table->decimal('qty_terima', 12,2)->default(0);
             $table->decimal('harga_awal',15,2)->default(0);
             $table->decimal('harga_akhir',15,2)->default(0);
-            $table->decimal('potongan', 12,2)->default(0);
-            $table->decimal('total', 15,2)->default(0);
+            $table->decimal('qty_awal', 12,2)->default(0);
+            $table->decimal('qty_tersedia', 12,2)->default(0);
+            $table->decimal('total_harga_awal',15,2)->default(0);
+            $table->decimal('total_harga_akhir',15,2)->default(0);
             $table->timestamps();
         });
     }

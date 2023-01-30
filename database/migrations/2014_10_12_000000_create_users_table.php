@@ -25,14 +25,24 @@ return new class extends Migration
             $table->timestampTz('code_expired_at')->nullable();
             $table->timestampTz('code_resend_at')->nullable();
             $table->timestampTz('last_seen_at')->nullable();
-            $table->enum('role', ['superadmin', 'admin', 'kepala toko', 'staff', 'checker', 'kasir']);
+            $table->enum('role', ['superadmin', 'admin', 'kepala toko', 'store manager', 'inventory', 'staff', 'sales', 'helpers', 'legal']);
+            // superadmin   : semua akses
+            // admin        : semua akses, membeli barang ke supplier
+            // kepala toko  : bebas
+            // store manager: semua kerjaan, rekrutmen, sdm, cr, purchasing.
+            // inventory    : stok control, barang mau expired, stok opname, menyiapkan produk dietalase
+            // staff        : kasir, kebersihan toko, menyiapkan produk dietalase
+            // sales        : melakukan penjualan, bonus penjualan
+            // helpers      : membantu semua hal secara teknis di toko
+            // legal        : legalitas, laporan pajak, aktivitas dengan vendor
+
             $table->boolean('isaktif')->default(true);
-            $table->rememberToken();
+
 
             $table->timestamp('tgl_gabung')->nullable();
             $table->decimal('gaji_pokok',12,2)->nullable();
             $table->decimal('pinjaman', 12,2)->default(0);
-            $table->integer('jatah_cuti_bulan')->default(0);
+            // $table->integer('jatah_cuti_bulan')->default(0);
             $table->integer('sisa_jatah_cuti_bulan')->default(0);
 
             $table->enum('jk', ['l', 'p'])->nullable();
@@ -42,6 +52,7 @@ return new class extends Migration
             $table->string('norek', 40)->nullable();
             $table->string('an', 40)->nullable();
 
+            $table->rememberToken();
             $table->timestamps();
         });
     }

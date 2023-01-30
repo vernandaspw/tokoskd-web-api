@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Nota Kecil</title>
+    <title>Struk bill</title>
     {{-- <link rel="stylesheet" href="{{ asset('vendor/AdminLTE-3.2.0/dist/css/adminlte.min.css') }}"> --}}
     <link rel="stylesheet" href="{{ asset('vendor/MDB5/css/mdb.min.css') }}">
 
@@ -119,36 +119,30 @@
 <body onload="window.print()">
     <button class="btn btn-print btn-info mb-3 d-print-none" style="width: 100px;"
         onclick="window.print()">Print</button>
-    <div class="d-flex justify-content-center pt-1">
+    <div class="d-flex justify-content-center pt-1 pb-3">
         <div class="borders">
             <div class="text-center">
-                <h6 style="margin-bottom: 0px;">SKD</h6>
-                <p class="p-0 mt-0">P5 Mulya Jaya, RT03</p>
+                <h6 style="margin-bottom: 0px;">Struk Bill</h6>
+                <p class="p-0 mt-0" style="font-size: 15px">{{ $data->no_bill }}</p>
             </div>
 
             <div class="mt-0">
 
-                <div class="d-flex head-h w-100">
-                    <div class="col text-start text-h">No Order</div>
-                    <div class="col-auto text-end text-h">{{ $data->no_penjualan }}</div>
-                </div>
-                <div class="d-flex justify-content-center head-h w-100">
-                    <div class="text-start text-h">
-                        {{ date('H:i', strtotime($data->waktu)) }}
-                    </div>
-                    <div class="text-end text-h">
-                        {{ date('d-m-Y', strtotime($data->waktu)) }}
-                    </div>
-                </div>
-                <div class="d-flex head-h w-100">
-                    <div class="col text-start text-h">Kasir</div>
-                    <div class="col-auto text-end text-h">{{ strtolower($data->kasir->nama) }}-{{ strtolower($data->user->nama) }}</div>
-                </div>
+
+
+
                 <div class="d-flex head-h w-100">
                     <div class="col text-start text-h">Pelanggan</div>
                     <div class="col-auto text-end text-h">{{ strtolower($data->pelanggan != null ? $data->pelanggan->nama : '-') }}</div>
                 </div>
-
+                <div class="d-flex justify-content-center head-h w-100">
+                    <div class="text-start text-h">
+                        {{ \Carbon\Carbon::parse($data->created_at)->isoFormat('HH:mm') }}
+                    </div>
+                    <div class="text-end text-h">
+                        {{ \Carbon\Carbon::parse($data->created_ata)->isoFormat('D MMMM Y') }}
+                    </div>
+                </div>
                 {{-- <table class="m-0 heads" style="border: 0;">
                     <tr class="m-0 p-0">
                         <td style="width:20%" class="text-h text-start">No Order</td>
@@ -219,7 +213,7 @@
                 </div>
             </div> --}}
             <table style="width: 100%" class="item text-dark" style="border: 0;">
-                @foreach ($data->penjualan_item as $item)
+                @foreach ($data->bill_item as $item)
                 <tr class="">
                     <td colspan="2" class="">
                         <p  class="textItem">{{ strtolower($item->produk->nama) }} ({{ strtolower($item->satuan->satuan) }})
@@ -278,61 +272,10 @@
                 <div class="col text-start totalT">Total Pembayaran:</div>
                 <div class="col-auto text-end totalT">@uang($data->total_pembayaran)</div>
             </div>
-            @if($data->diterima > 0)
-            <div class="d-flex totalH">
-                <div class="col text-start totalT">Diterima:</div>
-                <div class="col-auto text-end totalT">@uang($data->diterima)</div>
-            </div>
-            @endif
-            @if($data->kembali > 0)
-            <div class="d-flex totalH">
-                <div class="col text-start totalT">Kembali</div>
-                <div class="col-auto text-end totalT">@uang($data->kembali)</div>
-            </div>
-            @endif
 
-            {{-- <table width="100%" class="m-0 total" style="border: 0;">
-                <tr>
-                    <td>Total Harga jual:</td>
-                    <td class="text-right">@uang(20000000)</td>
-                </tr>
-                <tr>
-                    <td>Potongan diskon:</td>
-                    <td class="text-right">@uang(20000000)</td>
-                </tr>
-                <tr>
-                    <td>Total harga:</td>
-                    <td class="text-right">@uang(20000000)</td>
-                </tr>
-                <tr>
-                    <td>Tagihan utang:</td>
-                    <td class="text-right">@uang(22221)</td>
-                </tr>
-                <tr>
-                    <td>Ongkir:</td>
-                    <td class="text-right">@uang(22221)</td>
-                </tr>
-                <tr>
-                    <td>Potongan utang toko:</td>
-                    <td class="text-right">@uang(22221)</td>
-                </tr>
-
-                <tr>
-                    <td>Total Pembayaran:</td>
-                    <td class="text-right">@uang(22221)</td>
-                </tr>
-                <tr>
-                    <td>Diterima:</td>
-                    <td class="text-right">@uang(2323)</td>
-                </tr>
-                <tr>
-                    <td>Kembali:</td>
-                    <td class="text-right">@uang(2242424)</td>
-                </tr>
-            </table> --}}
 
             <div class="mt-1" style="border-bottom: solid 1px"></div>
-            <p class="text-center mb-0 pb-0">-- TERIMA KASIH --</p>
+            <p class="text-center mb-0 pb-0">-- Silahkan bayar bill ini --</p>
         </div>
     </div>
 

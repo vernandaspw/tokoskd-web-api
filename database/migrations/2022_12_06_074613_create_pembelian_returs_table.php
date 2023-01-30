@@ -20,15 +20,15 @@ return new class extends Migration
             $table->string('inv_supplier',30)->nullable();
             $table->timestamp('waktu')->default(now());
             $table->foreignId('supplier_id')->nullable()->constrained('suppliers')->onUpdate('cascade')->onDelete('set null');
-            $table->foreignId('user_id')->nullable()->constrained('users')->onUpdate('cascade')->onDelete('set null');
-            $table->foreignId('pembayaran_id')->nullable()->constrained('kas')->onUpdate('cascade')->onDelete('set null');
-            $table->decimal('sub_total', 15,2)->default(0);
-            $table->decimal('biaya_lain',12,2)->default(0);
-            $table->decimal('tot_pembayaran',15,2)->default(0);
-            $table->boolean('islunas')->default(true);
-            $table->boolean('isPotonganPembelian')->default(false);
+            $table->foreignId('kas_id')->nullable()->constrained('kas')->onUpdate('cascade')->onDelete('set null');
+
+            $table->decimal('total_harga_awal', 15,2)->default(0);
+            $table->decimal('total_harga_akhir',15,2)->default(0);
+            $table->decimal('total_harga_retur',15,2)->default(0);
+
             $table->longText('keterangan')->nullable();
             $table->enum('status', ['pending', 'success', 'failed']);
+            $table->foreignId('user_id')->nullable()->constrained('users')->onUpdate('cascade')->onDelete('set null');
             $table->timestamps();
         });
     }

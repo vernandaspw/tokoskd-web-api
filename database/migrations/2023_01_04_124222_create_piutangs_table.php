@@ -21,7 +21,9 @@ return new class extends Migration
             $table->foreignId('kas_id')->nullable()->constrained('kas')->onUpdate('cascade')->onDelete('set null');
             $table->foreignId('kas_transaksi_id')->nullable()->constrained('kas_transaksis')->onUpdate('cascade')->onDelete('set null');
             $table->foreignId('penjualan_id')->nullable()->constrained('penjualans')->onUpdate('cascade')->onDelete('set null');
+            $table->foreignId('penjualan_retur_id')->nullable()->constrained('penjualans')->onUpdate('cascade')->onDelete('set null');
             $table->foreignId('pembelian_id')->nullable()->constrained('pembelians')->onUpdate('cascade')->onDelete('set null');
+            $table->foreignId('pembelian_retur_id')->nullable()->constrained('pembelians')->onUpdate('cascade')->onDelete('set null');
             $table->decimal('jumlah', 14,2)->default(0);
             $table->longText('keterangan')->nullable();
             $table->foreignId('user_id')->nullable()->constrained('users')->onUpdate('cascade')->onDelete('set null');

@@ -11,25 +11,25 @@
     <link rel="manifest" href="{{ asset('/manifest.json') }}"> --}}
 
     <!-- Google Font: Source Sans Pro -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    {{-- <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback"> --}}
     <!-- Font Awesome -->
     <link rel="stylesheet" href="{{ asset('vendor/AdminLTE-3.2.0/plugins/fontawesome-free/css/all.min.css') }}">
     <!-- Ionicons -->
     {{-- <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css"> --}}
     <!-- Tempusdominus Bootstrap 4 -->
-    <link rel="stylesheet" href="{{ asset('vendor/AdminLTE-3.2.0/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css') }}">
+    {{-- <link rel="stylesheet" href="{{ asset('vendor/AdminLTE-3.2.0/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css') }}"> --}}
     <!-- iCheck -->
-    <link rel="stylesheet" href="{{ asset('vendor/AdminLTE-3.2.0/plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
+    {{-- <link rel="stylesheet" href="{{ asset('vendor/AdminLTE-3.2.0/plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}"> --}}
     <!-- JQVMap -->
     <link rel="stylesheet" href="{{ asset('vendor/AdminLTE-3.2.0/plugins/jqvmap/jqvmap.min.css') }}">
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset('vendor/AdminLTE-3.2.0/dist/css/adminlte.min.css') }}">
     <!-- overlayScrollbars -->
-    <link rel="stylesheet" href="{{ asset('vendor/AdminLTE-3.2.0/plugins/overlayScrollbars/css/OverlayScrollbars.min.css') }}">
+    {{-- <link rel="stylesheet" href="{{ asset('vendor/AdminLTE-3.2.0/plugins/overlayScrollbars/css/OverlayScrollbars.min.css') }}"> --}}
     <!-- Daterange picker -->
-    <link rel="stylesheet" href="{{ asset('vendor/AdminLTE-3.2.0/plugins/daterangepicker/daterangepicker.css') }}">
+    {{-- <link rel="stylesheet" href="{{ asset('vendor/AdminLTE-3.2.0/plugins/daterangepicker/daterangepicker.css') }}"> --}}
     <!-- summernote -->
-    <link rel="stylesheet" href="{{ asset('vendor/AdminLTE-3.2.0/plugins/summernote/summernote-bs4.min.css') }}">
+    {{-- <link rel="stylesheet" href="{{ asset('vendor/AdminLTE-3.2.0/plugins/summernote/summernote-bs4.min.css') }}"> --}}
 
     <link rel="stylesheet" href="{{ asset('vendor/AdminLTE-3.2.0/plugins/select2/css/select2.min.css') }}">
     {{-- MDB4 --}}
@@ -40,11 +40,11 @@
 
     <link rel="stylesheet" href="{{ asset('vendor/sweatalert2/sweetalert2.min.css') }}">
     <!-- Fonts -->
-    <link href="https://fonts.bunny.net/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    {{-- <link href="https://fonts.bunny.net/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet"> --}}
 
     {{-- VEnDOR --}}
     <!-- Font Awesome -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"> --}}
     <style>
         body {
             font-family: 'Nunito', sans-serif;
@@ -126,29 +126,29 @@ dark-mode
     <!-- ChartJS -->
     {{-- <script src="{{ asset('vendor/AdminLTE-3.2.0/plugins/chart.js/Chart.min.js') }}"></script> --}}
     <!-- Sparkline -->
-    <script src="{{ asset('vendor/AdminLTE-3.2.0/plugins/sparklines/sparkline.js') }}"></script>
+    {{-- <script src="{{ asset('vendor/AdminLTE-3.2.0/plugins/sparklines/sparkline.js') }}"></script> --}}
     <!-- JQVMap -->
     <script src="{{ asset('vendor/AdminLTE-3.2.0/plugins/jqvmap/jquery.vmap.min.js') }}"></script>
     <script src="{{ asset('vendor/AdminLTE-3.2.0/plugins/jqvmap/maps/jquery.vmap.usa.js') }}"></script>
     <!-- jQuery Knob Chart -->
     <script src="{{ asset('vendor/AdminLTE-3.2.0/plugins/jquery-knob/jquery.knob.min.js') }}"></script>
     <!-- daterangepicker -->
-    <script src="{{ asset('vendor/AdminLTE-3.2.0/plugins/moment/moment.min.js') }}"></script>
-    <script src="{{ asset('vendor/AdminLTE-3.2.0/plugins/daterangepicker/daterangepicker.js') }}"></script>
+    {{-- <script src="{{ asset('vendor/AdminLTE-3.2.0/plugins/moment/moment.min.js') }}"></script> --}}
+    {{-- <script src="{{ asset('vendor/AdminLTE-3.2.0/plugins/daterangepicker/daterangepicker.js') }}"></script> --}}
     <!-- Tempusdominus Bootstrap 4 -->
-    <script src="{{ asset('vendor/AdminLTE-3.2.0/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js') }}">
+    {{-- <script src="{{ asset('vendor/AdminLTE-3.2.0/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js') }}"> --}}
     </script>
     <!-- Summernote -->
-    <script src="{{ asset('vendor/AdminLTE-3.2.0/plugins/summernote/summernote-bs4.min.js') }}"></script>
+    {{-- <script src="{{ asset('vendor/AdminLTE-3.2.0/plugins/summernote/summernote-bs4.min.js') }}"></script> --}}
     <!-- overlayScrollbars -->
-    <script src="{{ asset('vendor/AdminLTE-3.2.0/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js') }}">
+    {{-- <script src="{{ asset('vendor/AdminLTE-3.2.0/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js') }}"> --}}
     </script>
     <!-- AdminLTE App -->
     <script src="{{ asset('vendor/AdminLTE-3.2.0/dist/js/adminlte.js') }}"></script>
     <!-- AdminLTE for demo purposes -->
-    <script src="{{ asset('vendor/AdminLTE-3.2.0/dist/js/demo.js') }}"></script>
+    {{-- <script src="{{ asset('vendor/AdminLTE-3.2.0/dist/js/demo.js') }}"></script> --}}
     <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-    <script src="{{ asset('vendor/AdminLTE-3.2.0/dist/js/pages/dashboard.js') }}"></script>
+    {{-- <script src="{{ asset('vendor/AdminLTE-3.2.0/dist/js/pages/dashboard.js') }}"></script> --}}
 
 
     {{-- MDB4 --}}

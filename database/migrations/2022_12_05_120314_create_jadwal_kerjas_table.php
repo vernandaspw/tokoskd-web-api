@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('jadwal_kerjas', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onUpdate('cascade')->onDelete('cascade');
-            $table->enum('shift', ['pagi', 'sore', 'malam'])->nullable();
+            $table->enum('shift', ['pagi', 'sore'])->nullable();
             $table->enum('hari', ['senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu', 'minggu']);
             $table->time('jam_masuk');
             $table->time('jam_keluar');

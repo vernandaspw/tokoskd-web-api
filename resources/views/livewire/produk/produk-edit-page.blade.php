@@ -275,7 +275,6 @@
 
 
                                         @else
-
                                         <button type="button" wire:click="tambahItem()" class="btn btn-primary">Tambah item</button>
                                         @endif
                                     </div>
@@ -369,7 +368,7 @@
                                     </div>
                                     <div class="">
                                         <b>
-                                            <h5>Tambah Item</h5>
+                                            {{-- <h5>Tambah Item</h5> --}}
                                         </b>
                                     </div>
                                     <div class="">
@@ -432,10 +431,10 @@
 
                                     @if(($harga_jual == null ? 0 : $harga_jual) - ($harga_pokok == null ? 0 : $harga_pokok) <= 0) <button type="button" wire:click="perbaruiItem()" class="mt-1 disabled btn btn-success mb-2">Perbarui</button>
                                         @else
-                                        <button type="button" wire:click="perbaruiItem()" class="mt-1 btn btn-success mb-2">Perbarui</button>
+                                        <button type="button" wire:click="perbaruiItem()" class="mt-1 btn btn-block btn-success mb-2">Perbarui</button>
                                         @endif
 
-                                        <button type="button" wire:click="tutupEditItem()" class="mt-2 btn btn-white mb-2">Tutup</button>
+                                        <button type="button" wire:click="tutupEditItem()" class="mt-1 btn btn-block btn-danger mb-2">Tutup</button>
 
                                 </div>
                                 @else

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\StrukBillController;
 use App\Http\Controllers\StrukController;
 use App\Http\Controllers\StrukKasirLaporanTutupKas;
 use App\Http\Livewire\Akun\Akun;
@@ -107,4 +108,5 @@ Route::middleware(['islogin'])->group(function () {
 
     Route::get('penjualan/struk/{id}', [StrukController::class, 'index'])->name('struk');
     Route::get('penjualan/struk/kasir/tutup/{id}', [StrukKasirLaporanTutupKas::class, 'index']);
+    Route::get('penjualan/struk/bill/{id}', [StrukBillController::class, 'index']);
 });

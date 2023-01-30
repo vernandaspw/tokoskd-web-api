@@ -58,11 +58,12 @@ class AkunPage extends Component
         $this->validate([
             'nama' => 'required',
             'phone' => 'required|unique:users,phone',
-            'email' => 'unique:users,email',
+            'email' => 'unique:users,email|nullable',
             'password' => 'required',
             'role' => 'required',
         ]);
 
+       try {
         $nip = date('Y') . date('m') . date('d') . date('H') . date('i') . date('s') . rand(001, 999);
         $cek = User::where('nip', $nip)->first();
         if ($cek != null) {
@@ -82,6 +83,9 @@ class AkunPage extends Component
         $this->resetData();
 
         $this->emit('success', ['pesan' => 'Berhasil buat akun']);
+       } catch (\Throwable $e) {
+        dd($e->getMessage());
+    }
     }
 
     // EDIT

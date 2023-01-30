@@ -16,8 +16,10 @@ return new class extends Migration
         Schema::create('kehadirans', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onUpdate('cascade')->onDelete('cascade');
+            $table->enum('status', ['hadir', 'tidak hadir', 'izin', 'sakit', 'libur berbayar']);
             $table->date('tanggal');
-            $table->enum('status', ['hadir', 'izin', 'sakit', 'tidak hadir']);
+            $table->timestamp('masuk')->nullable();
+            $table->timestamp('keluar')->nullable();
             $table->longText('catatan')->nullable();
             $table->timestamps();
         });

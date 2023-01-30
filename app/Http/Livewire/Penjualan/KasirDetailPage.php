@@ -3,6 +3,8 @@
 namespace App\Http\Livewire\Penjualan;
 
 use App\Models\AppModel;
+use App\Models\Bill;
+use App\Models\BillItem;
 use App\Models\CardItem;
 use App\Models\Catalog;
 use App\Models\Kasir;
@@ -20,6 +22,7 @@ use App\Models\Produk;
 use App\Models\ProdukItem;
 use App\Models\Rak;
 use App\Models\RiwayatHarga;
+use App\Models\Satuan;
 use App\Models\StokJenis;
 use App\Models\StokKategori;
 use App\Models\StokTransaksi;
@@ -39,6 +42,11 @@ class KasirDetailPage extends Component
 
     public $kasirID;
 
+    public function takeprodukitem()
+    {
+        $this->takeprodukitem += 25;
+    }
+
     public function menuProduk()
     {
         $this->menuManual = false;
@@ -49,12 +57,64 @@ class KasirDetailPage extends Component
     {
         $this->menuManual = true;
         $this->menuBuatBaru = false;
+
     }
 
     public function menuBuatBaru()
     {
         $this->menuManual = false;
         $this->menuBuatBaru = true;
+        $this->satuans = Satuan::get();
+    }
+    public $produkbaru_nama;
+    public $produkbaru_tipe;
+    public $produkbaru_satuan_id;
+    public $produkbaru_konversi = 1;
+    public $produkbaru_harga_jual;
+    public $produkbaru_barcode1;
+    public $produkbaru_barcode2;
+    public $produkbaru_barcode3;
+    public $produkbaru_barcode4;
+    public $produkbaru_barcode5;
+    public $produkbaru_barcode6;
+
+    public function simpanProdukBaru()
+    {
+        $P = Produk::create([
+            'nama' => $this->produkbaru_nama,
+            'tipe' => $this->produkbaru_tipe,
+        ]);
+        $item = ProdukItem::create([
+            'produk_id' => $P->id,
+            'barcode1' => $this->produkbaru_barcode1,
+            'barcode2' => $this->produkbaru_barcode2,
+            'barcode3' => $this->produkbaru_barcode3,
+            'barcode4' => $this->produkbaru_barcode4,
+            'barcode5' => $this->produkbaru_barcode5,
+            'barcode6' => $this->produkbaru_barcode6,
+            'satuan_id' => $this->produkbaru_satuan_id,
+
+            'konversi' => $this->produkbaru_konversi,
+            'harga_jual' => $this->produkbaru_harga_jual != null ? $this->produkbaru_harga_jual : 0,
+        ]);
+
+        $this->addNewCardItem($item->id);
+        $this->resetProdukBaru();
+    }
+
+    public function resetProdukBaru()
+    {
+        $this->produkbaru_nama = null;
+        $this->produkbaru_tipe = null;
+        $this->produkbaru_satuan_id = null;
+        $this->produkbaru_konversi = 1;
+        $this->produkbaru_harga_jual = null;
+        $this->produkbaru_barcode1 = null;
+        $this->produkbaru_barcode2 = null;
+        $this->produkbaru_barcode3 = null;
+        $this->produkbaru_barcode4 = null;
+        $this->produkbaru_barcode5 = null;
+        $this->produkbaru_barcode6 = null;
     }
 
     public function editItem($id)
@@ -72,6 +132,10 @@ class KasirDetailPage extends Component
 
     public function render()
     {
+        $this->bills = Bill::get();
+
+        $this->billCount = Bill::get()->count();
+
         $this->kasir = Kasir::find($this->kasirID)->first();
         // dd($this->kasir);
         $pi = ProdukItem::with('produk');
@@ -129,7 +193,7 @@ class KasirDetailPage extends Component
         $this->kategoris = Kategori::latest()->get();
         $this->raks = Rak::latest()->get();
 
-        $this->carditem = CardItem::get();
+        $this->carditem = CardItem::where('user_id', auth()->user()->id)->get();
 
         // if ($this->ubahHargaJualDasar == null) {
         //     $this->ubahHargaJualDasar = 0;
@@ -242,6 +306,8 @@ class KasirDetailPage extends Component
 
     public function addCardItem($id)
     {
+        session()->put('bill_baru', true);
+        $this->billPage = false;
         $data = ProdukItem::find($id);
         if ($data->diskon_start <= date('Y-m-d') && $data->diskon_end >= date('Y-m-d')) {
             if ($data->jam_start != null && $data->jam_end != null) {
@@ -435,7 +501,8 @@ class KasirDetailPage extends Component
     public function deleteItem($id)
     {
         $this->deleteLoading = true;
-        CardItem::find($id)->delete();
+        $c = CardItem::find($id);
+        $c->delete();
         $this->deleteLoading = false;
     }
 
@@ -656,6 +723,7 @@ class KasirDetailPage extends Component
     public function bayar_tunai()
     {
         $this->bayar_tunai_query();
+
     }
     public function bayar_tunai_query()
     {
@@ -666,7 +734,7 @@ class KasirDetailPage extends Component
         } elseif ($this->total_harga == 0) {
             $this->emit('error', ['pesan' => 'Pilih produk']);
             return 'error';
-        }else {
+        } else {
 
             $no_penjualan = date('Y') . date('m') . date('d') . date('H') . date('i') . date('s') . rand(0001, 9999);
             $cek_no_penjualan = Penjualan::where('no_penjualan', $no_penjualan)->first();
@@ -860,8 +928,28 @@ class KasirDetailPage extends Component
                 $item->delete();
             }
 
+            // delete bill
+            if ($this->bill_id) {
+                $id_bill = $this->bill_id;
+            }elseif (session('bill_id')) {
+                $id_bill = session('bill_id');
+            }else {
+                $id_bill = null;
+            }
+            if ($id_bill) {
+                $bill = Bill::find($id_bill);
+                $bill->delete();
+            }
+
+
+            if (session('bill_id')) {
+                session()->forget('bill_id');
+                session()->forget('bill_baru');
+            }
+
             redirect()->to('penjualan/kasir/' . $this->kasirID);
             // $this->bayar_tunai_close();
+            sleep(1);
             return ['transaksi_id' => $penjualan->no_penjualan];
         }
 
@@ -888,5 +976,304 @@ class KasirDetailPage extends Component
             $data->delete();
         }
 
+        session()->forget('bill_id');
+        session()->forget('bill_baru');
+
     }
+
+    // ================================================================================
+    // ===============================================================================
+    // ===============================================================================
+
+    public $new_item_produk_id = null, $new_item_produk_nama;
+
+    public $new_item_barcode1;
+    public $new_item_barcode2;
+    public $new_item_barcode3;
+    public $new_item_barcode4;
+    public $new_item_barcode5;
+    public $new_item_barcode6;
+    public $new_item_satuan_id;
+    public $new_item_konversi;
+    public $new_item_harga_jual;
+
+    public function new_item($id)
+    {
+        $this->new_item_produk_id = $id;
+        $produk = Produk::find($id);
+        $this->new_item_produks = $produk;
+        foreach ($produk->produk_item as $item) {
+            $konversiDasar = $item->min('konversi');
+        }
+
+        $dasar = ProdukItem::where('produk_id', $id)->where('konversi', $konversiDasar)->first();
+
+        $this->dasarKov = $dasar->satuan->satuan;
+        $this->dasarKovJml = $dasar->konversi;
+        $this->new_item_produk_nama = $produk->nama;
+        $this->satuans = Satuan::where('isaktif', true)->get();
+    }
+
+    public function closeNewItem()
+    {
+        $this->new_item_produk_id = null;
+        $this->new_item_produk_nama = null;
+        $this->new_item_barcode1 = null;
+        $this->new_item_barcode2 = null;
+        $this->new_item_barcode3 = null;
+        $this->new_item_barcode4 = null;
+        $this->new_item_barcode5 = null;
+        $this->new_item_barcode6 = null;
+        $this->new_item_satuan_id = null;
+        $this->new_item_konversi = null;
+        $this->new_item_harga_jual = null;
+    }
+
+    public function saveNewItem()
+    {
+        $item = ProdukItem::create([
+            'produk_id' => $this->new_item_produk_id,
+            'satuan_id' => $this->new_item_satuan_id,
+            'konversi' => $this->new_item_konversi,
+            'harga_jual' => $this->new_item_harga_jual,
+            'barcode1' => $this->new_item_barcode1,
+            'barcode2' => $this->new_item_barcode2,
+            'barcode3' => $this->new_item_barcode3,
+            'barcode4' => $this->new_item_barcode4,
+            'barcode5' => $this->new_item_barcode5,
+            'barcode6' => $this->new_item_barcode6,
+        ]);
+
+        $this->closeNewItem();
+        $this->emit('success', ['pesan' => 'Berhasil tambah item']);
+    }
+
+    public $editItemBar_id = null, $editItemBar_produk_nama;
+    public $editItemBar_barcode1;
+    public $editItemBar_barcode2;
+    public $editItemBar_barcode3;
+    public $editItemBar_barcode4;
+    public $editItemBar_barcode5;
+    public $editItemBar_barcode6;
+    public $editItemBar_satuan_id;
+    public $editItemBar_konversi;
+
+    public function editItemBarId($id)
+    {
+        $this->editItemBar_id = $id;
+
+        $this->satuans = Satuan::where('isaktif', true)->get();
+        $item = ProdukItem::find($id);
+        $produk = Produk::find($item->produk->id);
+        $this->editItemBar_produks = $produk;
+        foreach ($produk->produk_item as $item) {
+            $konversiDasar = $item->min('konversi');
+        }
+        $dasar = ProdukItem::where('produk_id', $produk->id)->where('konversi', $konversiDasar)->first();
+        $this->dasarKov = $dasar->satuan->satuan;
+        $this->dasarKovJml = $dasar->konversi;
+
+        $this->editItemBar_produk_nama = $item->produk->nama;
+        $this->editItemBar_barcode1 = $item->barcode1;
+        $this->editItemBar_barcode2 = $item->barcode2;
+        $this->editItemBar_barcode3 = $item->barcode3;
+        $this->editItemBar_barcode4 = $item->barcode4;
+        $this->editItemBar_barcode5 = $item->barcode5;
+        $this->editItemBar_barcode6 = $item->barcode6;
+        $this->editItemBar_satuan_id = $item->satuan_id;
+        $this->editItemBar_konversi = $item->konversi;
+
+    }
+
+    public function closeEditBarItem()
+    {
+        $this->editItemBar_id = null;
+        $this->editItemBar_produks = null;
+        $this->editItemBar_produk_nama = null;
+        $this->editItemBar_barcode1 = null;
+        $this->editItemBar_barcode2 = null;
+        $this->editItemBar_barcode3 = null;
+        $this->editItemBar_barcode4 = null;
+        $this->editItemBar_barcode5 = null;
+        $this->editItemBar_barcode6 = null;
+        $this->editItemBar_satuan_id = null;
+        $this->editItemBar_konversi = null;
+    }
+
+    public function saveEditBarItem()
+    {
+        $item = ProdukItem::find($this->editItemBar_id)->update([
+            'barcode1' => $this->editItemBar_barcode1,
+            'barcode2' => $this->editItemBar_barcode2,
+            'barcode3' => $this->editItemBar_barcode3,
+            'barcode4' => $this->editItemBar_barcode4,
+            'barcode5' => $this->editItemBar_barcode5,
+            'barcode6' => $this->editItemBar_barcode6,
+        ]);
+
+        $this->closeEditBarItem();
+        $this->emit('success', ['pesan' => 'Berhasil update barcode']);
+    }
+
+    // ============================================================================
+    // BILL
+    // ===========================================================================
+    public $billPage = false;
+    public $bill_id;
+
+    public function billPageShow()
+    {
+        if ($this->billPage == true) {
+            $this->billPage = false;
+        } else {
+            $this->billPage = true;
+        }
+    }
+
+    public function addNewBill()
+    {
+        if ($this->total_pembayaran) {
+            $no_bill = date('H') . date('i') . date('s') . rand(0001, 9999);
+        $cek = Bill::where('no_bill', $no_bill)->first();
+        if ($cek != null) {
+            $no_bill = date('H') . date('i') . date('s') . rand(0001, 9999);
+        }
+
+        $bill = Bill::create([
+            'no_bill' => $no_bill,
+            'pelanggan_id' => $this->pelanggan_id,
+            'total_harga_pokok' => $this->total_harga_pokok,
+            'total_harga_jual' => $this->total_harga_jual,
+            'potongan_diskon' => $this->total_potongan_diskon,
+            'total_harga' => $this->total_harga,
+            'tagihan_utang' => $this->tagihan_utang,
+            'ongkir' => $this->ongkir,
+            'pajak' => $this->pajak,
+            'total_pembayaran' => $this->total_pembayaran,
+            'user_id' => auth()->user()->id,
+        ]);
+        $card = CardItem::where('user_id', auth()->user()->id)->get();
+
+        foreach ($card as $data) {
+            BillItem::create([
+                'bill_id' => $bill->id,
+                'produk_id' => $data->produk_id,
+                'produk_nama' => $data->produk_nama != null ? $data->produk_nama : null,
+                'merek_id' => $data->merek_id,
+                'catalog_id' => $data->catalog_id,
+                'kategori_id' => $data->kategori_id,
+                'rak_id' => $data->rak_id,
+                'produk_item_id' => $data->produk_item_id,
+                'satuan_id' => $data->satuan_id,
+                'harga_modal' => $data->harga_modal,
+                'harga_jual' => $data->harga_jual,
+                'qty' => $data->qty,
+                'total_harga_modal' => $data->total_harga_modal,
+                'total_harga_jual' => $data->total_harga_jual,
+                'diskon_persen' => $data->diskon_persen,
+                'potongan_diskon' => $data->potongan_diskon,
+                'total_harga' => $data->total_harga,
+                'untung' => $data->untung,
+            ]);
+        }
+
+        // delete cardItem
+        foreach ($card as $data) {
+            $data->delete();
+        }
+
+        $this->pelanggan_id = null;
+        $this->pelanggan_phone = null;
+        $this->pelanggan_nama = null;
+        $this->pelanggan_piutang_usaha = null;
+        $this->pelanggan_hutang_usaha = null;
+        $this->ongkir = 0;
+
+
+        $this->emit('cetakData', ['url' => url('penjualan/struk/bill/'. $bill->no_bill), 'title' => 'Struk Bill']);
+        $this->emit('success', ['pesan' => 'Berhasil simpan bill']);
+        }else {
+            $this->emit('error', ['pesan' => 'Total pembayaran tidak boleh 0']);
+        }
+    }
+
+    public function proses_bill($id)
+    {
+        $this->bill_id = $id;
+        session()->put('bill_id', $id);
+        $bill = Bill::find($id);
+
+        // bersihkan
+        $pelanggan = Pelanggan::find($bill->pelanggan_id);
+        $this->pelanggan_id = null;
+        $this->pelanggan_phone = null;
+        $this->pelanggan_nama = null;
+        $this->pelanggan_piutang_usaha = null;
+        $this->pelanggan_hutang_usaha = null;
+        $this->tagihan_utang = 0;
+        $this->ongkir = 0;
+        $this->total_harga_pokok = 0;
+        $this->total_harga_jual = 0;
+        $this->total_potongan_diskon = 0;
+        $this->total_harga = 0;
+        $this->tagihan_utang = 0;
+        $this->ongkir = 0;
+        $this->pajak = 0;
+        $this->total_pembayaran = 0;
+
+        // bersihkan cart
+        $cart = CardItem::where('user_id', auth()->user()->id)->get();
+        foreach ($cart as $item) {
+            $item->delete();
+        }
+
+        // Pulihkan
+        if ($bill->pelanggan_id) {
+            $pelanggan = Pelanggan::find($bill->pelanggan_id);
+            $this->pelanggan_id = $bill->pelanggan_id != null ? $bill->pelanggan_id : null;
+            $this->pelanggan_phone = $pelanggan->phone != null ? $pelanggan->phone : null;
+            $this->pelanggan_nama = $pelanggan->nama != null ? $pelanggan->nama : null;
+            $this->pelanggan_piutang_usaha = $pelanggan->piutang_usaha;
+            $this->pelanggan_hutang_usaha = $pelanggan->hutang_usaha;
+        }
+
+        $this->ongkir = $bill->ongkir;
+        $this->pajak = $bill->pajak;
+
+        // pulihkan bill item > buat cart item
+        foreach ($bill->bill_item as $data) {
+            CardItem::create([
+                'user_id' => auth()->user()->id,
+                'produk_id' => $data->produk_id,
+                'produk_nama' => $data->produk_nama != null ? $data->produk_nama : null,
+                'merek_id' => $data->merek_id,
+                'catalog_id' => $data->catalog_id,
+                'kategori_id' => $data->kategori_id,
+                'rak_id' => $data->rak_id,
+                'produk_item_id' => $data->produk_item_id,
+                'satuan_id' => $data->satuan_id,
+                'harga_modal' => $data->harga_modal,
+                'harga_jual' => $data->harga_jual,
+                'qty' => $data->qty,
+                'total_harga_modal' => $data->total_harga_modal,
+                'total_harga_jual' => $data->total_harga_jual,
+                'diskon_persen' => $data->diskon_persen,
+                'potongan_diskon' => $data->potongan_diskon,
+                'total_harga' => $data->total_harga,
+                'untung' => $data->untung,
+            ]);
+        }
+
+        $this->billPage = false;
+    }
+
+    public function hapus_bill($id)
+    {
+        $bill = Bill::find($id);
+        $bill->delete();
+        $this->bill_id = null;
+        session()->forget('bill_id');
+        session()->forget('bill_baru');
+    }
+
 }

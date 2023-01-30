@@ -3,12 +3,12 @@
 namespace App\Http\Livewire\Penjualan;
 
 use App\Models\Kasir;
+use App\Models\KasirLog;
+use App\Models\KasirReport;
 use App\Models\Kas\Kas;
 use App\Models\Kas\KasTJenis;
 use App\Models\Kas\KasTKategori;
 use App\Models\Kas\KasTransaksi;
-use App\Models\KasirLog;
-use App\Models\KasirReport;
 use App\Models\Penjualan\Penjualan;
 use Carbon\Carbon;
 use Livewire\Component;
@@ -21,7 +21,7 @@ class KasirPage extends Component
 
     public $editID;
 
-    public $kasiractive = [], $kasirdeactive = [];
+    public $kasiractive, $kasirdeactive = [];
 
     public $kasData;
 
@@ -43,10 +43,16 @@ class KasirPage extends Component
 
         $this->KasirReportAll = KasirReport::latest()->take($this->take_report)->get();
 
-        foreach ($this->kasiractive as $data) {
-          $datas = $data->kas->sum('saldo_selisih');
+        if ($this->kasiractive == NULL) {
+            // ada
+            foreach ($this->kasiractive as $data) {
+                $dc = $data->kas->sum('saldo_selisih');
+            }
+
+            $this->total_selisih = $dc;
+        } else {
+            $this->total_selisih = 0;
         }
-        $this->total_selisih = $datas;
 
         if ($this->bukaKas_id) {
 
@@ -79,7 +85,7 @@ class KasirPage extends Component
             $this->kas_akhir = $this->kasData->saldo;
 
             $kas_tutup = $this->kas_tutup != null ? $this->kas_tutup : 0;
-            $this->selisih =  $kas_tutup - $this->kas_akhir;
+            $this->selisih = $kas_tutup - $this->kas_akhir;
 
             // update saldo kas saat ini saat klik ismpan
             $this->saldo_kas = $this->kasData->saldo + $this->selisih;
@@ -165,9 +171,8 @@ class KasirPage extends Component
             ]);
         }
 
-        redirect()->to('penjualan/kasir/'.$id);
+        redirect()->to('penjualan/kasir/' . $id);
     }
-
 
     public $bukaKas_id, $tutupKas_id, $namaKasir;
     public $reportID;
@@ -181,7 +186,7 @@ class KasirPage extends Component
         $this->namaKasir = Kasir::find($id)->nama;
     }
 
-    public function tutup_kas_toggle($id,  $reportID)
+    public function tutup_kas_toggle($id, $reportID)
     {
         $this->tutupKas_id = $id;
         $this->kasirID = $id;
@@ -198,15 +203,18 @@ class KasirPage extends Component
         $this->namaKasir = null;
     }
 
+    public $bukaSimpanLoading = false;
     public function buka_kas_simpan()
     {
+        $this->bukaSimpanLoading = true;
         KasirReport::create([
             'kasir_id' => $this->bukaKas_id,
             'kas_awal' => $this->kasData->saldo,
             'buka_oleh' => auth()->user()->id,
-            'status' => 'open'
+            'status' => 'open',
         ]);
         $this->kasir_detail($this->bukaKas_id);
+        $this->bukaSimpanLoading = false;
     }
 
     public function tutup_kas_simpan()
@@ -227,7 +235,7 @@ class KasirPage extends Component
             'untung' => $this->untung,
             'tutup_oleh' => auth()->user()->id,
             'tutup_at' => now(),
-            'status' => 'pending'
+            'status' => 'pending',
         ]);
         // update kas
         // $kasir = Kasir::find($this->kasirID);
@@ -236,14 +244,13 @@ class KasirPage extends Component
 
         // ]);
 
-        $this->emit('cetakStrukTutup', ['url' => url('penjualan/struk/kasir/tutup/'. $this->reportID), 'title' => 'struk laporan tutup kas']);
+        $this->emit('cetakStrukTutup', ['url' => url('penjualan/struk/kasir/tutup/' . $this->reportID), 'title' => 'struk laporan tutup kas']);
         $this->close();
     }
 
     public function terimaKasTutup($id)
     {
         $report = KasirReport::find($id);
-
 
         $kategori_id = KasTKategori::where('nama', 'tutup kasir')->first()->id;
 
@@ -254,7 +261,7 @@ class KasirPage extends Component
             // jika selisih bertambah
             $asal_saldo = $kas->saldo - ($report->kas_tutup - $report->selisih);
             $asal_saldo_selisih = $kas->saldo_selisih + $report->selisih;
-        }else {
+        } else {
             // jika berkurang
             $asal_saldo = $kas->saldo - ($report->kas_tutup - $report->selisih);
             $asal_saldo_selisih = $kas->saldo_selisih + $report->selisih;
@@ -273,7 +280,7 @@ class KasirPage extends Component
 
         $kas->update([
             'saldo' => $asal_saldo,
-            'saldo_selisih' => $asal_saldo_selisih
+            'saldo_selisih' => $asal_saldo_selisih,
         ]);
 
         $jenisMasuk = KasTJenis::where('nama', 'masuk')->first();
@@ -294,7 +301,7 @@ class KasirPage extends Component
         ]);
 
         $report->update([
-            'status' => 'close'
+            'status' => 'close',
         ]);
 
         $this->emit('success', ['pesan' => 'Berhasil terima uang dari tutup kasir']);
@@ -302,7 +309,7 @@ class KasirPage extends Component
 
     public function cetak()
     {
-        $this->emit('cetakStrukTutup', ['url' => url('penjualan/struk/kasir/tutup/'. $this->reportID), 'title' => 'struk laporan tutup kas']);
+        $this->emit('cetakStrukTutup', ['url' => url('penjualan/struk/kasir/tutup/' . $this->reportID), 'title' => 'struk laporan tutup kas']);
     }
 
     public $laporan_id = null;
@@ -311,7 +318,6 @@ class KasirPage extends Component
     {
         $this->laporan_id = $id;
         $kasir = Kasir::find($id);
-
 
     }
 

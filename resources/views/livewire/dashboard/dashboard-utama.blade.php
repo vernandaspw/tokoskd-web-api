@@ -17,6 +17,7 @@
 
         <!-- Main content -->
         <section class="content">
+            @if(auth()->user()->role == 'administrator' || auth()->user()->role == 'admin')
             <div class="container-fluid">
                 <div class="row">
 
@@ -297,6 +298,8 @@
 
 
             </div>
+            @elseif(auth()->user()->role == 'staff')
+            @endif
         </section>
     </div>
 

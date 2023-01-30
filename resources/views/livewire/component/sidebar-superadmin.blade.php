@@ -108,7 +108,7 @@
 
                         </ul>
                     </li>
-                    <li class="nav-header">Quick</li>
+                    <li class="nav-header">Quick menu</li>
 
                     <li class="nav-item">
                         <a href="{{ url('penjualan/kasir') }}" class="nav-link @if(Request::is('penjualan/kasir*'))
@@ -118,6 +118,15 @@
                             <p>
                                 Mode Kasir
                                 {{-- <span class="right badge badge-danger"> ! </span> --}}
+                            </p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fas fa-th"></i>
+                            <p>
+                                Riwayat harga
+                                <span class="right badge badge-danger"> ! </span>
                             </p>
                         </a>
                     </li>
@@ -140,16 +149,16 @@
                             </p>
                         </a>
                     </li>
-
                     <li class="nav-item">
                         <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-th"></i>
                             <p>
-                                Riwayat harga
-                                {{-- <span class="right badge badge-danger"> ! </span> --}}
+                                Jadwal kerja
+                                <span class="right badge badge-danger"> ! </span>
                             </p>
                         </a>
                     </li>
+
 
                     {{-- <li class="nav-item">
                         <a href="#" class="nav-link">
@@ -325,7 +334,7 @@
                                 active
                                 @endif">
                                     <i class="far fa-circle nav-icon"></i>
-                                    <p>Produk satuan</p>
+                                    <p>Produk utama</p>
                                 </a>
                             </li>
                             <li class="nav-item">
@@ -345,6 +354,16 @@
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Produk stok</p>
                                     {{-- <span class="right badge badge-danger"> ! </span> --}}
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ url('produk/stok-opname', []) }}" class="nav-link
+                                @if(Request::is('produk/stok-opname'))
+                                active
+                                @endif">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Stok opname</p>
+                                    <span class="right badge badge-danger"> ! </span>
                                 </a>
                             </li>
 
@@ -410,7 +429,6 @@
                                     <p>Retur pembelian</p>
                                     <span class="right badge badge-danger"> ! </span>
                                 </a>
-
                             </li>
                         </ul>
                     </li>
@@ -466,7 +484,6 @@
                             </p>
                         </a>
                         <ul class="nav nav-treeview">
-                            @if(env('APP_ENV') == 'local')
                             <li class="nav-item">
                                 <a href="#" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
@@ -477,28 +494,32 @@
                             <li class="nav-item">
                                 <a href="#" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
-                                    <p>Karyawan</p>
+                                    <p>Data Karyawan</p>
                                     <span class="right badge badge-danger"> ! </span>
                                 </a>
                             </li>
-                            @endif
 
-                            @if(env('APP_ENV') == 'local')
                             <li class="nav-item">
                                 <a href="#" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
-                                    <p>Gaji</p>
+                                    <p>Data Jadwal kerja</p>
                                     <span class="right badge badge-danger"> ! </span>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a href="#" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
-                                    <p>Kehadiran</p>
+                                    <p>Data Gaji</p>
                                     <span class="right badge badge-danger"> ! </span>
                                 </a>
                             </li>
-                            @endif
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Data Kehadiran</p>
+                                    <span class="right badge badge-danger"> ! </span>
+                                </a>
+                            </li>
 
                         </ul>
                     </li>

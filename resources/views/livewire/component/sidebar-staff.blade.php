@@ -60,20 +60,11 @@
                                     <p>Ringkasan</p>
                                 </a>
                             </li>
-                            <li class="nav-item">
-                                <a href="{{ url('/', []) }}" class="nav-link  @if(Request::is('/dashboard-hari'))
-                                active
-                                @endif">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Hari</p>
-                                    <span class="right badge badge-danger"> ! </span>
-                                </a>
-                            </li>
 
 
                         </ul>
                     </li>
-                    <li class="nav-header">Quick</li>
+                    <li class="nav-header">Quick menu</li>
 
                     <li class="nav-item">
                         <a href="{{ url('penjualan/kasir') }}" class="nav-link @if(Request::is('penjualan/kasir*'))
@@ -86,8 +77,16 @@
                             </p>
                         </a>
                     </li>
-
-                    {{-- <li class="nav-item">
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fas fa-th"></i>
+                            <p>
+                                Riwayat harga
+                                <span class="right badge badge-danger"> ! </span>
+                            </p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-th"></i>
                             <p>
@@ -104,32 +103,19 @@
                                 <span class="right badge badge-danger"> ! </span>
                             </p>
                         </a>
-                    </li> --}}
-
+                    </li>
                     <li class="nav-item">
                         <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-th"></i>
                             <p>
-                                Riwayat harga
-                                {{-- <span class="right badge badge-danger"> ! </span> --}}
+                                Jadwal kerja
+                                <span class="right badge badge-danger"> ! </span>
                             </p>
                         </a>
                     </li>
 
-                    {{-- <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="nav-icon fas fa-th"></i>
-                            <p>
-                                Widgets
-                                <span class="right badge badge-danger">New</span>
-                            </p>
-                        </a>
-                    </li> --}}
-
-                    <li class="nav-header">Keuangan</li>
-
-
-                    {{-- <li class="nav-item">
+                    {{-- <li class="nav-header">Keuangan</li>
+                    <li class="nav-item">
                         <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-th"></i>
                             <p>
@@ -137,16 +123,16 @@
                                 <span class="right badge badge-danger"> ! </span>
                             </p>
                         </a>
-                    </li> --}}
+                    </li>
                     <li class="nav-item">
                         <a href="{{ url('piutang', []) }}" class="nav-link">
                             <i class="nav-icon fas fa-th"></i>
                             <p>
                                 Piutang usaha
-                                {{-- <span class="right badge badge-danger"> ! </span> --}}
+                                <span class="right badge badge-danger"> ! </span>
                             </p>
                         </a>
-                    </li>
+                    </li> --}}
 
 
 
@@ -180,83 +166,7 @@
 
 
 
-                    <li class="nav-item
-                    @if(Request::is('produk*'))
-                                menu-open
-                                @endif">
-                        <a href="#" class="nav-link
-                        @if(Request::is('produk*'))
-                                active
-                                @endif">
-                            <i class="nav-icon fas fa-book"></i>
-                            <p>
-                                Produk
-                                <i class="right fas fa-angle-left"></i>
-                            </p>
-                        </a>
-                        <ul class="nav nav-treeview">
-                            <li class="nav-item">
-                                <a href="{{ url('produk/produk-satuan') }}" class="nav-link
-                                @if(Request::is('produk/produk-satuan'))
-                                active
-                                @endif">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Produk satuan</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{ url('produk/produk-item') }}" class="nav-link
-                                @if(Request::is('produk/produk-item'))
-                                active
-                                @endif">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Produk item</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{ url('produk/produk-stok', []) }}" class="nav-link
-                                @if(Request::is('produk/produk-stok'))
-                                active
-                                @endif">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Produk stok</p>
-                                    {{-- <span class="right badge badge-danger"> ! </span> --}}
-                                </a>
-                            </li>
 
-                            <li class="nav-item">
-                                <a href="{{ url('produk/produk-diskon', []) }}" class="nav-link
-                                @if(Request::is('produk/produk-diskon'))
-                                active
-                                @endif">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Produk diskon</p>
-                                    <span class="right badge badge-danger"> ! </span>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-
-                    {{-- <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="nav-icon fas fa-book"></i>
-                            <p>
-                                Stok
-                                <i class="right fas fa-angle-left"></i>
-                            </p>
-
-                        </a>
-                        <ul class="nav nav-treeview">
-                            <li class="nav-item">
-                                <a href="#" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Ringkasan</p>
-                                    <span class="right badge badge-danger"> ! </span>
-                                </a>
-                            </li>
-
-                        </ul>
-                    </li> --}}
                     <li class="nav-item">
                         <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-book"></i>
@@ -266,13 +176,13 @@
                             </p>
                         </a>
                         <ul class="nav nav-treeview">
-                            {{-- <li class="nav-item">
+                            <li class="nav-item">
                                 <a href="#" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Pesanan pembelian</p>
                                     <span class="right badge badge-danger"> ! </span>
                                 </a>
-                            </li> --}}
+                            </li>
                             <li class="nav-item">
                                 <a href="#" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
@@ -298,20 +208,20 @@
                             </p>
                         </a>
                         <ul class="nav nav-treeview">
-                            {{-- <li class="nav-item">
+                            <li class="nav-item">
                                 <a href="#" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Pesanan Penjualan</p>
                                     <span class="right badge badge-danger"> ! </span>
                                 </a>
-                            </li> --}}
-                            {{-- <li class="nav-item">
+                            </li>
+                            <li class="nav-item">
                                 <a href="#" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Penjualan</p>
                                     <span class="right badge badge-danger"> ! </span>
                                 </a>
-                            </li> --}}
+                            </li>
                             <li class="nav-item">
                                 <a href="{{ url('penjualan/kasir') }}" class="nav-link @if(Request::is('penjualan/kasir*'))
                                 active
@@ -321,13 +231,13 @@
                                     {{-- <span class="right badge badge-danger"> ! </span> --}}
                                 </a>
                             </li>
-                            {{-- <li class="nav-item">
+                            <li class="nav-item">
                                 <a href="#" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Retur Penjualan</p>
                                     <span class="right badge badge-danger"> ! </span>
                                 </a>
-                            </li> --}}
+                            </li>
                         </ul>
                     </li>
 

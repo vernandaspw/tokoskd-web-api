@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('penjualans', function (Blueprint $table) {
             $table->id();
-            $table->char('no_penjualan', 18);
+            $table->char('no_penjualan', 18)->unique();
             $table->timestamp('waktu')->default(now());
             $table->foreignId('penjualan_pesanan_id')->nullable()->constrained('penjualan_pesanans')->onUpdate('cascade')->onDelete('set null');
             $table->foreignId('pelanggan_id')->nullable()->constrained('pelanggans')->onUpdate('cascade')->onDelete('set null');
@@ -59,6 +59,7 @@ return new class extends Migration
             $table->enum('status', ['pending', 'success', 'failed']);
             $table->foreignId('user_id')->nullable()->constrained('users')->onUpdate('cascade')->onDelete('set null');
             $table->foreignId('kasir_id')->nullable()->constrained('kasirs')->onUpdate('cascade')->onDelete('set null');
+            $table->foreignId('sales_id')->nullable()->constrained('users')->onUpdate('cascade')->onDelete('set null');
             $table->timestamps();
         });
     }
