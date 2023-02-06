@@ -10,4 +10,11 @@ class SidebarStaff extends Component
     {
         return view('livewire.component.sidebar-staff');
     }
+
+    public function logout()
+    {
+        auth()->logout();
+        session()->flush();
+        return redirect()->to('login');
+    }
 }

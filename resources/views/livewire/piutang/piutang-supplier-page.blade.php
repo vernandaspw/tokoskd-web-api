@@ -182,6 +182,7 @@
                                     <th>ID</th>
                                     <th>supplier</th>
                                     <th>Piutang (utang supplier)</th>
+                         
                                     <th>
                                         aksi
                                     </th>

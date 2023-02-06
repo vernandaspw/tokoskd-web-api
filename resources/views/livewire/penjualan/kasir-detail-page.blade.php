@@ -46,40 +46,48 @@
                                     untung : @uang($ubahHargaJualDasar != null ? $ubahHargaJualDasar - $ubahHarga_harga_pokok : $ubahHarga_harga_pokok)
                                 </div>
                             </div>
-                            {{ $ubahHargaDiskonJual }}
-                            @if($ubahHargaDiskonJual)
-                            <div class="mt-1">
-                                <label class="m-0" for="">Ubah harga diskon</label>
-                                <div class="input-group ">
-                                    <div class="input-group-append">
-                                        <span class="input-group-text form-control-sm" id="basic-addon2">@uang($ubahHargaDiskonJual != null ? $ubahHargaDiskonJual : null)</span>
-                                    </div>
-                                    <input wire:model='ubahHargaDiskonJual' type="number" class="form-control form-control-sm">
 
+                           @if($ubahHargaDiskonJual)
+                           <div class="mt-1">
+                            <label class="m-0" for="">Ubah harga diskon</label>
+                            <div class="input-group ">
+                                <div class="input-group-append">
+                                    <span class="input-group-text form-control-sm" id="basic-addon2">@uang($ubahHargaDiskonJual != null ? $ubahHargaDiskonJual : null)</span>
                                 </div>
+                                <input wire:model='ubahHargaDiskonJual' type="number" class="form-control form-control-sm">
+                            </div>
+                        </div>
+
+                        <div class="mt-1">
+                            <div class="">
+                                Diskon : {{ $ubahPersenDiskon }}%
                             </div>
                             <div class="mt-1">
-                                <div class="">
-                                    Diskon : {{ $ubahPersenDiskon }}%
-                                </div>
-                                <div class="mt-1">
-                                    Harga jual setelah diskon : @uang($ubahHargaDiskonJual - ($ubahHargaDiskonJual * ($ubahPersenDiskon/100)))
-                                </div>
+                                Harga jual setelah diskon : @uang($ubahHargaDiskonJual - ($ubahHargaDiskonJual * ($ubahPersenDiskon/100)))
                             </div>
-                            <div class="mt-1">
-                                <div class="@if($ubahHargaDiskonJual - ($ubahHargaDiskonJual * ($ubahPersenDiskon/100)) > $ubahHarga_harga_pokok)
-                                text-success
-                                @else
-                                text-danger
-                            @endif">
-                                    untung setelah diskon : @uang(($ubahHargaDiskonJual - ($ubahHargaDiskonJual * ($ubahPersenDiskon/100))) - $ubahHarga_harga_pokok)
-                                </div>
-                            </div>
-                            @endif
-                            @if($ubahHargaJualDasar > $ubahHarga_harga_pokok)
-                            <button type="submit" class="btn mt-2 btn-success form-control">Simpan</button>
+                        </div>
+                        <div class="mt-1">
+                            <div class="@if($ubahHargaDiskonJual - ($ubahHargaDiskonJual * ($ubahPersenDiskon/100)) > $ubahHarga_harga_pokok)
+                            text-success
                             @else
-                            <div class="mt-2 bg-success form-control">Simpan</div>
+                            text-danger
+                        @endif">
+                                untung setelah diskon : @uang(($ubahHargaDiskonJual - ($ubahHargaDiskonJual * ($ubahPersenDiskon/100))) - $ubahHarga_harga_pokok)
+                            </div>
+                        </div>
+                           @endif
+                            @if($ubahHargaJualDasar > $ubahHarga_harga_pokok)
+                                @if($ubahHargaDiskonJual)
+                                @if (($ubahHargaDiskonJual - ($ubahHargaDiskonJual * ($ubahPersenDiskon/100))) > $ubahHarga_harga_pokok)
+                                <button type="submit" class="btn mt-2 btn-success form-control">Simpan</button>
+                                @else
+                                <div class="mt-2 bg-danger text-center form-control">Merugi</div>
+                                @endif
+                                @else
+                                <button type="submit" class="btn mt-2 btn-success form-control">Simpan</button>
+                                @endif
+                            @else
+                            <div class="mt-2 bg-danger text-center form-control">Merugi</div>
                             @endif
 
 
@@ -88,7 +96,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button wire:click="ubahharga_close()" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button wire:click="ubahharga_close()" type="button" class="btn btn-secondary btn-block" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
@@ -99,9 +107,9 @@
 
 
         <div class="d-flex ">
-            <div class="col-md-6" style="padding-bottom: 450px;">
+            <div class="col-md-6" style="padding-bottom: 50px;">
                 <div class="d-flex justify-content-center">
-                    <a href="#" wire:click="menuProduk()" class="w-100 border text-center py-3 text-white
+                    <a href="#" wire:click.prefetch="menuProduk()" class="w-100 border text-center py-3 text-white
                     @if($menuManual == false && $menuBuatBaru == false)
                     bg-primary
                     @endif
@@ -109,7 +117,7 @@
                         Produk
                     </a>
 
-                    <a href="#" wire:click="menuBuatBaru()" class="w-100 border text-center py-3 text-white
+                    <a href="#" wire:click.prefetch="menuBuatBaru()" class="w-100 border text-center py-3 text-white
                     @if($menuBuatBaru)
                     bg-primary
                     @endif
@@ -258,7 +266,7 @@
                                 <div class="container">
                                     <div class="row text-center d-flex justify-content-lg-evenly">
                                         <div class="col">
-                                            <input autofocus wire:model='cariBarcode' type="text" class="form-control" placeholder="Barcode">
+                                            <input autofocus wire:model='cariBarcode' type="text" class="form-control" placeholder="Cari Barcode/Nama">
                                         </div>
                                         <div class="col">
                                             <input wire:model='cariProduk' type="text" class="form-control" placeholder="Nama produk">
@@ -278,7 +286,7 @@
                         <div class="mt-2">
                             <div class="container">
                                 @if($new_item_produk_id)
-                                    <div class="">
+                                    <form wire:submit.prevent='saveNewItem'>
                                         <div class="">
                                             <b>
                                                 <h5>Tambah Item</h5>
@@ -339,10 +347,10 @@
                                         </div>
 
 
-                                            <button type="button" wire:click="saveNewItem()" wire:loading.remove wire:loading.attr='disabled' class="mb-1 mt-2 btn-block btn btn-success mb-2">Simpan</button>
+                                            <button type="submit"  wire:loading.remove wire:loading.attr='disabled' class="mb-1 mt-2 btn-block btn btn-success mb-2">Simpan</button>
 
                                             <button type="button" wire:click="closeNewItem()" class="mt-1 btn-block btn btn-danger mb-2">Tutup</button>
-                                    </div>
+                                    </form>
                                 @elseif($editItemBar_id)
                                 <div class="">
                                     <div class="">
@@ -411,7 +419,7 @@
                                                 <th scope="col">Nama Produk
 
                                                 </th>
-                                                <th scope="col">Stok</th>
+
                                                 <th scope="col">Harga</th>
                                                 <th scope="col">Catalog</th>
                                                 <th scope="col">Kategori</th>
@@ -470,24 +478,24 @@
                                                             @endif
                                             "
                                             >
-                                                <td>{{ $data->produk->nama }}
-                                                    <div class="">{{ $data->produk->merek != null ? $data->produk->merek->nama : '' }}</div>
-                                                    <div class="">
-                                                        <a href="#" wire:click.prevent="new_item('{{ $data->produk->id }}')" class="text-success">tambah new item</a>
-                                                    </div>
-                                                </td>
                                                 <td>
-                                                    @if ($data->produk->tipe == 'nonINV' || $data->produk->tipe == 'jasa')
-                                                    Tanpa stok
+                                                    <div class="d-flex">
+                                                        <div class="">{{ $data->produk->nama }}&nbsp;</div>
+                                                        @if ($data->produk->tipe == 'nonINV' || $data->produk->tipe == 'jasa')
+                                                    -
                                                     @else
-                                                    {{ $data->stok_jual }} <div class="badge badge-info" style="font-size: 12px">{{ $data->satuan->satuan }}</div>
+                                                    {{-- {{ $data->stok_jual }} \ --}}
+                                                    <div class="badge badge-info" style="font-size: 13px">{{ $data->satuan->satuan }}</div>
                                                     @endif
-                                                    <div class="">
-                                                        <a href="#" wire:click.prevent="editItemBarId('{{ $data->id }}')" class="text-info">+barcode</a>
                                                     </div>
+                                                    {{-- <div class="">{{ $data->produk->merek != null ? $data->produk->merek->nama : '' }}</div> --}}
 
-
+                                                    <div class="d-flex">
+                                                        <a href="#" wire:click.prevent="new_item('{{ $data->produk->id }}')" class="text-success mr-1">tambah item</a> |
+                                                        <a href="#" wire:click.prevent="editItemBarId('{{ $data->id }}')" class="text-info ml-1">+barcode</a>
+                                                    </div>
                                                 </td>
+
                                                 <td>
 
                                                     @if ($data->diskon_start <= date('Y-m-d') && $data->diskon_end >= date('Y-m-d'))
@@ -536,7 +544,7 @@ Harga pokok @uang($data->harga_pokok)
                                                     {{-- <button wire:click="laporItem('{{ $data->id }}')" wire:loading.attr="disabled" type="button" class="btn btn-sm btn-warning">
                                                         <div class="px-1">!</div>
                                                     </button> --}}
-                                                    <button wire:click="addNewCardItem('{{ $data->id }}')" wire:loading.attr="disabled" type="button" class="btn btn-sm btn-success">
+                                                    <button wire:click="addNewCardItem('{{ $data->id }}')"  type="button" class="btn btn-sm btn-success px-3 py-2">
                                                         <img src="{{ asset('assets/cart-plus.svg') }}" alt="">
                                                     </button>
 
@@ -571,7 +579,7 @@ Harga pokok @uang($data->harga_pokok)
 
             </div>
 
-            <div class="" style="background-color: rgb(30, 255, 0); padding: 1px"></div>
+            {{-- <div class="" style="background-color: rgb(30, 255, 0); padding: 1px"></div> --}}
             <div class="col-md-6">
                 <div class="d-flex p-2 justify-content-between align-items-center">
                     <div class="">
@@ -675,7 +683,7 @@ Harga pokok @uang($data->harga_pokok)
                     </div>
                     <div class="" style="background-color: rgb(30, 255, 0); padding: 1px"></div>
                     <div class="mt-2">
-                        <div class="d-flex ">
+                        <div class="d-flex">
                             <div class="col-4 text-start">
                                 <div class="d-flex justify-content-between">
                                     <div class="">
@@ -748,34 +756,42 @@ Harga pokok @uang($data->harga_pokok)
                                 </div>
                                 @endif --}}
 
+
                             </div>
                             {{-- <div class="col"></div> --}}
                             <div class="col-8 text-end ">
                                 <div class="d-flex justify-content-end text-right">
                                     <span>
                                         <b>
-                                            <div class="" style="font-size: 20px">
+                                            <div class="" style="font-size: 19px">
                                                 Total Pembayaran
                                             </div>
-                                            <div class="" style="font-size: 35px">
+                                            <div class="" style="font-size: 50px;">
                                                 @uang($total_pembayaran)
                                             </div>
                                         </b>
                                     </span>
                                 </div>
-                                <div class="mt-2 d-flex justify-content-end align-items-end">
+
+                            </div>
+                        </div>
+                        <div class="d-flex">
+                            <div class="col-6 text-start">
+                                <div class="mt-2 d-flex justify-content-start align-items-start">
                                     <button wire:click="resetKasir" type="button" class="btn btn-danger ml-1">Reset</button>
+
                                     @if(session('bill_id'))
-                                        @if (session('bill_baru'))
-                                        <button type="button" wire:click.prevent='addNewBill' wire:loading.remove class="btn btn-info ml-1">Simpan bill</button>
-                                        @endif
+                                    <button wire:click="updateBill('{{ session('bill_id') }}')" type="button" class="btn btn-info ml-1">Update bill</button>
                                     @else
-                                        @if (session('bill_baru'))
-                                        <button type="button" wire:click.prevent='addNewBill' wire:loading.remove wire:target='addNewBill' class="btn btn-info ml-1">Simpan bill</button>
-                                        @else
-                                        <button type="button" wire:click.prevent='addNewBill' wire:loading.remove wire:target='addNewBill' class="btn btn-info ml-1">Simpan bill</button>
-                                        @endif
+                                    <button wire:click="addNewBill()" type="button" class="btn btn-info ml-1">Simpan bill</button>
                                     @endif
+
+
+
+                                </div>
+                            </div>
+                            <div class="col-6 text-end">
+                                <div class="mt-2 d-flex justify-content-end align-items-end">
 
 
                                     {{-- @if($pelanggan_piutang_usaha <= 100000)
@@ -786,11 +802,261 @@ Harga pokok @uang($data->harga_pokok)
 
 
                                         {{-- <button type="button" class="btn btn-primary ml-1">Bayar nonTunai</button> --}}
-                                    <button wire:click.prevent='bayar_tunai_toggle()' type="button" class="btn btn-success ml-1" data-toggle="modal" data-target="#bayar_tunai" data-backdrop="static" data-keyboard="false">Bayar tunai</button>
+                                        <button wire:click.prevent='bayar_simpan()' type="button" class="btn btn-info ml-1 px-4">Simpan</button>
+                                    <button wire:click.prevent='bayar_uang_pas()' type="button" class="btn btn-success ml-1 px-4">Uang pas</button>
+                                    <button wire:click.prevent='bayar_tunai_toggle()' type="button" class="btn btn-primary ml-1 px-4" data-toggle="modal" data-target="#bayar_tunai" data-backdrop="static" data-keyboard="false">Bayar tunai</button>
 
                                 </div>
                             </div>
                         </div>
+                        <hr class="my-1">
+                        @if($total_pembayaran > 0)
+                        <div class="d-flex flex-wrap mb-0 mt-0">
+                                    <button type="button" hidden>awd</button>
+                                    <button type="button" hidden>awaw</button>
+                                    <button type="button" hidden>awaw</button>
+                                    <button type="button" hidden>awaw</button>
+                                    <button type="button" hidden>awaw</button>
+                                    <button type="button" hidden>awaw</button>
+                                    @if($total_pembayaran < 10000) <button type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(10000)">@nominal(10000)</button>
+                                    @endif
+
+                                    @if($total_pembayaran < 20000) <button type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(20000)">@nominal(20000)</button>
+                                    @endif
+                                    @if($total_pembayaran < 30000) <button type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(30000)">@nominal(30000)</button>
+                                    @endif
+                                    @if($total_pembayaran < 40000) <button type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(40000)">@nominal(40000)</button>
+                                    @endif
+                                    @if($total_pembayaran < 50000) <button type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(50000)">@nominal(50000)</button>
+                                        @endif
+                                    @if($total_pembayaran < 60000) <button type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(60000)">@nominal(60000)</button>
+                                        @endif
+                                    @if($total_pembayaran < 70000) <button type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(70000)">@nominal(70000)</button>
+                                        @endif
+                                    @if($total_pembayaran < 80000) <button type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(80000)">@nominal(80000)</button>
+                                        @endif
+                                    @if($total_pembayaran < 90000) <button type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(90000)">@nominal(90000)</button>
+                                        @endif
+                                        @if($total_pembayaran < 100000) <button type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(100000)">@nominal(100000)</button>
+                                            @else
+                                            @if($total_pembayaran < 110000 && $total_pembayaran)
+                                            <button type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(110000)">@nominal(110000)</button>
+                                            @endif
+                                            @if($total_pembayaran < 120000 && $total_pembayaran)
+                                            <button type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(120000)">@nominal(120000)</button>
+                                            @endif
+                                            @if($total_pembayaran < 130000 && $total_pembayaran)
+                                            <button type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(130000)">@nominal(130000)</button>
+                                            @endif
+                                            @if($total_pembayaran < 140000 && $total_pembayaran)
+                                            <button type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(140000)">@nominal(140000)</button>
+                                            @endif
+                                            @if($total_pembayaran < 150000 && $total_pembayaran)
+                                            <button type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(150000)">@nominal(150000)</button>
+                                            @endif
+                                            @if($total_pembayaran < 160000)
+                                            <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(160000)">@nominal(160000)</button>
+                                            @endif
+                                            @if($total_pembayaran < 170000)
+                                            <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(170000)">@nominal(170000)</button>
+                                            @endif
+                                            @if($total_pembayaran < 180000)
+                                            <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(180000)">@nominal(180000)</button>
+                                            @endif
+                                            @if($total_pembayaran < 190000)
+                                            <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(190000)">@nominal(190000)</button>
+                                            @endif
+                                            @if($total_pembayaran < 200000)
+                                                <button type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(200000)">@nominal(200000)</button>
+                                            @else
+                                                @if($total_pembayaran < 210000) <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(210000)">@nominal(210000)</button>
+                                                @endif
+                                                @if($total_pembayaran < 220000) <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(220000)">@nominal(220000)</button>
+                                                @endif
+                                                @if($total_pembayaran < 230000) <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(230000)">@nominal(230000)</button>
+                                                @endif
+                                                @if($total_pembayaran < 240000) <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(240000)">@nominal(240000)</button>
+                                                @endif
+                                                @if($total_pembayaran < 250000) <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(250000)">@nominal(250000)</button>
+                                                @endif
+                                                @if($total_pembayaran < 260000) <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(260000)">@nominal(260000)</button>
+                                                @endif
+                                                @if($total_pembayaran < 270000) <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(270000)">@nominal(270000)</button>
+                                                @endif
+                                                @if($total_pembayaran < 280000) <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(280000)">@nominal(280000)</button>
+                                                @endif
+                                                @if($total_pembayaran < 290000) <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(290000)">@nominal(290000)</button>
+                                                @endif
+                                                @if($total_pembayaran < 300000) <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(300000)">@nominal(300000)</button>
+                                                @else
+                                                    @if($total_pembayaran < 310000) <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(310000)">@nominal(310000)</button>
+                                                    @endif
+                                                    @if($total_pembayaran < 320000) <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(320000)">@nominal(320000)</button>
+                                                    @endif
+                                                    @if($total_pembayaran < 330000) <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(330000)">@nominal(330000)</button>
+                                                    @endif
+                                                    @if($total_pembayaran < 340000) <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(340000)">@nominal(340000)</button>
+                                                    @endif
+                                                    @if($total_pembayaran < 350000) <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(350000)">@nominal(350000)</button>
+                                                    @endif
+                                                    @if($total_pembayaran < 360000) <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(360000)">@nominal(360000)</button>
+                                                    @endif
+                                                    @if($total_pembayaran < 370000) <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(370000)">@nominal(370000)</button>
+                                                    @endif
+                                                    @if($total_pembayaran < 380000) <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(380000)">@nominal(380000)</button>
+                                                    @endif
+                                                    @if($total_pembayaran < 390000) <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(390000)">@nominal(390000)</button>
+                                                    @endif
+                                                    @if($total_pembayaran < 400000) <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(400000)">@nominal(400000)</button>
+                                                    @else
+                                                        @if($total_pembayaran < 410000) <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(410000)">@nominal(410000)</button>
+                                                        @endif
+                                                        @if($total_pembayaran < 420000) <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(420000)">@nominal(420000)</button>
+                                                        @endif
+                                                        @if($total_pembayaran < 430000) <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(430000)">@nominal(430000)</button>
+                                                        @endif
+                                                        @if($total_pembayaran < 440000) <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(440000)">@nominal(440000)</button>
+                                                        @endif
+                                                        @if($total_pembayaran < 450000) <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(450000)">@nominal(450000)</button>
+                                                        @endif
+                                                        @if($total_pembayaran < 460000) <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(460000)">@nominal(460000)</button>
+                                                        @endif
+                                                        @if($total_pembayaran < 470000) <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(470000)">@nominal(470000)</button>
+                                                        @endif
+                                                        @if($total_pembayaran < 480000) <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(480000)">@nominal(480000)</button>
+                                                        @endif
+                                                        @if($total_pembayaran < 490000) <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(490000)">@nominal(490000)</button>
+                                                        @endif
+                                                        @if($total_pembayaran < 500000) <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(500000)">@nominal(500000)</button>
+                                                        @else
+                                                            @if($total_pembayaran < 510000) <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(510000)">@nominal(510000)</button>
+                                                            @endif
+                                                            @if($total_pembayaran < 520000) <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(520000)">@nominal(520000)</button>
+                                                            @endif
+                                                            @if($total_pembayaran < 530000) <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(530000)">@nominal(530000)</button>
+                                                            @endif
+                                                            @if($total_pembayaran < 540000) <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(540000)">@nominal(540000)</button>
+                                                            @endif
+                                                            @if($total_pembayaran < 550000) <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(550000)">@nominal(550000)</button>
+                                                            @endif
+                                                            @if($total_pembayaran < 560000) <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(560000)">@nominal(560000)</button>
+                                                            @endif
+                                                            @if($total_pembayaran < 570000) <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(570000)">@nominal(570000)</button>
+                                                            @endif
+                                                            @if($total_pembayaran < 580000) <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(580000)">@nominal(580000)</button>
+                                                            @endif
+                                                            @if($total_pembayaran < 590000) <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(590000)">@nominal(590000)</button>
+                                                            @endif
+                                                            @if($total_pembayaran < 600000) <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(600000)">@nominal(600000)</button>
+                                                            @else
+                                                                @if($total_pembayaran < 610000) <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(610000)">@nominal(610000)</button>
+                                                                @endif
+                                                                @if($total_pembayaran < 620000) <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(620000)">@nominal(620000)</button>
+                                                                @endif
+                                                                @if($total_pembayaran < 630000) <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(630000)">@nominal(630000)</button>
+                                                                @endif
+                                                                @if($total_pembayaran < 640000) <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(640000)">@nominal(640000)</button>
+                                                                @endif
+                                                                @if($total_pembayaran < 650000) <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(650000)">@nominal(650000)</button>
+                                                                @endif
+                                                                @if($total_pembayaran < 660000) <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(660000)">@nominal(660000)</button>
+                                                                @endif
+                                                                @if($total_pembayaran < 670000) <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(670000)">@nominal(670000)</button>
+                                                                @endif
+                                                                @if($total_pembayaran < 680000) <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(680000)">@nominal(680000)</button>
+                                                                @endif
+                                                                @if($total_pembayaran < 690000) <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(690000)">@nominal(690000)</button>
+                                                                @endif
+                                                                @if($total_pembayaran < 700000) <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(700000)">@nominal(700000)</button>
+                                                                @else
+                                                                    @if($total_pembayaran < 710000) <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(710000)">@nominal(710000)</button>
+                                                                    @endif
+                                                                    @if($total_pembayaran < 720000) <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(720000)">@nominal(720000)</button>
+                                                                    @endif
+                                                                    @if($total_pembayaran < 730000) <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(730000)">@nominal(730000)</button>
+                                                                    @endif
+                                                                    @if($total_pembayaran < 740000) <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(740000)">@nominal(740000)</button>
+                                                                    @endif
+                                                                    @if($total_pembayaran < 750000) <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(750000)">@nominal(750000)</button>
+                                                                    @endif
+                                                                    @if($total_pembayaran < 760000) <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(760000)">@nominal(760000)</button>
+                                                                    @endif
+                                                                    @if($total_pembayaran < 770000) <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(770000)">@nominal(770000)</button>
+                                                                    @endif
+                                                                    @if($total_pembayaran < 780000) <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(780000)">@nominal(780000)</button>
+                                                                    @endif
+                                                                    @if($total_pembayaran < 790000) <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(790000)">@nominal(790000)</button>
+                                                                    @endif
+                                                                    @if($total_pembayaran < 800000) <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(800000)">@nominal(800000)</button>
+
+                                                                    @else
+                                                                        @if($total_pembayaran < 800000) <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(800000)">@nominal(800000)</button>
+                                                                        @endif
+                                                                        @if($total_pembayaran < 810000) <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(810000)">@nominal(810000)</button>
+                                                                        @endif
+                                                                        @if($total_pembayaran < 820000) <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(820000)">@nominal(820000)</button>
+                                                                        @endif
+                                                                        @if($total_pembayaran < 830000) <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(830000)">@nominal(830000)</button>
+                                                                        @endif
+                                                                        @if($total_pembayaran < 840000) <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(840000)">@nominal(840000)</button>
+                                                                        @endif
+                                                                        @if($total_pembayaran < 850000) <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(850000)">@nominal(850000)</button>
+                                                                        @endif
+                                                                        @if($total_pembayaran < 860000) <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(860000)">@nominal(860000)</button>
+                                                                        @endif
+                                                                        @if($total_pembayaran < 870000) <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(870000)">@nominal(870000)</button>
+                                                                        @endif
+                                                                        @if($total_pembayaran < 880000) <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(880000)">@nominal(880000)</button>
+                                                                        @endif
+                                                                        @if($total_pembayaran < 890000) <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(890000)">@nominal(890000)</button>
+                                                                        @endif
+                                                                        @if($total_pembayaran < 900000) <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(900000)">@nominal(900000)</button>
+
+                                                                        @else
+                                                                            @if($total_pembayaran < 910000) <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(910000)">@nominal(910000)</button>
+                                                                            @endif
+                                                                            @if($total_pembayaran < 920000) <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(920000)">@nominal(920000)</button>
+                                                                            @endif
+                                                                            @if($total_pembayaran < 930000) <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(930000)">@nominal(930000)</button>
+                                                                            @endif
+                                                                            @if($total_pembayaran < 940000) <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(940000)">@nominal(940000)</button>
+                                                                            @endif
+                                                                            @if($total_pembayaran < 950000) <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(950000)">@nominal(950000)</button>
+                                                                            @endif
+                                                                            @if($total_pembayaran < 960000) <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(960000)">@nominal(960000)</button>
+                                                                            @endif
+                                                                            @if($total_pembayaran < 970000) <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(970000)">@nominal(970000)</button>
+                                                                            @endif
+                                                                            @if($total_pembayaran < 980000) <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(980000)">@nominal(980000)</button>
+                                                                            @endif
+                                                                            @if($total_pembayaran < 990000) <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(990000)">@nominal(990000)</button>
+                                                                            @endif
+                                                                            @if($total_pembayaran < 1000000) <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(1000000)">@nominal(1000000)</button>
+                                                                            @else
+                                                                                @if($total_pembayaran < 1100000) <button  type="button" class="btn btn-warning mr-2 mb-2" wire:click.prevent="btnTerima(1100000)">@nominal(1100000)</button>
+                                                                                @endif
+                                                                            @endif
+                                                                        @endif
+                                                                    @endif
+
+                                                                @endif
+
+                                                            @endif
+
+                                                        @endif
+
+                                                    @endif
+
+
+                                                @endif
+
+
+                                            @endif
+
+                                        @endif
+                        </div>
+                        @endif
+
                     </div>
                 </div>
                 {{-- ======================================================================================= --}}
@@ -820,7 +1086,7 @@ Harga pokok @uang($data->harga_pokok)
                                         class="bg-danger"
                                         style="color:white;"
                                         @endif>
-                                        <td>{{ $data->produk->nama }}
+                                        <td>{{ $data->produk != null ? $data->produk->nama : '-' }}
                                             <div class="">{{ $data->produk->merek != null ? $data->produk->merek->nama : '' }}</div>
                                         </td>
                                         <td>
@@ -956,106 +1222,307 @@ Harga pokok @uang($data->harga_pokok)
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div class="">
-                        <div class="card mb-2 bg-success shadow-none">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div class="">
-                                        <b>Total Pembayaran</b>
-                                    </div>
-                                    <div class="" style="font-size: 20px">
-                                        <b>@uang($total_pembayaran)</b>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    @if ($total_pembayaran != 0)
-                        <div class="d-flex flex-wrap mb-2">
-                            <button type="button" hidden>awd</button>
-                            <button type="button" hidden>awaw</button>
-                            <button type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima',{{ $total_pembayaran }})">Uang Pas</button>
-                            @if($total_pembayaran < 10000) <button type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima',10000)">@uang(10000)</button>
-                            @endif
-                            @if($total_pembayaran < 20000) <button type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 20000)">@uang(20000)</button>
-                            @endif
-                            @if($total_pembayaran < 30000) <button type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 30000)">@uang(30000)</button>
-                            @endif
-                            @if($total_pembayaran < 40000) <button type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 40000)">@uang(40000)</button>
-                            @endif
-                            @if($total_pembayaran < 50000) <button type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 50000)">@uang(50000)</button>
-                                @endif
-                            @if($total_pembayaran < 70000) <button type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 70000)">@uang(70000)</button>
-                                @endif
-                                @if($total_pembayaran < 100000) <button type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 100000)">@uang(100000)</button>
-                                @endif
-                                @if($total_pembayaran < 110000) <button type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 110000)">@uang(110000)</button>
-                                @endif
-                                @if($total_pembayaran < 150000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 150000)">@uang(150000)</button>
-                                @endif
-                                @if($total_pembayaran < 200000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 200000)">@uang(200000)</button>
-                                @endif
-                                @if($total_pembayaran < 250000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 250000)">@uang(250000)</button>
-                                @endif
-                                @if($total_pembayaran < 300000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 300000)">@uang(300000)</button>
-                                @endif
-
-                                @if($total_pembayaran < 400000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 400000)">@uang(400000)</button>
-                                @endif
-
-                                @if($total_pembayaran < 500000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 500000)">@uang(500000)</button>
-                                @endif
-                                @if($total_pembayaran < 600000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 600000)">@uang(600000)</button>
-                                @endif
-                                @if($total_pembayaran < 800000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 800000)">@uang(800000)</button>
-                                @endif
-                                @if($total_pembayaran < 1000000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 1000000)">@uang(1000000)</button>
-                                @endif
-
-
-
-                        </div>
-                        <div class="card mb-2 bg-info shadow-none">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div class="" style="font-size: 16px">
-                                        <b>Diterima : </b> <span >@uang($diterima != null ? $diterima : 0)</span>
-                                    </div>
-                                    <div class="" style="font-size: 20px">
-                                        <input min="{{ $total_pembayaran }}" wire:model="diterima" type="number" class="" placeholder="Rp...">
+                    <form wire:submit.prevent="bayar_tunai_cetak_struk">
+                        <div class="">
+                            <div class="card mb-2 bg-success shadow-none">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="">
+                                            <b>Total Pembayaran</b>
+                                        </div>
+                                        <div class="" style="font-size: 35px">
+                                            <b>@uang($total_pembayaran)</b>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                       @if($total_pembayaran < $diterima)
-                       <div class="card mb-2 bg-danger shadow-none">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="">
-                                    <b>Kembali</b>
+                            @if ($total_pembayaran != 0)
+                                <div class="d-flex flex-wrap mb-2">
+                                    <button type="button" hidden>awd</button>
+                                    <button type="button" hidden>awaw</button>
+                                    <button wire:click.prevent='bayar_uang_pas2()' type="button" class="btn btn-success mr-2 mb-2">Uang pas</button>
+                                    @if($total_pembayaran < 10000) <button type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima',10000)">@uang(10000)</button>
+                                    @endif
+                                    @if($total_pembayaran < 20000) <button type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 20000)">@uang(20000)</button>
+                                    @endif
+                                    @if($total_pembayaran < 30000) <button type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 30000)">@uang(30000)</button>
+                                    @endif
+                                    @if($total_pembayaran < 40000) <button type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 40000)">@uang(40000)</button>
+                                    @endif
+                                    @if($total_pembayaran < 50000) <button type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 50000)">@uang(50000)</button>
+                                        @endif
+                                    @if($total_pembayaran < 60000) <button type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 60000)">@uang(60000)</button>
+                                        @endif
+                                    @if($total_pembayaran < 70000) <button type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 70000)">@uang(70000)</button>
+                                        @endif
+                                    @if($total_pembayaran < 80000) <button type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 80000)">@uang(80000)</button>
+                                        @endif
+                                    @if($total_pembayaran < 90000) <button type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 90000)">@uang(90000)</button>
+                                        @endif
+                                        @if($total_pembayaran < 100000) <button type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 100000)">@uang(100000)</button>
+                                            @else
+                                            @if($total_pembayaran < 110000 && $total_pembayaran)
+                                            <button type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 110000)">@uang(110000)</button>
+                                            @endif
+                                            @if($total_pembayaran < 120000 && $total_pembayaran)
+                                            <button type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 120000)">@uang(120000)</button>
+                                            @endif
+                                            @if($total_pembayaran < 130000 && $total_pembayaran)
+                                            <button type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 130000)">@uang(130000)</button>
+                                            @endif
+                                            @if($total_pembayaran < 140000 && $total_pembayaran)
+                                            <button type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 140000)">@uang(140000)</button>
+                                            @endif
+                                            @if($total_pembayaran < 150000 && $total_pembayaran)
+                                            <button type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 150000)">@uang(150000)</button>
+                                            @endif
+                                            @if($total_pembayaran < 160000)
+                                            <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 160000)">@uang(160000)</button>
+                                            @endif
+                                            @if($total_pembayaran < 170000)
+                                            <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 170000)">@uang(170000)</button>
+                                            @endif
+                                            @if($total_pembayaran < 180000)
+                                            <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 180000)">@uang(180000)</button>
+                                            @endif
+                                            @if($total_pembayaran < 190000)
+                                            <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 190000)">@uang(190000)</button>
+                                            @endif
+                                            @if($total_pembayaran < 200000)
+                                                <button type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 200000)">@uang(200000)</button>
+                                            @else
+                                                @if($total_pembayaran < 210000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 210000)">@uang(210000)</button>
+                                                @endif
+                                                @if($total_pembayaran < 220000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 220000)">@uang(220000)</button>
+                                                @endif
+                                                @if($total_pembayaran < 230000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 230000)">@uang(230000)</button>
+                                                @endif
+                                                @if($total_pembayaran < 240000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 240000)">@uang(240000)</button>
+                                                @endif
+                                                @if($total_pembayaran < 250000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 250000)">@uang(250000)</button>
+                                                @endif
+                                                @if($total_pembayaran < 260000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 260000)">@uang(260000)</button>
+                                                @endif
+                                                @if($total_pembayaran < 270000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 270000)">@uang(270000)</button>
+                                                @endif
+                                                @if($total_pembayaran < 280000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 280000)">@uang(280000)</button>
+                                                @endif
+                                                @if($total_pembayaran < 290000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 290000)">@uang(290000)</button>
+                                                @endif
+                                                @if($total_pembayaran < 300000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 300000)">@uang(300000)</button>
+                                                @else
+                                                    @if($total_pembayaran < 310000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 310000)">@uang(310000)</button>
+                                                    @endif
+                                                    @if($total_pembayaran < 320000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 320000)">@uang(320000)</button>
+                                                    @endif
+                                                    @if($total_pembayaran < 330000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 330000)">@uang(330000)</button>
+                                                    @endif
+                                                    @if($total_pembayaran < 340000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 340000)">@uang(340000)</button>
+                                                    @endif
+                                                    @if($total_pembayaran < 350000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 350000)">@uang(350000)</button>
+                                                    @endif
+                                                    @if($total_pembayaran < 360000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 360000)">@uang(360000)</button>
+                                                    @endif
+                                                    @if($total_pembayaran < 370000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 370000)">@uang(370000)</button>
+                                                    @endif
+                                                    @if($total_pembayaran < 380000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 380000)">@uang(380000)</button>
+                                                    @endif
+                                                    @if($total_pembayaran < 390000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 390000)">@uang(390000)</button>
+                                                    @endif
+                                                    @if($total_pembayaran < 400000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 400000)">@uang(400000)</button>
+                                                    @else
+                                                        @if($total_pembayaran < 410000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 410000)">@uang(410000)</button>
+                                                        @endif
+                                                        @if($total_pembayaran < 420000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 420000)">@uang(420000)</button>
+                                                        @endif
+                                                        @if($total_pembayaran < 430000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 430000)">@uang(430000)</button>
+                                                        @endif
+                                                        @if($total_pembayaran < 440000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 440000)">@uang(440000)</button>
+                                                        @endif
+                                                        @if($total_pembayaran < 450000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 450000)">@uang(450000)</button>
+                                                        @endif
+                                                        @if($total_pembayaran < 460000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 460000)">@uang(460000)</button>
+                                                        @endif
+                                                        @if($total_pembayaran < 470000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 470000)">@uang(470000)</button>
+                                                        @endif
+                                                        @if($total_pembayaran < 480000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 480000)">@uang(480000)</button>
+                                                        @endif
+                                                        @if($total_pembayaran < 490000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 490000)">@uang(490000)</button>
+                                                        @endif
+                                                        @if($total_pembayaran < 500000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 500000)">@uang(500000)</button>
+                                                        @else
+                                                            @if($total_pembayaran < 510000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 510000)">@uang(510000)</button>
+                                                            @endif
+                                                            @if($total_pembayaran < 520000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 520000)">@uang(520000)</button>
+                                                            @endif
+                                                            @if($total_pembayaran < 530000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 530000)">@uang(530000)</button>
+                                                            @endif
+                                                            @if($total_pembayaran < 540000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 540000)">@uang(540000)</button>
+                                                            @endif
+                                                            @if($total_pembayaran < 550000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 550000)">@uang(550000)</button>
+                                                            @endif
+                                                            @if($total_pembayaran < 560000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 560000)">@uang(560000)</button>
+                                                            @endif
+                                                            @if($total_pembayaran < 570000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 570000)">@uang(570000)</button>
+                                                            @endif
+                                                            @if($total_pembayaran < 580000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 580000)">@uang(580000)</button>
+                                                            @endif
+                                                            @if($total_pembayaran < 590000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 590000)">@uang(590000)</button>
+                                                            @endif
+                                                            @if($total_pembayaran < 600000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 600000)">@uang(600000)</button>
+                                                            @else
+                                                                @if($total_pembayaran < 610000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 610000)">@uang(610000)</button>
+                                                                @endif
+                                                                @if($total_pembayaran < 620000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 620000)">@uang(620000)</button>
+                                                                @endif
+                                                                @if($total_pembayaran < 630000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 630000)">@uang(630000)</button>
+                                                                @endif
+                                                                @if($total_pembayaran < 640000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 640000)">@uang(640000)</button>
+                                                                @endif
+                                                                @if($total_pembayaran < 650000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 650000)">@uang(650000)</button>
+                                                                @endif
+                                                                @if($total_pembayaran < 660000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 660000)">@uang(660000)</button>
+                                                                @endif
+                                                                @if($total_pembayaran < 670000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 670000)">@uang(670000)</button>
+                                                                @endif
+                                                                @if($total_pembayaran < 680000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 680000)">@uang(680000)</button>
+                                                                @endif
+                                                                @if($total_pembayaran < 690000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 690000)">@uang(690000)</button>
+                                                                @endif
+                                                                @if($total_pembayaran < 700000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 700000)">@uang(700000)</button>
+                                                                @else
+                                                                    @if($total_pembayaran < 710000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 710000)">@uang(710000)</button>
+                                                                    @endif
+                                                                    @if($total_pembayaran < 720000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 720000)">@uang(720000)</button>
+                                                                    @endif
+                                                                    @if($total_pembayaran < 730000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 730000)">@uang(730000)</button>
+                                                                    @endif
+                                                                    @if($total_pembayaran < 740000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 740000)">@uang(740000)</button>
+                                                                    @endif
+                                                                    @if($total_pembayaran < 750000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 750000)">@uang(750000)</button>
+                                                                    @endif
+                                                                    @if($total_pembayaran < 760000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 760000)">@uang(760000)</button>
+                                                                    @endif
+                                                                    @if($total_pembayaran < 770000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 770000)">@uang(770000)</button>
+                                                                    @endif
+                                                                    @if($total_pembayaran < 780000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 780000)">@uang(780000)</button>
+                                                                    @endif
+                                                                    @if($total_pembayaran < 790000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 790000)">@uang(790000)</button>
+                                                                    @endif
+                                                                    @if($total_pembayaran < 800000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 800000)">@uang(800000)</button>
+
+                                                                    @else
+                                                                        @if($total_pembayaran < 800000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 800000)">@uang(800000)</button>
+                                                                        @endif
+                                                                        @if($total_pembayaran < 810000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 810000)">@uang(810000)</button>
+                                                                        @endif
+                                                                        @if($total_pembayaran < 820000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 820000)">@uang(820000)</button>
+                                                                        @endif
+                                                                        @if($total_pembayaran < 830000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 830000)">@uang(830000)</button>
+                                                                        @endif
+                                                                        @if($total_pembayaran < 840000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 840000)">@uang(840000)</button>
+                                                                        @endif
+                                                                        @if($total_pembayaran < 850000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 850000)">@uang(850000)</button>
+                                                                        @endif
+                                                                        @if($total_pembayaran < 860000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 860000)">@uang(860000)</button>
+                                                                        @endif
+                                                                        @if($total_pembayaran < 870000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 870000)">@uang(870000)</button>
+                                                                        @endif
+                                                                        @if($total_pembayaran < 880000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 880000)">@uang(880000)</button>
+                                                                        @endif
+                                                                        @if($total_pembayaran < 890000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 890000)">@uang(890000)</button>
+                                                                        @endif
+                                                                        @if($total_pembayaran < 900000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 900000)">@uang(900000)</button>
+
+                                                                        @else
+                                                                            @if($total_pembayaran < 910000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 910000)">@uang(910000)</button>
+                                                                            @endif
+                                                                            @if($total_pembayaran < 920000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 920000)">@uang(920000)</button>
+                                                                            @endif
+                                                                            @if($total_pembayaran < 930000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 930000)">@uang(930000)</button>
+                                                                            @endif
+                                                                            @if($total_pembayaran < 940000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 940000)">@uang(940000)</button>
+                                                                            @endif
+                                                                            @if($total_pembayaran < 950000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 950000)">@uang(950000)</button>
+                                                                            @endif
+                                                                            @if($total_pembayaran < 960000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 960000)">@uang(960000)</button>
+                                                                            @endif
+                                                                            @if($total_pembayaran < 970000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 970000)">@uang(970000)</button>
+                                                                            @endif
+                                                                            @if($total_pembayaran < 980000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 980000)">@uang(980000)</button>
+                                                                            @endif
+                                                                            @if($total_pembayaran < 990000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 990000)">@uang(990000)</button>
+                                                                            @endif
+                                                                            @if($total_pembayaran < 1000000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 1000000)">@uang(1000000)</button>
+                                                                            @else
+                                                                                @if($total_pembayaran < 1100000) <button  type="button" class="btn btn-info mr-2 mb-2" wire:click="$set('diterima', 1100000)">@uang(1100000)</button>
+                                                                                @endif
+                                                                            @endif
+                                                                        @endif
+                                                                    @endif
+
+                                                                @endif
+
+                                                            @endif
+
+                                                        @endif
+
+                                                    @endif
+
+
+                                                @endif
+
+
+                                            @endif
+
+                                        @endif
+
+
+
+
                                 </div>
-                                <div class="" style="font-size: 18px">
-                                    @uang($kembali != null ? $kembali : 0)
+                                <div class="card mb-2 bg-info shadow-none">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="" style="font-size: 16px">
+                                                <b>Diterima : </b> <span >@uang($diterima != null ? $diterima : 0)</span>
+                                            </div>
+                                            <div class="" style="font-size: 30px">
+                                                <input min="{{ $total_pembayaran }}" wire:model="diterima" type="number" class="" placeholder="Rp...">
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
+                                @if($total_pembayaran < $diterima)
+                                <div class="card mb-2 bg-danger shadow-none">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="">
+                                                <b>Kembali</b>
+                                            </div>
+                                            <div class="" style="font-size: 18px">
+                                                @uang($kembali != null ? $kembali : 0)
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                @endif
+
+
+                            <div class="mt-2">
+                                <div class="d-flex">
+                                    <button type="submit" wire:loading.remove class="btn btn-primary form-control mr-1">Simpan dan cetak struk</button>
+                                    {{-- <button type="button" wire:click='bayar_tunai_cetak_nota()'  class="btn btn-info form-control ml-1">Simpan dan cetak Nota</button> --}}
+                                </div>
+                                <button type="button"  wire:loading   class="btn btn-secondary mt-2 form-control">Loading...</button>
+                                {{-- <button type="button"  wire:click.prevent='bayar_tunai()' wire:loading.remove  class="btn btn-warning mt-2 form-control">Simpan (tanpa cetak struk)</button> --}}
+                                {{-- <a type="button" href="{{ url('struk') }}" class="btn btn-warning mt-2 form-control">cetak</a> --}}
+
                             </div>
+                            @endif
                         </div>
-                    </div>
-
-                       @endif
-
-                    @endif
-
-                        <div class="mt-2">
-                            <div class="d-flex">
-                                <button type="button" wire:click='bayar_tunai_cetak_struk()'  wire:loading.remove  class="btn btn-primary form-control mr-1">Simpan dan cetak struk</button>
-                                {{-- <button type="button" wire:click='bayar_tunai_cetak_nota()'  class="btn btn-info form-control ml-1">Simpan dan cetak Nota</button> --}}
-                            </div>
-                            <button type="button"  wire:loading   class="btn btn-secondary mt-2 form-control">Loading...</button>
-                            <button type="button"  wire:click.prevent='bayar_tunai()' wire:loading.remove  class="btn btn-warning mt-2 form-control">Simpan (tanpa cetak struk)</button>
-                            {{-- <a type="button" href="{{ url('struk') }}" class="btn btn-warning mt-2 form-control">cetak</a> --}}
-                        </div>
-
-
-                    </div>
+                    </form>
                 </div>
                 <div class="modal-footer">
                     <button wire:click="bayar_tunai_close()" type="button" class="btn btn-secondary btn-block" data-dismiss="modal">Close</button>
@@ -1221,4 +1688,22 @@ Harga pokok @uang($data->harga_pokok)
 
 </script>
 
+@endpush
+
+@push('script')
+    <script type="text/javascript">
+        window.onload = function(ev) {
+            if (window.innerHeight + window.scrollY >= document.body.offsetHeight && window.innerHeight + window
+                .pageYOffset >= document.body.offsetHeight) {
+                Livewire.emit('take-data');
+            }
+        }
+
+        window.onscroll = function(ev) {
+            if (window.innerHeight + window.scrollY >= document.body.offsetHeight && window.innerHeight + window
+                .pageYOffset >= document.body.offsetHeight) {
+                Livewire.emit('take-data');
+            }
+        }
+    </script>
 @endpush

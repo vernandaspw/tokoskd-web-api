@@ -9,7 +9,8 @@ class StrukController extends Controller
 {
     public function index($id)
     {
-        $data = Penjualan::where('no_penjualan', $id)->first();
+        // $data = Penjualan::where('id', $id)->first();
+        $data = Penjualan::find($id);
         // dd($data);
         return view('struk', compact('data'));
     }

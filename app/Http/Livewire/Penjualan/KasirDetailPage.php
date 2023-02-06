@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Penjualan;
 
+use App\Helpers\PenjualanCetak;
 use App\Models\AppModel;
 use App\Models\Bill;
 use App\Models\BillItem;
@@ -31,7 +32,7 @@ use Livewire\Component;
 class KasirDetailPage extends Component
 {
     public $produkitem = [];
-    public $takeprodukitem = 25;
+    public $takeprodukitem = 13;
 
     public $selectMerek, $selectCatalog, $selectKategori, $selectRak;
     public $cariProduk, $cariBarcode, $orderBy;
@@ -42,9 +43,13 @@ class KasirDetailPage extends Component
 
     public $kasirID;
 
+    protected $listeners = [
+        'take-data' => 'takeprodukitem',
+    ];
+
     public function takeprodukitem()
     {
-        $this->takeprodukitem += 25;
+        $this->takeprodukitem += 13;
     }
 
     public function menuProduk()
@@ -126,8 +131,8 @@ class KasirDetailPage extends Component
 
     public function mount($id)
     {
+        // dd($id)
         $this->kasirID = $id;
-        $this->waktu = now();
     }
 
     public function render()
@@ -135,25 +140,13 @@ class KasirDetailPage extends Component
         $this->bills = Bill::get();
 
         $this->billCount = Bill::get()->count();
+        // dd($this->kasirID);
+        $this->kasir = Kasir::find($this->kasirID);
 
-        $this->kasir = Kasir::find($this->kasirID)->first();
         // dd($this->kasir);
+
         $pi = ProdukItem::with('produk');
-        if ($this->cariBarcode) {
-            $data = $pi->where('barcode1', $this->cariBarcode)
-                ->orWhere('barcode2', $this->cariBarcode)
-                ->orWhere('barcode3', $this->cariBarcode)
-                ->orWhere('barcode4', $this->cariBarcode)
-                ->orWhere('barcode5', $this->cariBarcode)
-                ->orWhere('barcode6', $this->cariBarcode)->first();
-            if ($data) {
-                // cek diskon
-                $id = $data->id;
-                $this->addCardItem($id);
-                $this->itemID = null;
-                $this->cariBarcode = null;
-            }
-        }
+
         if ($this->cariProduk) {
             $pi->whereRelation('produk', 'nama', 'like', '%' . $this->cariProduk . '%');
         }
@@ -186,14 +179,66 @@ class KasirDetailPage extends Component
                 }
             }
         }
+        if ($this->cariBarcode == null) {
+            $this->produkitem = $pi->take($this->takeprodukitem)->get();
+        }
         $this->produkitem = $pi->take($this->takeprodukitem)->get();
+
+        if ($this->cariBarcode) {
+            $barcodeProduk = ProdukItem::with('produk')
+                ->Where('barcode1', $this->cariBarcode)
+                ->orWhere('barcode2', $this->cariBarcode)
+                ->orWhere('barcode3', $this->cariBarcode)
+                ->orWhere('barcode4', $this->cariBarcode)
+                ->orWhere('barcode5', $this->cariBarcode)
+                ->orWhere('barcode6', $this->cariBarcode);
+
+            $dataBarcode = $barcodeProduk->get();
+
+            if ($dataBarcode->count() > 1) {
+                // cari konversi terendah
+                $konversi_terendah = $dataBarcode->min('konversi');
+                $dataTerendah = $barcodeProduk->where('konversi', $konversi_terendah)->first();
+                // dd($dataTerendah);
+                // add data tambah barang dengan koonversi terendah
+                $id = $dataTerendah->id;
+                $this->addCardItem($id);
+                $this->itemID = null;
+                $this->cariBarcode = null;
+
+                // tampilkan data produk dari produk_id nya produk item barcode
+                // produk_id yang telah dikonversi
+                $produk_id_kon = $dataTerendah->produk_id;
+
+                $this->produkitem = ProdukItem::where('produk_id', $produk_id_kon)->get();
+                // dd($this->produkitem);
+            } elseif ($dataBarcode->count() == 1) {
+                // cek diskon
+                $dataFind = $barcodeProduk->first();
+                $id = $dataFind->id;
+                $this->addCardItem($id);
+                $this->itemID = null;
+                $this->cariBarcode = null;
+
+                // cari produk_id
+                $produk_id_kon = $dataFind->produk_id;
+                $this->produkitem = ProdukItem::where('produk_id', $produk_id_kon)->get();
+
+            } else {
+                $dataNama = $pi->whereRelation('produk', 'nama', 'like', '%' . $this->cariBarcode . '%')->first();
+                if ($dataNama) {
+                    $pi->whereRelation('produk', 'nama', 'like', '%' . $this->cariBarcode . '%');
+                }
+                $this->produkitem = $pi->take($this->takeprodukitem)->get();
+            }
+        }
 
         $this->mereks = Merek::latest()->get();
         $this->catalogs = Catalog::latest()->get();
         $this->kategoris = Kategori::latest()->get();
         $this->raks = Rak::latest()->get();
 
-        $this->carditem = CardItem::where('user_id', auth()->user()->id)->get();
+        $this->carditem = CardItem::where('user_id', auth()->user()->id)->latest()->get();
 
         // if ($this->ubahHargaJualDasar == null) {
         //     $this->ubahHargaJualDasar = 0;
@@ -250,42 +295,29 @@ class KasirDetailPage extends Component
         return view('livewire.penjualan.kasir-detail-page')->extends('layouts.app')->section('content');
     }
 
+    public $bayar_tunai_pending = false;
+
     public function updated()
     {
+        // buat versi ambil harga dari card
         if ($this->itemID) {
             if ($this->qtyEdit) {
                 $ci = CardItem::find($this->itemID);
                 $data = ProdukItem::find($ci->produk_item_id);
 
-                if ($data->diskon_start <= date('Y-m-d') && $data->diskon_end >= date('Y-m-d')) {
-                    if ($data->jam_start != null && $data->jam_end != null) {
-                        if ($data->jam_start <= date('H:i:s') && $data->jam_end >= date('H:i:s')) {
-                            $harga_jual = $data->diskon_harga_jual;
-                            $persenDiskon = $data->diskon_persen;
-                        } else {
-                            $harga_jual = $data->harga_jual;
-                            $isDiskon = false;
-                            $persenDiskon = 0;
-                        }
-                    } else {
-                        $harga_jual = $data->diskon_harga_jual;
-                        $persenDiskon = $data->diskon_persen;
-                    }
-                } else {
-                    $harga_jual = $data->harga_jual;
-                    $persenDiskon = 0;
-                }
+                $cart_harga_jual = $ci->harga_jual;
+                $cart_diskon_persen = $ci->diskon_persen;
 
                 // cardItem ubah
                 $qty = $this->qtyEdit;
                 $total_harga_modal = $data->harga_pokok * $qty;
-                $total_harga_jual = $harga_jual * $qty;
-                $total_potongan_diskon = ($harga_jual * ($persenDiskon / 100)) * $qty;
+                $total_harga_jual = $cart_harga_jual * $qty;
+                $total_potongan_diskon = ($cart_harga_jual * ($cart_diskon_persen / 100)) * $qty;
                 $total_harga = $total_harga_jual - $total_potongan_diskon;
                 $untung = $total_harga - $total_harga_modal;
                 $ci->update([
-                    'harga_jual' => $harga_jual,
-                    'diskon_persen' => $persenDiskon,
+                    'harga_jual' => $cart_harga_jual,
+                    'diskon_persen' => $cart_diskon_persen,
                     'qty' => $qty,
                     'total_harga_modal' => $total_harga_modal,
                     'total_harga_jual' => $total_harga_jual,
@@ -296,6 +328,56 @@ class KasirDetailPage extends Component
 
             }
         }
+
+        // if ($this->bayar_tunai_pending) {
+
+        // } else {
+        //     if ($this->itemID) {
+        //         if ($this->qtyEdit) {
+        //             $ci = CardItem::find($this->itemID);
+        //             $data = ProdukItem::find($ci->produk_item_id);
+
+        //             if ($data->diskon_start <= date('Y-m-d') && $data->diskon_end >= date('Y-m-d')) {
+        //                 if ($data->jam_start != null && $data->jam_end != null) {
+        //                     if ($data->jam_start <= date('H:i:s') && $data->jam_end >= date('H:i:s')) {
+        //                         $harga_jual = $data->diskon_harga_jual;
+        //                         $persenDiskon = $data->diskon_persen;
+        //                     } else {
+        //                         $harga_jual = $data->harga_jual;
+        //                         $isDiskon = false;
+        //                         $persenDiskon = 0;
+        //                     }
+        //                 } else {
+        //                     $harga_jual = $data->diskon_harga_jual;
+        //                     $persenDiskon = $data->diskon_persen;
+        //                 }
+        //             } else {
+        //                 $harga_jual = $data->harga_jual;
+        //                 $persenDiskon = 0;
+        //             }
+
+        //             // cardItem ubah
+        //             $qty = $this->qtyEdit;
+        //             $total_harga_modal = $data->harga_pokok * $qty;
+        //             $total_harga_jual = $harga_jual * $qty;
+        //             $total_potongan_diskon = ($harga_jual * ($persenDiskon / 100)) * $qty;
+        //             $total_harga = $total_harga_jual - $total_potongan_diskon;
+        //             $untung = $total_harga - $total_harga_modal;
+        //             $ci->update([
+        //                 'harga_jual' => $harga_jual,
+        //                 'diskon_persen' => $persenDiskon,
+        //                 'qty' => $qty,
+        //                 'total_harga_modal' => $total_harga_modal,
+        //                 'total_harga_jual' => $total_harga_jual,
+        //                 'potongan_diskon' => $total_potongan_diskon,
+        //                 'total_harga' => $total_harga,
+        //                 'untung' => $untung,
+        //             ]);
+
+        //         }
+        //     }
+        // }
+
     }
 
     public function addNewCardItem($id)
@@ -307,6 +389,7 @@ class KasirDetailPage extends Component
     public function addCardItem($id)
     {
         session()->put('bill_baru', true);
+        $user_id = auth()->user()->id;
         $this->billPage = false;
         $data = ProdukItem::find($id);
         if ($data->diskon_start <= date('Y-m-d') && $data->diskon_end >= date('Y-m-d')) {
@@ -327,7 +410,7 @@ class KasirDetailPage extends Component
             $persenDiskon = 0;
         }
 
-        $cartitem = CardItem::where('produk_item_id', $data->id)->first();
+        $cartitem = CardItem::where('user_id', $user_id)->where('produk_item_id', $data->id)->first();
         if ($cartitem) {
             $qty = $cartitem->qty + 1;
             $total_harga_modal = $data->harga_pokok * $qty;
@@ -337,7 +420,7 @@ class KasirDetailPage extends Component
             $untung = $total_harga - $total_harga_modal;
 
             $cartitem->update([
-                'user_id' => auth()->user()->id,
+                // 'user_id' => auth()->user()->id,
                 'produk_id' => $data->produk->id,
                 'merek_id' => $data->produk->merek_id,
                 'catalog_id' => $data->produk->catalog_id,
@@ -414,7 +497,6 @@ class KasirDetailPage extends Component
         $untung = $total_harga - $total_harga_modal;
 
         $cartitem->update([
-            'user_id' => auth()->user()->id,
             'produk_id' => $data->produk->id,
             'merek_id' => $data->produk->merek_id,
             'catalog_id' => $data->produk->catalog_id,
@@ -472,7 +554,7 @@ class KasirDetailPage extends Component
             $untung = $total_harga - $total_harga_modal;
 
             $cartitem->update([
-                'user_id' => auth()->user()->id,
+
                 'produk_id' => $data->produk->id,
                 'merek_id' => $data->produk->merek_id,
                 'catalog_id' => $data->produk->catalog_id,
@@ -565,39 +647,57 @@ class KasirDetailPage extends Component
         $cardItem = CardItem::find($id);
         $produk = ProdukItem::find($cardItem->produk_item_id);
 
-        $var_harga_jual = $produk->harga_jual;
+        // $var_harga_jual = $produk->harga_jual;
 
-        // update produk
-        if ($this->ubahHargaDiskonJual) {
-            $produk->update([
-                'harga_jual' => $this->ubahHargaJualDasar,
-                'diskon_harga_jual' => $this->ubahHargaDiskonJual,
-            ]);
-        } else {
-            $produk->update([
-                'harga_jual' => $this->ubahHargaJualDasar,
-            ]);
-        }
+        // // update produk
+        // if ($this->ubahHargaDiskonJual) {
+        //     $produk->update([
+        //         'harga_jual' => $this->ubahHargaJualDasar,
+        //         'diskon_harga_jual' => $this->ubahHargaDiskonJual,
+        //     ]);
+        // } else {
+        //     $produk->update([
+        //         'harga_jual' => $this->ubahHargaJualDasar,
+        //     ]);
+        // }
 
-        // riwayat harga create
-        RiwayatHarga::create([
-            'produk_id' => $produk->produk_id,
-            'produk_item_id' => $produk->id,
-            'harga_jual_awal' => $var_harga_jual ? $var_harga_jual : null,
-            'harga_jual_akhir' => $this->ubahHargaJualDasar ? $this->ubahHargaJualDasar : null,
-            'status' => 'telah diperbarui',
-            'user_id' => auth()->user()->id,
-        ]);
+        // // riwayat harga create
+        // RiwayatHarga::create([
+        //     'produk_id' => $produk->produk_id,
+        //     'produk_item_id' => $produk->id,
+        //     'harga_jual_awal' => $var_harga_jual ? $var_harga_jual : null,
+        //     'harga_jual_akhir' => $this->ubahHargaJualDasar ? $this->ubahHargaJualDasar : null,
+        //     'status' => 'telah diperbarui',
+        //     'user_id' => auth()->user()->id,
+        // ]);
 
-        // update carditem
+        // // update carditem
+        // $qty = $cardItem->qty;
+        // $total_harga_modal = $produk->harga_pokok * $qty;
+        // $total_harga_jual = $produk->harga_jual * $qty;
+        // $total_potongan_diskon = ($produk->harga_jual * ($cardItem->diskon_persen / 100)) * $qty;
+        // $total_harga = $total_harga_jual - $total_potongan_diskon;
+        // $untung = $total_harga - $total_harga_modal;
+        // $cardItem->update([
+        //     'harga_jual' => $produk->harga_jual,
+        //     'qty' => $qty,
+        //     'total_harga_modal' => $total_harga_modal,
+        //     'total_harga_jual' => $total_harga_jual,
+        //     'potongan_diskon' => $total_potongan_diskon,
+        //     'total_harga' => $total_harga,
+        //     'untung' => $untung,
+        // ]);
+
+        $hargaJualJikaDiskon = $this->ubahHargaDiskonJual != null ? $this->ubahHargaDiskonJual : $this->ubahHargaJualDasar;
+
         $qty = $cardItem->qty;
         $total_harga_modal = $produk->harga_pokok * $qty;
-        $total_harga_jual = $produk->harga_jual * $qty;
-        $total_potongan_diskon = ($produk->harga_jual * ($cardItem->diskon_persen / 100)) * $qty;
+        $total_harga_jual = $hargaJualJikaDiskon * $qty;
+        $total_potongan_diskon = ($hargaJualJikaDiskon * ($cardItem->diskon_persen / 100)) * $qty;
         $total_harga = $total_harga_jual - $total_potongan_diskon;
         $untung = $total_harga - $total_harga_modal;
         $cardItem->update([
-            'harga_jual' => $produk->harga_jual,
+            'harga_jual' => $hargaJualJikaDiskon,
             'qty' => $qty,
             'total_harga_modal' => $total_harga_modal,
             'total_harga_jual' => $total_harga_jual,
@@ -605,7 +705,90 @@ class KasirDetailPage extends Component
             'total_harga' => $total_harga,
             'untung' => $untung,
         ]);
+        // riwayat harga create
+        RiwayatHarga::create([
+            'produk_id' => $produk->produk_id,
+            'produk_item_id' => $produk->id,
+            'harga_jual_awal' => $produk->harga_jual ? $produk->harga_jual : null,
+            'harga_jual_akhir' => $hargaJualJikaDiskon ? $hargaJualJikaDiskon : null,
+            'status' => 'tidak diperbarui',
+            'ubahdiRak' => true,
+            'keterangan' => 'ubah harga jual saat penjualan',
+            'user_id' => auth()->user()->id,
+        ]);
 
+        // if ($produk->diskon_start <= date('Y-m-d') && $produk->diskon_end >= date('Y-m-d')) {
+        //     if ($produk->jam_start != null && $produk->jam_end != null) {
+        //         if ($produk->jam_start <= date('H:i:s') && $produk->jam_end >= date('H:i:s')) {
+        //             $isDiskon = true;
+        //         } else {
+        //             $isDiskon = false;
+        //         }
+        //     } else {
+        //         $isDiskon = true;
+        //     }
+        // } else {
+        //     $isDiskon = false;
+        // }
+
+        // // update produk
+        // if ($isDiskon) {
+        //     // update carditem
+        //     $qty = $cardItem->qty;
+        //     $total_harga_modal = $produk->harga_pokok * $qty;
+        //     $total_harga_jual = $this->ubahHargaDiskonJual * $qty;
+        //     $total_potongan_diskon = ($this->ubahHargaDiskonJual * ($produk->diskon_persen / 100)) * $qty;
+        //     $total_harga = $total_harga_jual - $total_potongan_diskon;
+        //     $untung = $total_harga - $total_harga_modal;
+        //     $cardItem->update([
+        //         'harga_jual' => $this->ubahHargaDiskonJual,
+        //         'qty' => $qty,
+        //         'total_harga_modal' => $total_harga_modal,
+        //         'total_harga_jual' => $total_harga_jual,
+        //         'potongan_diskon' => $total_potongan_diskon,
+        //         'total_harga' => $total_harga,
+        //         'untung' => $untung,
+        //     ]);
+        //     // riwayat harga create
+        //     RiwayatHarga::create([
+        //         'produk_id' => $produk->produk_id,
+        //         'produk_item_id' => $produk->id,
+        //         'harga_jual_awal' => $produk->harga_jual ? $produk->harga_jual : null,
+        //         'harga_jual_akhir' => $this->ubahHargaJualDasar ? $this->ubahHargaJualDasar : null,
+        //         'status' => 'tidak diperbarui',
+        //         'ubahdiRak' => true,
+        //         'keterangan' => 'ubah harga jual saat penjualan',
+        //         'user_id' => auth()->user()->id,
+        //     ]);
+        // } else {
+        //     // update carditem
+        //     $qty = $cardItem->qty;
+        //     $total_harga_modal = $produk->harga_pokok * $qty;
+        //     $total_harga_jual = $this->ubahHargaJualDasar * $qty;
+        //     $total_harga = $total_harga_jual;
+        //     $untung = $total_harga - $total_harga_modal;
+        //     $cardItem->update([
+        //         'harga_jual' => $this->ubahHargaJualDasar,
+        //         'qty' => $qty,
+        //         'total_harga_modal' => $total_harga_modal,
+        //         'total_harga_jual' => $total_harga_jual,
+        //         // 'potongan_diskon' => $total_potongan_diskon,
+        //         'total_harga' => $total_harga,
+        //         'untung' => $untung,
+        //     ]);
+        //     // riwayat harga create
+        //     RiwayatHarga::create([
+        //         'produk_id' => $produk->produk_id,
+        //         'produk_item_id' => $produk->id,
+        //         'harga_jual_awal' => $produk->harga_jual ? $produk->harga_jual : null,
+        //         'harga_jual_akhir' => $this->ubahHargaJualDasar ? $this->ubahHargaJualDasar : null,
+        //         'status' => 'ubah harga jual saat penjualan',
+        //         'user_id' => auth()->user()->id,
+        //     ]);
+        // }
+
+        // 'status' => 'tidak diperbarui',
+        // 'ubahdiRak' => true,
         // $this->ubahharga_close();
         $this->emit('success', ['pesan' => 'Berhasil simpan data']);
     }
@@ -693,6 +876,7 @@ class KasirDetailPage extends Component
     public function bayar_tunai_toggle()
     {
         $this->bayar_tunai_show = true;
+        $this->bayar_tunai_pending = true;
     }
 
     public function bayar_tunai_close()
@@ -709,22 +893,66 @@ class KasirDetailPage extends Component
         $cek = $this->bayar_tunai_query();
 
         if ($cek != 'error') {
+            $this->emit('success', ['pesan' => 'Berhasil simpan']);
+            // PenjualanCetak::struk($cek['transaksi_id']);
             $this->emit('cetakData', ['url' => url('penjualan/struk', $cek['transaksi_id']), 'title' => 'struk']);
         }
     }
-    public function bayar_tunai_cetak_nota()
+
+    public function bayar_uang_pas()
     {
+        $this->diterima = $this->total_pembayaran;
+        $this->kembali = 0;
         $cek = $this->bayar_tunai_query();
 
         if ($cek != 'error') {
-            $this->emit('cetakData', ['url' => url('struk'), 'title' => 'struk']);
+            PenjualanCetak::struk($cek['transaksi_id']);
+            $this->emit('success', ['pesan' => 'Berhasil simpan']);
+            // $this->emit('cetakData', ['url' => url('penjualan/struk', $cek['transaksi_id']), 'title' => 'struk']);
         }
     }
+    public function bayar_uang_pas2()
+    {
+        $this->diterima = $this->total_pembayaran;
+        $this->kembali = 0;
+        $cek = $this->bayar_tunai_query();
+
+        if ($cek != 'error') {
+            // PenjualanCetak::struk($cek['transaksi_id']);
+            $this->emit('success', ['pesan' => 'Berhasil simpan']);
+            $this->emit('cetakData', ['url' => url('penjualan/struk', $cek['transaksi_id']), 'title' => 'struk']);
+        }
+    }
+
+    public function bayar_simpan()
+    {
+        $this->diterima = $this->total_pembayaran;
+        $this->kembali = 0;
+        $cek = $this->bayar_tunai_query();
+
+        if ($cek != 'error') {
+            // PenjualanCetak::struk($cek['transaksi_id']);
+            $this->emit('success', ['pesan' => 'Berhasil simpan']);
+            // $this->emit('cetakData', ['url' => url('penjualan/struk', $cek['transaksi_id']), 'title' => 'struk']);
+        }
+    }
+
+    // belum memiliki printer
+    // public function bayar_tunai_cetak_nota()
+    // {
+    //     $cek = $this->bayar_tunai_query();
+
+    //     if ($cek != 'error') {
+    //         $this->emit('cetakData', ['url' => url('struk'), 'title' => 'struk']);
+    //     }
+    // }
+
     public function bayar_tunai()
     {
         $this->bayar_tunai_query();
 
     }
+
     public function bayar_tunai_query()
     {
         // validasi data
@@ -924,6 +1152,9 @@ class KasirDetailPage extends Component
             $this->pelanggan_piutang_usaha = null;
             $this->pelanggan_hutang_usaha = null;
             $this->ongkir = 0;
+            $this->diterima = 0;
+            $this->kembali = 0;
+
             foreach ($cardItem as $item) {
                 $item->delete();
             }
@@ -931,9 +1162,9 @@ class KasirDetailPage extends Component
             // delete bill
             if ($this->bill_id) {
                 $id_bill = $this->bill_id;
-            }elseif (session('bill_id')) {
+            } elseif (session('bill_id')) {
                 $id_bill = session('bill_id');
-            }else {
+            } else {
                 $id_bill = null;
             }
             if ($id_bill) {
@@ -941,16 +1172,16 @@ class KasirDetailPage extends Component
                 $bill->delete();
             }
 
-
             if (session('bill_id')) {
                 session()->forget('bill_id');
                 session()->forget('bill_baru');
             }
 
+            $this->bayar_tunai_pending = false;
             redirect()->to('penjualan/kasir/' . $this->kasirID);
             // $this->bayar_tunai_close();
-            sleep(1);
-            return ['transaksi_id' => $penjualan->no_penjualan];
+            // sleep(1);
+            return ['transaksi_id' => $penjualan->id];
         }
 
     }
@@ -1001,12 +1232,12 @@ class KasirDetailPage extends Component
     {
         $this->new_item_produk_id = $id;
         $produk = Produk::find($id);
-        $this->new_item_produks = $produk;
-        foreach ($produk->produk_item as $item) {
-            $konversiDasar = $item->min('konversi');
-        }
 
-        $dasar = ProdukItem::where('produk_id', $id)->where('konversi', $konversiDasar)->first();
+        $this->new_item_produks = $produk;
+
+        $konProduk = $produk->produk_item->min('konversi');
+
+        $dasar = ProdukItem::where('produk_id', $produk->id)->where('konversi', $konProduk)->first();
 
         $this->dasarKov = $dasar->satuan->satuan;
         $this->dasarKovJml = $dasar->konversi;
@@ -1044,6 +1275,8 @@ class KasirDetailPage extends Component
             'barcode6' => $this->new_item_barcode6,
         ]);
 
+        // tandai
+        $this->addNewCardItem($item->id);
         $this->closeNewItem();
         $this->emit('success', ['pesan' => 'Berhasil tambah item']);
     }
@@ -1134,65 +1367,64 @@ class KasirDetailPage extends Component
     {
         if ($this->total_pembayaran) {
             $no_bill = date('H') . date('i') . date('s') . rand(0001, 9999);
-        $cek = Bill::where('no_bill', $no_bill)->first();
-        if ($cek != null) {
-            $no_bill = date('H') . date('i') . date('s') . rand(0001, 9999);
-        }
+            $cek = Bill::where('no_bill', $no_bill)->first();
+            if ($cek != null) {
+                $no_bill = date('H') . date('i') . date('s') . rand(0001, 9999);
+            }
 
-        $bill = Bill::create([
-            'no_bill' => $no_bill,
-            'pelanggan_id' => $this->pelanggan_id,
-            'total_harga_pokok' => $this->total_harga_pokok,
-            'total_harga_jual' => $this->total_harga_jual,
-            'potongan_diskon' => $this->total_potongan_diskon,
-            'total_harga' => $this->total_harga,
-            'tagihan_utang' => $this->tagihan_utang,
-            'ongkir' => $this->ongkir,
-            'pajak' => $this->pajak,
-            'total_pembayaran' => $this->total_pembayaran,
-            'user_id' => auth()->user()->id,
-        ]);
-        $card = CardItem::where('user_id', auth()->user()->id)->get();
-
-        foreach ($card as $data) {
-            BillItem::create([
-                'bill_id' => $bill->id,
-                'produk_id' => $data->produk_id,
-                'produk_nama' => $data->produk_nama != null ? $data->produk_nama : null,
-                'merek_id' => $data->merek_id,
-                'catalog_id' => $data->catalog_id,
-                'kategori_id' => $data->kategori_id,
-                'rak_id' => $data->rak_id,
-                'produk_item_id' => $data->produk_item_id,
-                'satuan_id' => $data->satuan_id,
-                'harga_modal' => $data->harga_modal,
-                'harga_jual' => $data->harga_jual,
-                'qty' => $data->qty,
-                'total_harga_modal' => $data->total_harga_modal,
-                'total_harga_jual' => $data->total_harga_jual,
-                'diskon_persen' => $data->diskon_persen,
-                'potongan_diskon' => $data->potongan_diskon,
-                'total_harga' => $data->total_harga,
-                'untung' => $data->untung,
+            $bill = Bill::create([
+                'no_bill' => $no_bill,
+                'pelanggan_id' => $this->pelanggan_id,
+                'total_harga_pokok' => $this->total_harga_pokok,
+                'total_harga_jual' => $this->total_harga_jual,
+                'potongan_diskon' => $this->total_potongan_diskon,
+                'total_harga' => $this->total_harga,
+                'tagihan_utang' => $this->tagihan_utang,
+                'ongkir' => $this->ongkir,
+                'pajak' => $this->pajak,
+                'total_pembayaran' => $this->total_pembayaran,
+                'user_id' => auth()->user()->id,
             ]);
-        }
+            $card = CardItem::where('user_id', auth()->user()->id)->get();
 
-        // delete cardItem
-        foreach ($card as $data) {
-            $data->delete();
-        }
+            foreach ($card as $data) {
+                BillItem::create([
+                    'bill_id' => $bill->id,
+                    'produk_id' => $data->produk_id,
+                    'produk_nama' => $data->produk_nama != null ? $data->produk_nama : null,
+                    'merek_id' => $data->merek_id,
+                    'catalog_id' => $data->catalog_id,
+                    'kategori_id' => $data->kategori_id,
+                    'rak_id' => $data->rak_id,
+                    'produk_item_id' => $data->produk_item_id,
+                    'satuan_id' => $data->satuan_id,
+                    'harga_modal' => $data->harga_modal,
+                    'harga_jual' => $data->harga_jual,
+                    'qty' => $data->qty,
+                    'total_harga_modal' => $data->total_harga_modal,
+                    'total_harga_jual' => $data->total_harga_jual,
+                    'diskon_persen' => $data->diskon_persen,
+                    'potongan_diskon' => $data->potongan_diskon,
+                    'total_harga' => $data->total_harga,
+                    'untung' => $data->untung,
+                ]);
+            }
 
-        $this->pelanggan_id = null;
-        $this->pelanggan_phone = null;
-        $this->pelanggan_nama = null;
-        $this->pelanggan_piutang_usaha = null;
-        $this->pelanggan_hutang_usaha = null;
-        $this->ongkir = 0;
+            // delete cardItem
+            foreach ($card as $data) {
+                $data->delete();
+            }
 
+            $this->pelanggan_id = null;
+            $this->pelanggan_phone = null;
+            $this->pelanggan_nama = null;
+            $this->pelanggan_piutang_usaha = null;
+            $this->pelanggan_hutang_usaha = null;
+            $this->ongkir = 0;
 
-        $this->emit('cetakData', ['url' => url('penjualan/struk/bill/'. $bill->no_bill), 'title' => 'Struk Bill']);
-        $this->emit('success', ['pesan' => 'Berhasil simpan bill']);
-        }else {
+            $this->emit('cetakData', ['url' => url('penjualan/struk/bill/' . $bill->no_bill), 'title' => 'Struk Bill']);
+            $this->emit('success', ['pesan' => 'Berhasil simpan bill']);
+        } else {
             $this->emit('error', ['pesan' => 'Total pembayaran tidak boleh 0']);
         }
     }
@@ -1267,6 +1499,77 @@ class KasirDetailPage extends Component
         $this->billPage = false;
     }
 
+    public function updateBill($id)
+    {
+        $bill = Bill::find($id);
+
+        if ($this->total_pembayaran) {
+
+            // hapus bill item yang sebelumnya
+            $bill_lama = BillItem::where('bill_id', $id)->get();
+            // dd($bill_lama);
+            foreach ($bill_lama as $data) {
+                $data->delete();
+            }
+
+            $bill->update([
+                'pelanggan_id' => $this->pelanggan_id,
+                'total_harga_pokok' => $this->total_harga_pokok,
+                'total_harga_jual' => $this->total_harga_jual,
+                'potongan_diskon' => $this->total_potongan_diskon,
+                'total_harga' => $this->total_harga,
+                'tagihan_utang' => $this->tagihan_utang,
+                'ongkir' => $this->ongkir,
+                'pajak' => $this->pajak,
+                'total_pembayaran' => $this->total_pembayaran,
+                'user_id' => auth()->user()->id,
+            ]);
+
+            $card = CardItem::where('user_id', auth()->user()->id)->get();
+
+            foreach ($card as $data) {
+                BillItem::create([
+                    'bill_id' => $bill->id,
+                    'produk_id' => $data->produk_id,
+                    'produk_nama' => $data->produk_nama != null ? $data->produk_nama : null,
+                    'merek_id' => $data->merek_id,
+                    'catalog_id' => $data->catalog_id,
+                    'kategori_id' => $data->kategori_id,
+                    'rak_id' => $data->rak_id,
+                    'produk_item_id' => $data->produk_item_id,
+                    'satuan_id' => $data->satuan_id,
+                    'harga_modal' => $data->harga_modal,
+                    'harga_jual' => $data->harga_jual,
+                    'qty' => $data->qty,
+                    'total_harga_modal' => $data->total_harga_modal,
+                    'total_harga_jual' => $data->total_harga_jual,
+                    'diskon_persen' => $data->diskon_persen,
+                    'potongan_diskon' => $data->potongan_diskon,
+                    'total_harga' => $data->total_harga,
+                    'untung' => $data->untung,
+                ]);
+            }
+
+            // delete cardItem
+            foreach ($card as $data) {
+                $data->delete();
+            }
+
+            $this->pelanggan_id = null;
+            $this->pelanggan_phone = null;
+            $this->pelanggan_nama = null;
+            $this->pelanggan_piutang_usaha = null;
+            $this->pelanggan_hutang_usaha = null;
+            $this->ongkir = 0;
+
+            $this->emit('cetakData', ['url' => url('penjualan/struk/bill/' . $bill->no_bill), 'title' => 'Struk Bill']);
+            $this->emit('success', ['pesan' => 'Berhasil simpan bill']);
+        } else {
+            $this->emit('error', ['pesan' => 'Total pembayaran tidak boleh 0']);
+        }
+
+    }
+
     public function hapus_bill($id)
     {
         $bill = Bill::find($id);
@@ -1274,6 +1577,29 @@ class KasirDetailPage extends Component
         $this->bill_id = null;
         session()->forget('bill_id');
         session()->forget('bill_baru');
+    }
+
+    public function btnTerima($nominal)
+    {
+        $this->diterima = $nominal;
+
+        if ($this->diterima == null) {
+            $diterima = 0;
+        } else {
+            $diterima = $this->diterima;
+        }
+        $this->kembali = $diterima - $this->total_pembayaran;
+
+        $cek = $this->bayar_tunai_query();
+
+        if ($cek != 'error') {
+            PenjualanCetak::struk($cek['transaksi_id']);
+            $this->emit('successPenjualan', [
+                'total: ' => 'Rp. '.number_format($this->total_pembayaran,0,',','.'),
+                'diterima: ' => 'Rp. '.number_format($this->diterima,0,',','.'),
+                'kembali: ' =>'Rp. '.number_format($this->kembali,0,',','.')
+            ]);
+        }
     }
 
 }

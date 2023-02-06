@@ -10,4 +10,11 @@ class SidebarAdmin extends Component
     {
         return view('livewire.component.sidebar-admin');
     }
+
+    public function logout()
+    {
+        auth()->logout();
+        session()->flush();
+        return redirect()->to('login');
+    }
 }

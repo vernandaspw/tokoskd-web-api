@@ -56,7 +56,7 @@
                                                             </div>
                                                         </div>
                                                         @else
-                                                        <button wire:loading.attr='hidden' wire:click.prefetch='buka_kas_simpan()' type="submit"
+                                                        <button wire:loading.attr='disabled' wire:click.prevent='buka_kas_simpan()' type="submit"
                                                         class="btn form-control btn-primary" >Simpan</button>
                                                     @endif
                                                 </div>
@@ -277,7 +277,7 @@
                                                     </td>
                                                     <td>
                                                         @if ($data->jumlah_transaksi != 0)
-                                                            @uang($data->jumlah_transaksi)
+                                                            {{ $data->jumlah_transaksi }}
                                                         @endif
                                                     </td>
                                                     <td>
@@ -300,7 +300,7 @@
                                                             @if ($data->status == 'pending')
                                                                 <button
                                                                     {{-- onclick="confirm('Pastikan telah menerima uang sesuai dengan jumlah pada kas tutup?') || event.stopImmediatePropagation()" --}}
-                                                                    wire:click.prefetch="terimaKasTutup('{{ $data->id }}')"
+                                                                    wire:click.prevent="terimaKasTutup('{{ $data->id }}')" wire:loading.attr="disabled"
                                                                     type="button" class="btn btn-success">Terima uang</button>
                                                             @endif
                                                         @endif
@@ -367,7 +367,7 @@
                                                     </td>
                                                     <td>
                                                         @if ($data->jumlah_transaksi != 0)
-                                                            @uang($data->jumlah_transaksi)
+                                                            {{ $data->jumlah_transaksi }}
                                                         @endif
                                                     </td>
                                                     <td>
@@ -391,7 +391,7 @@
                                                             @if ($data->status == 'pending')
                                                                 <button
                                                                     {{-- onclick="confirm('Pastikan telah menerima uang sesuai dengan jumlah pada kas tutup?') || event.stopImmediatePropagation()" --}}
-                                                                    wire:click.prefetch="terimaKasTutup('{{ $data->id }}')"
+                                                                    wire:click.prevent="terimaKasTutup('{{ $data->id }}')" wire:loading.attr='disabled'
                                                                     type="button" class="btn btn-success">Terima</button>
                                                             @endif
                                                         @endif
@@ -507,12 +507,10 @@
                                                         @php
                                                             $dayReport = $data
                                                                 ->kasir_report()
-                                                                ->whereDate('created_at', date('Y-m-d'))
                                                                 ->where('status', 'open')
                                                                 ->first();
                                                             $dayReportPending = $data
                                                                 ->kasir_report()
-                                                                ->whereDate('created_at', date('Y-m-d'))
                                                                 ->where('status', 'pending')
                                                                 ->first();
                                                         @endphp
@@ -523,7 +521,7 @@
 
                                                         @if ($dayReport)
                                                             <button
-                                                                wire:click="tutup_kas_toggle('{{ $data->id }}', '{{ $dayReport->id }}')"
+                                                                wire:click="tutup_kas_toggle('{{ $data->id }}')"
                                                                 class="btn btn-danger">
                                                                 Tutup kas
                                                             </button>
@@ -647,7 +645,7 @@
                                                 </td>
                                                 <td>
                                                     @if ($data->jumlah_transaksi != 0)
-                                                        @uang($data->jumlah_transaksi)
+                                                        {{ $data->jumlah_transaksi }}
                                                     @endif
                                                 </td>
                                                 <td>
@@ -671,7 +669,7 @@
                                                         @if ($data->status == 'pending')
                                                             <button
                                                                 {{-- onclick="confirm('Pastikan telah menerima uang sesuai dengan jumlah pada kas tutup?') || event.stopImmediatePropagation()" --}}
-                                                                wire:click.prefetch="terimaKasTutup('{{ $data->id }}')"
+                                                                wire:click.prevent="terimaKasTutup('{{ $data->id }}')" wire:loading.attr='disabled'
                                                                 type="button" class="btn btn-success">Terima</button>
                                                         @endif
                                                     @endif

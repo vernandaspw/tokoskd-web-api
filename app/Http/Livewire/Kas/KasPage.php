@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Kas;
 
 use App\Models\Kas\Kas;
+use App\Models\Kas\KasTJenis;
 use App\Models\Kas\KasTransaksi;
 use Livewire\Component;
 
@@ -17,6 +18,10 @@ class KasPage extends Component
     public $no, $nama, $tipe, $saldo, $bank, $norek, $an;
 
 
+    protected $listeners = [
+        'take-data' => 'takeKasTransaksi',
+    ];
+
     public $kasTransaksi = [];
     public $takeKasTransaksi = 15;
 
@@ -25,6 +30,14 @@ class KasPage extends Component
         $this->takeKasTransaksi += 15;
     }
 
+    public $dateTransaksi, $pilih_kas_jenis_id;
+
+    public function mount()
+    {
+        $this->dateTransaksi = date('Y-m-d');
+    }
+
+
     public function render()
     {
         $this->kasTunai = Kas::where('tipe', 'tunai')->take($this->take)->orderBy('no', 'ASC')->get();
@@ -32,7 +45,17 @@ class KasPage extends Component
         $this->kasBank = Kas::where('tipe', 'bank')->take($this->take)->orderBy('no', 'ASC')->get();
         $this->kasEwallet = Kas::where('tipe', 'ewallet')->take($this->take)->orderBy('no', 'ASC')->get();
 
-        $this->kasTransaksi = KasTransaksi::with('kas', 'jenis', 'kategori', 'user')->latest()->take($this->takeKasTransaksi)->get();
+        $this->kasJenisTransaksi = KasTJenis::get();
+        $dateTransaksi = $this->dateTransaksi != null ? $this->dateTransaksi : date('Y-m-d');
+
+
+
+        $kast = KasTransaksi::with('kas', 'jenis', 'kategori', 'user');
+        if($this->pilih_kas_jenis_id) {
+            $kast->where('kas_t_jenis_id', $this->pilih_kas_jenis_id);
+        }
+        $kast->whereDate('created_at', $dateTransaksi);
+        $this->kasTransaksi = $kast->latest()->take($this->takeKasTransaksi)->get();
 
         return view('livewire.kas.kas-page')->extends('layouts.app')->section('content');
     }

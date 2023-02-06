@@ -114,11 +114,12 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
+                        <a href="{{ url('produk/riwayat-harga') }}"
+                        class="nav-link @if (Request::is('produk/riwayat-harga*')) active @endif">
                             <i class="nav-icon fas fa-th"></i>
                             <p>
                                 Riwayat harga
-                                <span class="right badge badge-danger"> ! </span>
+                                {{-- <span class="right badge badge-danger"> ! </span> --}}
                             </p>
                         </a>
                     </li>
@@ -439,10 +440,12 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="#" class="nav-link">
+                                <a href="{{ url('penjualan', []) }}"
+                                    class="nav-link
+                                @if (Request::is('penjualan*')) active @endif">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Penjualan</p>
-                                    <span class="right badge badge-danger"> ! </span>
+                                    {{-- <span class="right badge badge-danger"> ! </span> --}}
                                 </a>
                             </li>
                             <li class="nav-item">

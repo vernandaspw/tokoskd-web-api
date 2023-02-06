@@ -37,7 +37,7 @@ class KasirPage extends Component
 
     public function render()
     {
-        $this->kasiractive = Kasir::with('kasir_report', 'kas')->where('isaktif', true)->latest()->get();
+        $this->kasiractive = Kasir::with('kasir_report', 'kas')->where('isaktif', true)->get();
 
         $this->kasirdeactive = Kasir::where('isaktif', false)->latest()->get();
 
@@ -74,11 +74,17 @@ class KasirPage extends Component
             $report = KasirReport::find($this->reportID);
 
             $this->tutupR = KasirReport::find($this->reportID);
-            $kasTr = KasTransaksi::where('kas_id', $this->kasData->id)->whereBetween('created_at', [$report->created_at, now()]);
+
+            // cari masuk
             $masuk = KasTJenis::where('nama', 'masuk')->first()->id;
+            $kasTrMasuk = KasTransaksi::where('kas_id', $this->kasData->id)->whereBetween('created_at', [$report->created_at, now()]);
+            $this->total_uang_masuk = $kasTrMasuk->where('kas_t_jenis_id', $masuk)->get()->sum('nominal');
+
+            // keluar
             $keluar = KasTJenis::where('nama', 'keluar')->first()->id;
-            $this->total_uang_masuk = $kasTr->where('kas_t_jenis_id', $masuk)->get()->sum('nominal');
-            $this->total_uang_keluar = $kasTr->where('kas_t_jenis_id', $keluar)->get()->sum('nominal');
+            $kasTrKeluar = KasTransaksi::where('kas_id', $this->kasData->id)->whereBetween('created_at', [$report->created_at, now()]);
+            $this->total_uang_keluar = $kasTrKeluar->where('kas_t_jenis_id', $keluar)->get()->sum('nominal');
+            // dd($this->total_uang_keluar);
 
             $cekKasir = Kasir::find($this->kasirID);
             $this->kasData = $cekKasir->kas;
@@ -171,7 +177,7 @@ class KasirPage extends Component
             ]);
         }
 
-        redirect()->to('penjualan/kasir/' . $id);
+        redirect('penjualan/kasir/'. $id);
     }
 
     public $bukaKas_id, $tutupKas_id, $namaKasir;
@@ -183,14 +189,6 @@ class KasirPage extends Component
     {
         $this->bukaKas_id = $id;
         $this->kasirID = $id;
-        $this->namaKasir = Kasir::find($id)->nama;
-    }
-
-    public function tutup_kas_toggle($id, $reportID)
-    {
-        $this->tutupKas_id = $id;
-        $this->kasirID = $id;
-        $this->reportID = $reportID;
         $this->namaKasir = Kasir::find($id)->nama;
     }
 
@@ -215,6 +213,17 @@ class KasirPage extends Component
         ]);
         $this->kasir_detail($this->bukaKas_id);
         $this->bukaSimpanLoading = false;
+    }
+
+    public function tutup_kas_toggle($id)
+    {
+        $this->tutupKas_id = $id;
+        $this->kasirID = $id;
+
+        // cari report yang kasir_id nya open
+        $cari_report = KasirReport::where('kasir_id', $id)->where('status', 'open')->first();
+        $this->reportID = $cari_report->id;
+        $this->namaKasir = Kasir::find($id)->nama;
     }
 
     public function tutup_kas_simpan()

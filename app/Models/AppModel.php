@@ -17,7 +17,7 @@ class AppModel extends Model
         $data = [
            'ip' => $ip,
            'url' => '/tokoskd/public',
-           'app_url' => 'http://'.$ip.'/tokoskd/public',
+           'app_url' => 'http://'.$ip. env('SUB_URL'),
         ];
 
         return $data;

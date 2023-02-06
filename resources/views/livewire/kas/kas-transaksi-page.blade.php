@@ -57,6 +57,16 @@
                             </div>
                             <div class="card-body">
                                 <form wire:submit.prevent='masuk'>
+                                    <div class="d-flex mb-2">
+                                        <div class="mr-1 w-100">
+                                            <label for="pilih tanggal">Pilih Tanggal</label>
+                                            <input type="date" class="form-control" wire:model='pilih_tanggal'>
+                                        </div>
+                                        <div class="ml-1 w-100">
+                                            <label for="pilih tanggal">Pilih Jam</label>
+                                            <input type="time" class="form-control" wire:model='pilih_jam'>
+                                        </div>
+                                    </div>
                                     <div class="mb-2">
                                         <label for="kas_id" class="m-0">Kas</label>
                                         <select required wire:model='kas_id' id="kas_id" class="form-control">
@@ -98,6 +108,16 @@
                             </div>
                             <div class="card-body">
                                 <form wire:submit.prevent='keluar'>
+                                    <div class="d-flex mb-2">
+                                        <div class="mr-1 w-100">
+                                            <label for="pilih tanggal">Pilih Tanggal</label>
+                                            <input type="date" class="form-control" wire:model='pilih_tanggal'>
+                                        </div>
+                                        <div class="ml-1 w-100">
+                                            <label for="pilih tanggal">Pilih Jam</label>
+                                            <input type="time" class="form-control" wire:model='pilih_jam'>
+                                        </div>
+                                    </div>
                                     <div class="mb-2">
                                         <label for="kas_id" class="m-0">Kas</label>
                                         <select required wire:model='kas_id' id="kas_id" class="form-control">
@@ -135,10 +155,20 @@
                     <div class="col-md-5">
                         <div class="card">
                             <div class="card-header bg-info text-center">
-                                Transaksi (alokasi)
+                                Transfer (alokasi)
                             </div>
                             <div class="card-body">
                                 <form wire:submit.prevent='transfer'>
+                                    <div class="d-flex mb-2">
+                                        <div class="mr-1 w-100">
+                                            <label for="pilih tanggal">Pilih Tanggal</label>
+                                            <input type="date" class="form-control" wire:model='pilih_tanggal'>
+                                        </div>
+                                        <div class="ml-1 w-100">
+                                            <label for="pilih tanggal">Pilih Jam</label>
+                                            <input type="time" class="form-control" wire:model='pilih_jam'>
+                                        </div>
+                                    </div>
                                     <div class="mb-2">
                                         <label for="kas_id" class="m-0">Kas asal</label>
                                         <select required wire:model='kas_id' id="kas_id" class="form-control">

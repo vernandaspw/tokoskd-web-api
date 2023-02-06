@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('card_items', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->nullable()->constrained('users')->onUpdate('cascade')->onDelete('set null');
+            $table->foreignId('kasir_id')->nullable()->constrained('kasirs')->onUpdate('cascade')->onDelete('set null');
             $table->foreignId('produk_id')->nullable()->constrained('produks')->onUpdate('cascade')->onDelete('set null');
             $table->string('produk_nama', 50)->nullable();
             $table->foreignId('merek_id')->nullable()->constrained('mereks')->onUpdate('cascade')->onDelete('set null');

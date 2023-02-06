@@ -2,6 +2,10 @@
 
 namespace App\Http\Livewire\Master;
 
+use App\Models\Kas\Kas;
+use App\Models\Kas\KasTJenis;
+use App\Models\Kas\KasTKategori;
+use App\Models\Kas\KasTransaksi;
 use App\Models\Supplier;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
@@ -24,9 +28,13 @@ class SupplierPage extends Component
     public function render()
     {
         $this->akun = Supplier::latest()->take($this->take)->get();
+
+
+        $this->kas = Kas::where('isaktif', true)->get();
+
         return view('livewire.master.supplier-page')->extends('layouts.app')->section('content');
     }
-    
+
     public function next()
     {
         $this->take += 10;
@@ -173,5 +181,67 @@ class SupplierPage extends Component
                 $storage->delete($filePathname);
             }
         }
+    }
+
+    public $titip_uang_page = false;
+    public $titip_id_supplier, $titip_nama_supplier;
+    public function titip_uang_page($supplier_id)
+    {
+        $supp = Supplier::find($supplier_id);
+        $this->titip_id_supplier = $supp->id;
+        $this->titip_nama_supplier = $supp->nama;
+
+
+        if ($this->titip_uang_page == true) {
+            $this->titip_uang_page = false;
+        }else{
+            $this->titip_uang_page = true;
+        }
+    }
+
+    public function resetTitipUang()
+    {
+        $this->titip_id_supplier = null;
+        $this->titip_nama_supplier = null;
+        $this->nominal_titip_uang = null;
+        $this->titip_kas_id = null;
+    }
+
+    public $titip_kas_id, $nominal_titip_uang;
+
+    public function titip_uang()
+    {
+
+        $kas = Kas::find($this->titip_kas_id);
+        $supp = Supplier::find($this->titip_id_supplier);
+        // cek kas apakah cukup, jika kas lebih banyak dari jumlah titip kas
+        if ($kas->saldo >= $this->nominal_titip_uang) {
+            // jalan kan query
+            // jika titip uang, saldo titip uang usaha bertambah
+            $supp->update([
+                'titip_uang_usaha' => $supp->titip_uang_usaha + $this->nominal_titip_uang
+            ]);
+            // pilih saldo kas, dan saldo kas berkurang
+            $jenis_keluar = KasTJenis::where('nama', 'keluar')->first();
+            $kategori = KasTKategori::where('nama', 'titip uang')->first();
+            $trx = KasTransaksi::create([
+                'kas_t_jenis_id' => $jenis_keluar->id,
+                'kas_t_kategori_id' => $kategori->id,
+                'kas_id' => $this->titip_kas_id,
+                'nominal' => $this->nominal_titip_uang,
+                'user_id' => auth()->user()->id,
+            ]);
+
+            $kas->update([
+                'saldo' => $kas->saldo - $this->nominal_titip_uang,
+            ]);
+            $this->resetTitipUang();
+            $this->titip_uang_page = false;
+            $this->emit('success', ['pesan' => 'titip uang berhasil dibuat']);
+        }else{
+            $this->emit('error', ['pesan' => 'saldo kas tidak cukup']);
+        }
+
+
     }
 }

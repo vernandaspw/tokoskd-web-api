@@ -23,216 +23,304 @@
                 <div class="mb-2">
                     @if ($tambahPage)
                     @else
-                    <button type="button" wire:click="tambahPage()" class="btn btn-primary rounded-pill">
-                        Tambah
-                    </button>
+                        <button type="button" wire:click="tambahPage()" class="btn btn-primary rounded-pill">
+                            Tambah
+                        </button>
                     @endif
                 </div>
 
                 @if ($editPage)
-                <div class="row">
-                    <div class="col-md-5">
-                        <div class="card">
-                            <div class="card-body">
-                                <form wire:submit.prevent='edit'>
-                                    <div class="mb-1">
-                                        <img src="{{ Storage::url($img) }}" width="300px" alt="">
-                                    </div>
-                                    <div class="mb-1">
-                                        <label for="img">Gambar</label>
-                                        <input wire:model='newImg' type="file" class="form-control" placeholder="image">
-                                    </div>
-                                    <div class="mb-1">
-                                        <label for="nama">Nama <span class="text-danger">*wajib</span></label>
-                                        <input autofocus='true' required wire:model='nama' type="text" class="form-control" placeholder="Nama">
-                                    </div>
-                                    <div class="mb-1">
-                                        <label for="keterangan">Keterangan <span class="text-danger">*wajib</span></label>
-                                        <input required wire:model='keterangan' type="text" class="form-control" placeholder="Keterangan">
-                                    </div>
-                                    <div class="mb-1">
-                                        <label for="phone">Nomor hp</label>
-                                        <input wire:model='phone' type="tel" class="form-control" placeholder="phone">
-                                    </div>
-                                    <div class="mb-1">
-                                        <label for="tel">Telpon</label>
-                                        <input wire:model='tel'  type="tel" class="form-control" placeholder="Telpon">
-                                    </div>
-                                    <div class="mb-1">
-                                        <label for="fax">fax</label>
-                                        <input wire:model='fax'  type="tel" class="form-control" placeholder="Fax">
-                                    </div>
-                                    <div class="mb-1">
-                                        <label for="email">email</label>
-                                        <input autocomplete="off" wire:model='email' type="email" class="form-control" placeholder="email">
-                                    </div>
-                                    <div class="mb-1">
-                                        <label for="provinsi">Provinsi</label>
-                                        <input wire:model='provinsi' type="text" class="form-control" placeholder="Provinsi">
-                                    </div>
-                                    <div class="mb-1">
-                                        <label for="kota">Kota</label>
-                                        <input wire:model='kota' type="text" class="form-control" placeholder="Kota">
-                                    </div>
-                                    <div class="mb-1">
-                                        <label for="alamat">Alamat</label>
-                                        <input wire:model='alamat' type="text" class="form-control" placeholder="Alamat">
-                                    </div>
-                                    <div class="mb-1">
-                                        <label for="bank">Bank</label>
-                                        <input wire:model='bank' type="text" class="form-control" placeholder="Bank">
-                                    </div>
-                                    <div class="mb-1">
-                                        <label for="norek">No Rekening</label>
-                                        <input wire:model='norek' type="text" class="form-control" placeholder="No Rekening">
-                                    </div>
-                                    <div class="mb-1">
-                                        <label for="an">Atas Nama</label>
-                                        <input wire:model='an' type="text" class="form-control" placeholder="Atas nama">
-                                    </div>
-                                    <div class="mb-1">
-                                        <label for="npwp">NPWP</label>
-                                        <input wire:model='npwp' type="text" class="form-control" placeholder="NPWP">
-                                    </div>
-
-
-                                    <button type="submit" class="btn mb-1 mt-1 btn-success rounded-pill form-control">Simpan</button>
-                                    <button type="button" wire:click="editPageClose()" class="btn btn-light rounded-pill form-control">Tutup</button>
-
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                @else
-                @if ($tambahPage)
-                <div class="row">
-                    <div class="col-md-5">
-                        <div class="card">
-                            <div class="card-body">
-                                <form wire:submit.prevent='simpan'>
-                                    <div class="mb-1">
-                                        <label for="img">Gambar</label>
-                                        <input wire:model='img' type="file" class="form-control" placeholder="image">
-                                    </div>
-                                    <div class="mb-1">
-                                        <label for="nama">Nama <span class="text-danger">*wajib</span></label>
-                                        <input autofocus='true' required wire:model='nama' type="text" class="form-control" placeholder="Nama">
-                                    </div>
-                                    <div class="mb-1">
-                                        <label for="keterangan">Keterangan <span class="text-danger">*wajib</span></label>
-                                        <input required wire:model='keterangan' type="text" class="form-control" placeholder="Keterangan">
-                                    </div>
-                                    <div class="mb-1">
-                                        <label for="phone">Nomor hp</label>
-                                        <input wire:model='phone' type="tel" class="form-control" placeholder="phone">
-                                    </div>
-                                    <div class="mb-1">
-                                        <label for="telp">Telpon</label>
-                                        <input wire:model='telp'  type="tel" class="form-control" placeholder="Telpon">
-                                    </div>
-                                    <div class="mb-1">
-                                        <label for="fax">fax</label>
-                                        <input wire:model='fax'  type="tel" class="form-control" placeholder="Fax">
-                                    </div>
-                                    <div class="mb-1">
-                                        <label for="email">email</label>
-                                        <input autocomplete="off" wire:model='email' type="email" class="form-control" placeholder="email">
-                                    </div>
-                                    <div class="mb-1">
-                                        <label for="provinsi">Provinsi</label>
-                                        <input wire:model='provinsi' type="text" class="form-control" placeholder="Provinsi">
-                                    </div>
-                                    <div class="mb-1">
-                                        <label for="kota">Kota</label>
-                                        <input wire:model='kota' type="text" class="form-control" placeholder="Kota">
-                                    </div>
-                                    <div class="mb-1">
-                                        <label for="alamat">Alamat</label>
-                                        <input wire:model='alamat' type="text" class="form-control" placeholder="Alamat">
-                                    </div>
-                                    <div class="mb-1">
-                                        <label for="bank">Bank</label>
-                                        <input wire:model='bank' type="text" class="form-control" placeholder="Bank">
-                                    </div>
-                                    <div class="mb-1">
-                                        <label for="norek">No Rekening</label>
-                                        <input wire:model='norek' type="text" class="form-control" placeholder="No Rekening">
-                                    </div>
-                                    <div class="mb-1">
-                                        <label for="an">Atas Nama</label>
-                                        <input wire:model='an' type="text" class="form-control" placeholder="Atas nama">
-                                    </div>
-                                    <div class="mb-1">
-                                        <label for="npwp">NPWP</label>
-                                        <input wire:model='npwp' type="text" class="form-control" placeholder="NPWP">
-                                    </div>
-
-                                    <button type="submit" class="btn mb-1 mt-1 btn-success rounded-pill form-control">Simpan</button>
-                                    <button type="button" wire:click="tambahPage()" class="btn btn-light rounded-pill form-control">Tutup</button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                @endif
-                <div class="row">
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-header">
-                                <h3 class="card-title">Akun</h3>
-                                <div class="card-tools">
-                                    <div class="input-group input-group-sm" style="width: 150px;">
-                                        <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
-                                        <div class="input-group-append">
-                                            <button type="submit" class="btn btn-default">
-                                                <i class="fas fa-search"></i>
-                                            </button>
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div class="card">
+                                <div class="card-body">
+                                    <form wire:submit.prevent='edit'>
+                                        <div class="mb-1">
+                                            <img src="{{ Storage::url($img) }}" width="300px" alt="">
                                         </div>
+                                        <div class="mb-1">
+                                            <label for="img">Gambar</label>
+                                            <input wire:model='newImg' type="file" class="form-control"
+                                                placeholder="image">
+                                        </div>
+                                        <div class="mb-1">
+                                            <label for="nama">Nama <span class="text-danger">*wajib</span></label>
+                                            <input autofocus='true' required wire:model='nama' type="text"
+                                                class="form-control" placeholder="Nama">
+                                        </div>
+                                        <div class="mb-1">
+                                            <label for="keterangan">Keterangan <span
+                                                    class="text-danger">*wajib</span></label>
+                                            <input required wire:model='keterangan' type="text" class="form-control"
+                                                placeholder="Keterangan">
+                                        </div>
+                                        <div class="mb-1">
+                                            <label for="phone">Nomor hp</label>
+                                            <input wire:model='phone' type="tel" class="form-control"
+                                                placeholder="phone">
+                                        </div>
+                                        <div class="mb-1">
+                                            <label for="tel">Telpon</label>
+                                            <input wire:model='tel' type="tel" class="form-control"
+                                                placeholder="Telpon">
+                                        </div>
+                                        <div class="mb-1">
+                                            <label for="fax">fax</label>
+                                            <input wire:model='fax' type="tel" class="form-control"
+                                                placeholder="Fax">
+                                        </div>
+                                        <div class="mb-1">
+                                            <label for="email">email</label>
+                                            <input autocomplete="off" wire:model='email' type="email"
+                                                class="form-control" placeholder="email">
+                                        </div>
+                                        <div class="mb-1">
+                                            <label for="provinsi">Provinsi</label>
+                                            <input wire:model='provinsi' type="text" class="form-control"
+                                                placeholder="Provinsi">
+                                        </div>
+                                        <div class="mb-1">
+                                            <label for="kota">Kota</label>
+                                            <input wire:model='kota' type="text" class="form-control"
+                                                placeholder="Kota">
+                                        </div>
+                                        <div class="mb-1">
+                                            <label for="alamat">Alamat</label>
+                                            <input wire:model='alamat' type="text" class="form-control"
+                                                placeholder="Alamat">
+                                        </div>
+                                        <div class="mb-1">
+                                            <label for="bank">Bank</label>
+                                            <input wire:model='bank' type="text" class="form-control"
+                                                placeholder="Bank">
+                                        </div>
+                                        <div class="mb-1">
+                                            <label for="norek">No Rekening</label>
+                                            <input wire:model='norek' type="text" class="form-control"
+                                                placeholder="No Rekening">
+                                        </div>
+                                        <div class="mb-1">
+                                            <label for="an">Atas Nama</label>
+                                            <input wire:model='an' type="text" class="form-control"
+                                                placeholder="Atas nama">
+                                        </div>
+                                        <div class="mb-1">
+                                            <label for="npwp">NPWP</label>
+                                            <input wire:model='npwp' type="text" class="form-control"
+                                                placeholder="NPWP">
+                                        </div>
+
+
+                                        <button type="submit"
+                                            class="btn mb-1 mt-1 btn-success rounded-pill form-control">Simpan</button>
+                                        <button type="button" wire:click="editPageClose()"
+                                            class="btn btn-light rounded-pill form-control">Tutup</button>
+
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @else
+                    @if ($tambahPage)
+                        <div class="row">
+                            <div class="col-md-5">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <form wire:submit.prevent='simpan'>
+                                            <div class="mb-1">
+                                                <label for="img">Gambar</label>
+                                                <input wire:model='img' type="file" class="form-control"
+                                                    placeholder="image">
+                                            </div>
+                                            <div class="mb-1">
+                                                <label for="nama">Nama <span
+                                                        class="text-danger">*wajib</span></label>
+                                                <input autofocus='true' required wire:model='nama' type="text"
+                                                    class="form-control" placeholder="Nama">
+                                            </div>
+                                            <div class="mb-1">
+                                                <label for="keterangan">Keterangan <span
+                                                        class="text-danger">*wajib</span></label>
+                                                <input required wire:model='keterangan' type="text"
+                                                    class="form-control" placeholder="Keterangan">
+                                            </div>
+                                            <div class="mb-1">
+                                                <label for="phone">Nomor hp</label>
+                                                <input wire:model='phone' type="tel" class="form-control"
+                                                    placeholder="phone">
+                                            </div>
+                                            <div class="mb-1">
+                                                <label for="telp">Telpon</label>
+                                                <input wire:model='telp' type="tel" class="form-control"
+                                                    placeholder="Telpon">
+                                            </div>
+                                            <div class="mb-1">
+                                                <label for="fax">fax</label>
+                                                <input wire:model='fax' type="tel" class="form-control"
+                                                    placeholder="Fax">
+                                            </div>
+                                            <div class="mb-1">
+                                                <label for="email">email</label>
+                                                <input autocomplete="off" wire:model='email' type="email"
+                                                    class="form-control" placeholder="email">
+                                            </div>
+                                            <div class="mb-1">
+                                                <label for="provinsi">Provinsi</label>
+                                                <input wire:model='provinsi' type="text" class="form-control"
+                                                    placeholder="Provinsi">
+                                            </div>
+                                            <div class="mb-1">
+                                                <label for="kota">Kota</label>
+                                                <input wire:model='kota' type="text" class="form-control"
+                                                    placeholder="Kota">
+                                            </div>
+                                            <div class="mb-1">
+                                                <label for="alamat">Alamat</label>
+                                                <input wire:model='alamat' type="text" class="form-control"
+                                                    placeholder="Alamat">
+                                            </div>
+                                            <div class="mb-1">
+                                                <label for="bank">Bank</label>
+                                                <input wire:model='bank' type="text" class="form-control"
+                                                    placeholder="Bank">
+                                            </div>
+                                            <div class="mb-1">
+                                                <label for="norek">No Rekening</label>
+                                                <input wire:model='norek' type="text" class="form-control"
+                                                    placeholder="No Rekening">
+                                            </div>
+                                            <div class="mb-1">
+                                                <label for="an">Atas Nama</label>
+                                                <input wire:model='an' type="text" class="form-control"
+                                                    placeholder="Atas nama">
+                                            </div>
+                                            <div class="mb-1">
+                                                <label for="npwp">NPWP</label>
+                                                <input wire:model='npwp' type="text" class="form-control"
+                                                    placeholder="NPWP">
+                                            </div>
+
+                                            <button type="submit"
+                                                class="btn mb-1 mt-1 btn-success rounded-pill form-control">Simpan</button>
+                                            <button type="button" wire:click="tambahPage()"
+                                                class="btn btn-light rounded-pill form-control">Tutup</button>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
-                            <div class="card-body table-responsive p-0">
-                                <table class="table table-hover text-nowrap">
-                                    <thead>
-                                        <tr>
-                                            <th>Foto</th>
-                                            <th>Nama</th>
-                                            <th>Phone/Telp</th>
-                                            <th>Alamat</th>
-                                            <th>Keterangan</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($akun as $data)
-                                        <tr>
-                                            <td>
-                                                <a href="{{ Storage::url($data->img) }}" target="_blank" rel="noopener noreferrer">
-                                                <img src="{{ Storage::url($data->img) }}" width="100px" alt="">
-                                                </a>
-                                            </td>
-                                            <td>{{ $data->nama }}
-                                            </td>
-                                            <td>{{ $data->phone }}@if($data->phone != null && $data->telp != null)
-/
-                                            @endif{{ $data->telp }}</td>
-                                            <td>{{ $data->alamat }}</td>
-                                            <td>{{ $data->keterangan }}</td>
-                                            <td>
-                                                <button wire:click="editPage('{{ $data->id }}')" type="button" class="btn btn-sm btn-warning rounded-pill px-3">Ubah</button>
-                                            </td>
-                                        </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
+                        </div>
+                    @endif
+                    @if($titip_uang_page)
+                        <div class="">
+                            <div class="col-3">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="mb-2">
+                                            <b>Form Titip uang</b>
+                                        </div>
+                                        <form wire:submit.prevent="titip_uang">
+                                            <div class="">
+                                                <label for="">Supplier</label>
+                                                <input class="form-control" type="text" readonly value="{{ $titip_nama_supplier }}">
+                                            </div>
+                                            <div class="mt-2">
+                                                <label for="">Pilih kas</label>
+                                                <select class="form-control" wire:model="titip_kas_id" id="">
+                                                    <option value="">Pilih kas</option>
+                                                    @foreach ($kas as $data)
+                                                    <option value="{{ $data->id }}">{{ $data->nama }} - @uang($data->saldo)</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="mt-2">
+                                                <label for="nominal_titip_uang">Nominal titip uang</label> @uang($nominal_titip_uang != null ? $nominal_titip_uang : 0)
+                                                <input class="form-control" type="number" wire:model="nominal_titip_uang" placeholder="nominal titip uang" id="nominal_titip_uang">
+                                            </div>
+                                            <div class="mt-2">
+                                                <button type="submit" class="form-control btn btn-success">Simpan</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                        @else
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h3 class="card-title">Akun</h3>
+                                        <div class="card-tools">
+                                            <div class="input-group input-group-sm" style="width: 150px;">
+                                                <input type="text" name="table_search"
+                                                    class="form-control float-right" placeholder="Search">
+                                                <div class="input-group-append">
+                                                    <button type="submit" class="btn btn-default">
+                                                        <i class="fas fa-search"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-body table-responsive p-0">
+                                        <table class="table table-hover text-nowrap">
+                                            <thead>
+                                                <tr>
+                                                    <th>Foto</th>
+                                                    <th>Nama</th>
+                                                    <th>Phone/Telp</th>
+                                                    <th>Alamat</th>
+                                                    <th>hutang usaha</th>
+                                                    <th>piutang usaha</th>
+                                                    <th>titip uang usaha</th>
+                                                    <th>Keterangan</th>
+                                                    <th>Aksi</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach ($akun as $data)
+                                                    <tr>
+                                                        <td>
+                                                            <a href="{{ Storage::url($data->img) }}" target="_blank"
+                                                                rel="noopener noreferrer">
+                                                                <img src="{{ Storage::url($data->img) }}" width="100px"
+                                                                    alt="">
+                                                            </a>
+                                                        </td>
+                                                        <td>{{ $data->nama }}
+                                                        </td>
+                                                        <td>{{ $data->phone }}@if ($data->phone != null && $data->telp != null)
+                                                                /
+                                                            @endif{{ $data->telp }}</td>
+                                                        <td>{{ $data->alamat }}</td>
+                                                        <td>@uang($data->hutang_usaha)</td>
+                                                        <td>@uang($data->piutang_usaha)</td>
+                                                        <td>@uang($data->titip_uang_usaha)</td>
+                                                        <td>{{ $data->keterangan }}</td>
+                                                        <td>
+                                                            <button wire:click="titip_uang_page('{{ $data->id }}')"
+                                                                type="button"
+                                                                class="btn btn-sm btn-success rounded-pill px-3">Tambah
+                                                                Titip uang</button>
+                                                            <button wire:click="editPage('{{ $data->id }}')"
+                                                                type="button"
+                                                                class="btn btn-sm btn-warning rounded-pill px-3">Ubah</button>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     @endif
-                </div>
+                @endif
             </div>
-        </section>
     </div>
+    </section>
+</div>
 </div>
 
 
@@ -240,5 +328,4 @@
     .card-text {
         font-size: 14px;
     }
-
 </style>

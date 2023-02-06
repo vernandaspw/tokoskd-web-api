@@ -16,9 +16,10 @@ class isLogin
      */
     public function handle(Request $request, Closure $next)
     {
+        \Artisan::call('logs:clear');
         if (auth()->check()) {
             return $next($request);
-        }else {
+        } else {
             return redirect('login');
         }
     }

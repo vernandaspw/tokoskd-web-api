@@ -196,6 +196,21 @@ crossorigin="anonymous"></script> --}}
             })
         })
 
+        Livewire.on('successPenjualan', data => {
+            console.log(data.total);
+            console.log(data.diterima);
+            console.log(data.kembali);
+            Swal.fire({
+                title: 'Total : data.total'
+                , text: 'diterima : data.diterima'
+                , text: 'Kembali : data.kembali'
+                , icon: 'success',
+                confirmButtonText: 'oke'
+                // showConfirmButton: false
+                // , timer: 1500
+            })
+        })
+
     </script>
 
 </body>

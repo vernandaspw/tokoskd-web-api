@@ -182,6 +182,7 @@
                                     <th>ID</th>
                                     <th>supplier</th>
                                     <th>Hutang saya</th>
+                                    <th>Titip utang usaha</th>
                                     <th>
                                         aksi
                                     </th>
@@ -196,6 +197,9 @@
                                     </td>
                                     <td>
                                         @uang($data->hutang_usaha)
+                                    </td>
+                                    <td>
+                                        @uang($data->titip_uang_usaha)
                                     </td>
                                     <td>
                                         <button wire:click="tambahPage('{{ $data->id }}')" class="btn btn-danger btn-sm">Tambah (utang)</button>

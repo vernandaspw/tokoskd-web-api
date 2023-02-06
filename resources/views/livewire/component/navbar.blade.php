@@ -1,5 +1,11 @@
 <div>
-    <nav class="main-header navbar navbar-expand navbar-white navbar-light fixed-top">
+    <nav class="main-header navbar navbar-expand
+    @if(env('DB_DATABASE') == 'db_skd')
+    navbar-white navbar-light
+    @else
+    navbar-danger navbar-dark
+    @endif
+     fixed-top">
         <!-- Left navbar links -->
         <ul class="navbar-nav">
 

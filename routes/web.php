@@ -5,6 +5,7 @@ use App\Http\Controllers\StrukController;
 use App\Http\Controllers\StrukKasirLaporanTutupKas;
 use App\Http\Livewire\Akun\Akun;
 use App\Http\Livewire\Auth\Login;
+use App\Http\Livewire\Dashboard\DashboardHari;
 use App\Http\Livewire\Dashboard\DashboardUtama;
 use App\Http\Livewire\Hutang\HutangPage;
 use App\Http\Livewire\Hutang\HutangPelangganPage;
@@ -26,6 +27,7 @@ use App\Http\Livewire\Master\Supplier;
 use App\Http\Livewire\Master\SupplierPage;
 use App\Http\Livewire\Penjualan\KasirDetailPage;
 use App\Http\Livewire\Penjualan\KasirPage;
+use App\Http\Livewire\Penjualan\PenjualanPage;
 use App\Http\Livewire\Piutang\PiutangPage;
 use App\Http\Livewire\Piutang\PiutangPelangganPage;
 use App\Http\Livewire\Piutang\PiutangSupplierPage;
@@ -33,6 +35,7 @@ use App\Http\Livewire\Produk\ProdukCreatePage;
 use App\Http\Livewire\Produk\ProdukDiskonPage;
 use App\Http\Livewire\Produk\ProdukEditPage;
 use App\Http\Livewire\Produk\ProdukItemPage;
+use App\Http\Livewire\Produk\ProdukRiwayatHargaPage;
 use App\Http\Livewire\Produk\ProdukSatuanPage;
 use App\Http\Livewire\Produk\ProdukStokDetail;
 use App\Http\Livewire\Produk\ProdukStokPage;
@@ -59,11 +62,58 @@ Route::middleware(['isauth'])->group(function () {
     Route::get('customer', Login::class);
 });
 
+Route::get('/backup-db', function()
+{
+    \Artisan::call('backup:run --only-db');
+    echo 'backup db complete';
+    // kirim email
+});
+Route::get('/backup-clean', function()
+{
+    $cek = \Artisan::call('backup:clean');
+    if ($cek) {
+        echo 'clear backup success';
+    }else {
+        echo 'clear backup failed!';
+    }
+    // $storage = Storage::disk('local');
+    // if ($storage) {
+    //     foreach ($storage->allFiles('tokoskd') as $filePathname) {
+    //         $storage->delete($filePathname);
+    //     }
+    // }
+});
+Route::get('/backup-clear', function()
+{
+    $storage = Storage::disk('local');
+    if ($storage) {
+        foreach ($storage->allFiles('tokoskd') as $filePathname) {
+            $storage->delete($filePathname);
+        }
+    }
+    echo 'clear data backup success';
+});
+Route::get('/backup-send-email', function()
+{
+    // kirim data ke email
+
+    // $storage = Storage::disk('local');
+    // if ($storage) {
+    //     foreach ($storage->allFiles('tokoskd') as $filePathname) {
+    //         $storage->delete($filePathname);
+    //     }
+    // }
+    echo 'kirim data backup success';
+});
+
+
+
 
 // Route::get('/', DashboardPageRingkasan::class);
 
 Route::middleware(['islogin'])->group(function () {
     Route::get('/', DashboardUtama::class);
+    Route::get('/hari', DashboardHari::class);
 
     Route::get('master/akun', AkunPage::class);
     Route::get('master/perusahaan', PerusahaanPage::class);
@@ -91,11 +141,15 @@ Route::middleware(['islogin'])->group(function () {
 
     Route::get('produk/produk-diskon', ProdukDiskonPage::class);
     Route::get('produk/produk-stok', ProdukStokPage::class);
+    // Route::get('produk/produk-terjual', ProdukStokPage::class);
     Route::get('produk/produk-stok-detail/{id}', ProdukStokDetail::class);
 
+    Route::get('penjualan', PenjualanPage::class);
 
     Route::get('penjualan/kasir', KasirPage::class);
     Route::get('penjualan/kasir/{id}', KasirDetailPage::class);
+
+    Route::get('produk/riwayat-harga', ProdukRiwayatHargaPage::class);
 
     Route::get('hutang', HutangPage::class);
     Route::get('hutang/hutang-pelanggan', HutangPelangganPage::class);

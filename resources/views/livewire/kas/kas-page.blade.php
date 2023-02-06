@@ -26,9 +26,9 @@
                         <div class="">
                             @if ($tambahPage)
                             @else
-                            <button type="button" wire:click="tambahPage()" class="btn btn-primary rounded-pill">
-                                Buat kas
-                            </button>
+                                <button type="button" wire:click="tambahPage()" class="btn btn-primary rounded-pill">
+                                    Buat kas
+                                </button>
                             @endif
                             <a href="{{ url('kas/kas-transaksi', []) }}" class="btn btn-success rounded-pill">
                                 Buat transaksi
@@ -100,56 +100,62 @@
                 </div>
                 @else --}}
                 @if ($tambahPage)
-                <div class="row">
-                    <div class="col-md-5">
-                        <div class="card">
-                            <div class="card-body">
-                                <form wire:submit.prevent='simpan'>
-                                    <h5><b>Buat kas</b></h5>
-                                    <div class="mb-1">
-                                        <label for="nama">urut</label>
-                                        <input wire:model='no' type="text" class="form-control" placeholder="no">
-                                    </div>
-                                    <div class="mb-1">
-                                        <label for="tipe">Tipe</label>
-                                        <select wire:model='tipe' required id="tipe" class="form-control">
-                                            <option value="">Pilih</option>
-                                            <option value="tunai">tunai</option>
-                                            <option value="bank">bank</option>
-                                            <option value="ewallet">ewallet</option>
-                                        </select>
-                                    </div>
-                                    <div class="mb-1">
-                                        <label for="nama">nama</label>
-                                        <input wire:model='nama' required type="text" class="form-control" placeholder="nama">
-                                    </div>
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div class="card">
+                                <div class="card-body">
+                                    <form wire:submit.prevent='simpan'>
+                                        <h5><b>Buat kas</b></h5>
+                                        <div class="mb-1">
+                                            <label for="nama">urut</label>
+                                            <input wire:model='no' type="text" class="form-control" placeholder="no">
+                                        </div>
+                                        <div class="mb-1">
+                                            <label for="tipe">Tipe</label>
+                                            <select wire:model='tipe' required id="tipe" class="form-control">
+                                                <option value="">Pilih</option>
+                                                <option value="tunai">tunai</option>
+                                                <option value="bank">bank</option>
+                                                <option value="ewallet">ewallet</option>
+                                            </select>
+                                        </div>
+                                        <div class="mb-1">
+                                            <label for="nama">nama</label>
+                                            <input wire:model='nama' required type="text" class="form-control"
+                                                placeholder="nama">
+                                        </div>
 
-                                    <div class="mb-1">
-                                        <label for="saldo">saldo</label>
-                                        <input wire:model='saldo' type="number" class="form-control" placeholder="saldo">
-                                    </div>
+                                        <div class="mb-1">
+                                            <label for="saldo">saldo</label>
+                                            <input wire:model='saldo' type="number" class="form-control"
+                                                placeholder="saldo">
+                                        </div>
 
-                                    <div class="mb-1">
-                                        <label for="bank">bank</label>
-                                        <input wire:model='bank' type="text" class="form-control" placeholder="bank">
-                                    </div>
-                                    <div class="mb-1">
-                                        <label for="norek">Nomor rekening</label>
-                                        <input wire:model='norek' type="text" class="form-control" placeholder="norek">
-                                    </div>
-                                    <div class="mb-1">
-                                        <label for="an">Atas nama</label>
-                                        <input wire:model='an' type="text" class="form-control" placeholder="an">
-                                    </div>
+                                        <div class="mb-1">
+                                            <label for="bank">bank</label>
+                                            <input wire:model='bank' type="text" class="form-control"
+                                                placeholder="bank">
+                                        </div>
+                                        <div class="mb-1">
+                                            <label for="norek">Nomor rekening</label>
+                                            <input wire:model='norek' type="text" class="form-control"
+                                                placeholder="norek">
+                                        </div>
+                                        <div class="mb-1">
+                                            <label for="an">Atas nama</label>
+                                            <input wire:model='an' type="text" class="form-control" placeholder="an">
+                                        </div>
 
 
-                                    <button type="submit" class="btn mb-1 mt-1 btn-success  rounded-pill form-control">Simpan</button>
-                                    <button type="button" wire:click="tambahPage()" class="btn btn-light rounded-pill form-control">Tutup</button>
-                                </form>
+                                        <button type="submit"
+                                            class="btn mb-1 mt-1 btn-success  rounded-pill form-control">Simpan</button>
+                                        <button type="button" wire:click="tambahPage()"
+                                            class="btn btn-light rounded-pill form-control">Tutup</button>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
                 @endif
                 <div class="mt-3">
                     <b>Kas Tunai</b>
@@ -157,16 +163,17 @@
                 <div class="row mt-3">
 
                     @foreach ($kasTunai as $data)
-                    <div class="col-xl-3 col-lg-4 col-md-5 col-6">
-                        <a href="{{ url('kas/kas', $data->id) }}" class="card bg-white">
-                            <div class="card-body">
-                                <div class="">{{ $data->no == null ? 0 : $data->no . '.' }} {{ $data->nama }}
+                        <div class="col-xl-3 col-lg-4 col-md-5 col-6">
+                            <a href="{{ url('kas/kas', $data->id) }}" class="card bg-white">
+                                <div class="card-body">
+                                    <div class="">{{ $data->no == null ? 0 : $data->no . '.' }}
+                                        {{ $data->nama }}
+                                    </div>
+                                    <div class="">@uang($data->saldo)</div>
+                                    <div class="mt-3">Selisih: @uang($data->saldo_selisih)</div>
                                 </div>
-                                <div class="">@uang($data->saldo)</div>
-                                <div class="mt-3">Selisih: @uang($data->saldo_selisih)</div>
-                            </div>
-                        </a>
-                    </div>
+                            </a>
+                        </div>
                     @endforeach
                 </div>
                 <hr>
@@ -175,25 +182,27 @@
                 </div>
                 <div class="row mt-3">
                     @foreach ($kasTunaiKasir as $data)
-                    <div class="col-xl-3 col-lg-4 col-md-5 col-6">
-                        <a href="{{ url('kas/kas', $data->id) }}" class="card bg-white">
-                            <div class="card-body">
+                        <div class="col-xl-3 col-lg-4 col-md-5 col-6">
+                            <a href="{{ url('kas/kas', $data->id) }}" class="card bg-white">
+                                <div class="card-body">
 
-                                <div class="">{{ $data->no == null ? 0 : $data->no . '.' }} {{ $data->nama }}
+                                    <div class="">{{ $data->no == null ? 0 : $data->no . '.' }}
+                                        {{ $data->nama }}
+                                    </div>
+                                    <div class="">@uang($data->saldo)</div>
+                                    <div
+                                        class="mt-3 @if ($data->saldo_selisih > 0) text-success
+                                    @else
+                                    text-danger @endif">
+                                        Selisih: @uang($data->saldo_selisih) @if ($data->saldo_selisih > 0)
+                                            +
+                                        @else
+                                            -
+                                        @endif
+                                    </div>
                                 </div>
-                                <div class="">@uang($data->saldo)</div>
-                                <div class="mt-3 @if($data->saldo_selisih > 0)
-                                    text-success
-                                    @else
-                                    text-danger
-                                @endif">Selisih: @uang($data->saldo_selisih) @if($data->saldo_selisih > 0)
-                                    +
-                                    @else
-                                    -
-                                @endif</div>
-                            </div>
-                        </a>
-                    </div>
+                            </a>
+                        </div>
                     @endforeach
                 </div>
                 <hr>
@@ -202,15 +211,16 @@
                 </div>
                 <div class="row mt-3">
                     @foreach ($kasBank as $data)
-                    <div class="col-xl-3 col-lg-4 col-md-5 col-6">
-                        <a href="{{ url('kas/kas', $data->id) }}" class="card bg-white">
-                            <div class="card-body">
-                                <div class="">{{ $data->no == null ? 0 : $data->no . '.' }} {{ $data->nama }}
+                        <div class="col-xl-3 col-lg-4 col-md-5 col-6">
+                            <a href="{{ url('kas/kas', $data->id) }}" class="card bg-white">
+                                <div class="card-body">
+                                    <div class="">{{ $data->no == null ? 0 : $data->no . '.' }}
+                                        {{ $data->nama }}
+                                    </div>
+                                    <div class="">@uang($data->saldo)</div>
                                 </div>
-                                <div class="">@uang($data->saldo)</div>
-                            </div>
-                        </a>
-                    </div>
+                            </a>
+                        </div>
                     @endforeach
                 </div>
                 <hr>
@@ -219,15 +229,15 @@
                 </div>
                 <div class="row mt-3">
                     @foreach ($kasEwallet as $data)
-                    <div class="col-xl-3 col-lg-4 col-md-5 col-6">
-                        <a href="{{ url('kas/kas', $data->id) }}" class="card text-white bg-success">
-                            <div class="card-body">
-                                <div class="">{{ $data->no == null ? 0 : $data->no }}</div>
-                                <div class="">{{ $data->nama }}</div>
-                                <div class="">@uang($data->saldo)</div>
-                            </div>
-                        </a>
-                    </div>
+                        <div class="col-xl-3 col-lg-4 col-md-5 col-6">
+                            <a href="{{ url('kas/kas', $data->id) }}" class="card text-white bg-success">
+                                <div class="card-body">
+                                    <div class="">{{ $data->no == null ? 0 : $data->no }}</div>
+                                    <div class="">{{ $data->nama }}</div>
+                                    <div class="">@uang($data->saldo)</div>
+                                </div>
+                            </a>
+                        </div>
                     @endforeach
                 </div>
                 {{-- @endif --}}
@@ -237,8 +247,21 @@
 
                 <hr>
                 <div class="mt-1">
-                    <div class="">
+                    <div class="d-flex justify-content-between">
                         <b>Semua transaksi</b>
+                        <div class="d-flex">
+                            <div class="mr-1">
+                                <select wire:model="pilih_kas_jenis_id" class="form-control" style="width: 200px"
+                                    id="">
+                                    <option value="">Semua Jenis</option>
+                                    @foreach ($kasJenisTransaksi as $data)
+                                        <option value="{{ $data->id }}">{{ $data->nama }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <input type="date" wire:model='dateTransaksi' class="form-control"
+                                style="width: 200px" id="">
+                        </div>
                     </div>
                     <div class="mt-2">
                         <div class="row">
@@ -246,12 +269,10 @@
                                 <div class="card">
                                     <div class="card-header">
                                         <h3 class="card-title">Data</h3>
-
                                         <div class="card-tools">
-
-
                                             <div class="input-group input-group-sm" style="width: 150px;">
-                                                <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
+                                                <input type="text" name="table_search"
+                                                    class="form-control float-right" placeholder="Search">
                                                 <div class="input-group-append">
                                                     <button type="submit" class="btn btn-default">
                                                         <i class="fas fa-search"></i>
@@ -265,6 +286,7 @@
                                             <thead>
                                                 <tr>
                                                     <th>ID</th>
+                                                    <th>waktu</th>
                                                     <th>KAS</th>
                                                     <th>JENIS</th>
                                                     <th>KATEGORI</th>
@@ -276,12 +298,19 @@
                                             </thead>
                                             <tbody>
                                                 @foreach ($kasTransaksi as $data)
-                                                <tr>
-                                                    <td>{{ $data->id }}
-                                                    </td>
-                                                    <td>{{ $data->kas->tipe }} - {{ $data->kas->nama }}</td>
-                                                    <td style="font-size: 17px">
-                                                        <span class="
+                                                    <tr>
+                                                        <td>{{ $data->id }}
+                                                        </td>
+                                                        <td>
+                                                            {{ \Carbon\Carbon::parse($data->created_at)->isoFormat('D MMMM Y, HH:mm') }}
+                                                            -
+                                                            {{ \Carbon\Carbon::parse($data->created_at)->diffForHumans() }}
+
+                                                        </td>
+                                                        <td>{{ $data->kas->tipe }} - {{ $data->kas->nama }}</td>
+                                                        <td style="font-size: 17px">
+                                                            <span
+                                                                class="
 
                                                         @if ($data->jenis) @if ($data->jenis->nama == 'masuk')
                                                         text-white badge badge-success
@@ -293,11 +322,12 @@
 
 
                                                         ">
-                                                            {{ $data->jenis != null ? $data->jenis->nama : '' }}
-                                                        </span>
+                                                                {{ $data->jenis != null ? $data->jenis->nama : '' }}
+                                                            </span>
 
-                                                    </td>
-                                                    <td class="
+                                                        </td>
+                                                        <td
+                                                            class="
 
 
                                                     @if ($data->jenis) @if ($data->jenis->nama == 'masuk')
@@ -310,24 +340,25 @@
 
 
                                                     ">
-                                                        {{ $data->kategori != null ? $data->kategori->nama : '' }}
-                                                    </td>
-                                                    <td>@uang($data->nominal)</td>
-                                                    <td>{{ $data->keterangan }}</td>
-                                                    <td>{{ $data->user != null ? $data->user->nama : '' }}</td>
-                                                    <td>
+                                                            {{ $data->kategori != null ? $data->kategori->nama : '' }}
+                                                        </td>
+                                                        <td>@uang($data->nominal)</td>
+                                                        <td>{{ $data->keterangan }}</td>
+                                                        <td>{{ $data->user != null ? $data->user->nama : '' }}</td>
+                                                        <td>
 
-                                                    </td>
-                                                </tr>
+                                                        </td>
+                                                    </tr>
                                                 @endforeach
                                             </tbody>
                                         </table>
                                     </div>
                                     @if ($takeKasTransaksi <= $kasTransaksi->count())
-                                        <button type="button" class="mt-3 btn btn-info btn-block" wire:click='takeKasTransaksi()'>
+                                        <button type="button" class="mt-3 btn btn-info btn-block"
+                                            wire:click='takeKasTransaksi()'>
                                             Lanjut
                                         </button>
-                                        @endif
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -343,5 +374,23 @@
     .card-text {
         font-size: 14px;
     }
-
 </style>
+
+
+@push('script')
+    <script type="text/javascript">
+        window.onload = function(ev) {
+            if (window.innerHeight + window.scrollY >= document.body.offsetHeight && window.innerHeight + window
+                .pageYOffset >= document.body.offsetHeight) {
+                Livewire.emit('take-data');
+            }
+        }
+
+        window.onscroll = function(ev) {
+            if (window.innerHeight + window.scrollY >= document.body.offsetHeight && window.innerHeight + window
+                .pageYOffset >= document.body.offsetHeight) {
+                Livewire.emit('take-data');
+            }
+        }
+    </script>
+@endpush
