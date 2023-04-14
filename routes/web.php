@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\StrukBillController;
+use App\Http\Controllers\StrukCetakHargaController;
 use App\Http\Controllers\StrukController;
 use App\Http\Controllers\StrukKasirLaporanTutupKas;
 use App\Http\Livewire\Akun\Akun;
@@ -31,6 +32,7 @@ use App\Http\Livewire\Penjualan\PenjualanPage;
 use App\Http\Livewire\Piutang\PiutangPage;
 use App\Http\Livewire\Piutang\PiutangPelangganPage;
 use App\Http\Livewire\Piutang\PiutangSupplierPage;
+use App\Http\Livewire\Produk\ProdukCetakhargaPage;
 use App\Http\Livewire\Produk\ProdukCreatePage;
 use App\Http\Livewire\Produk\ProdukDiskonPage;
 use App\Http\Livewire\Produk\ProdukEditPage;
@@ -163,4 +165,7 @@ Route::middleware(['islogin'])->group(function () {
     Route::get('penjualan/struk/{id}', [StrukController::class, 'index'])->name('struk');
     Route::get('penjualan/struk/kasir/tutup/{id}', [StrukKasirLaporanTutupKas::class, 'index']);
     Route::get('penjualan/struk/bill/{id}', [StrukBillController::class, 'index']);
+
+    Route::get('produk/cetak-harga', ProdukCetakhargaPage::class);
+    Route::get('struk/cetak-harga', [StrukCetakHargaController::class, 'index']);
 });

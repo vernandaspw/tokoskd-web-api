@@ -166,6 +166,7 @@
 
                                                 <th>Satuan</th>
                                                 <th>Konversi</th>
+                                                <th>Harga beli</th>
                                                 <th>Harga pokok</th>
                                                 <th>Harga jual</th>
                                                 <td>Untung</td>
@@ -203,6 +204,9 @@
                                                     </td>
                                                     <td>
                                                         {{ $data->konversi }}
+                                                    </td>
+                                                    <td>
+                                                        @uang($data->harga_beli)
                                                     </td>
                                                     <td>
                                                         @uang($data->harga_pokok)

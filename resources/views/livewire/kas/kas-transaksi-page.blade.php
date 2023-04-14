@@ -183,7 +183,7 @@
                                         <select required wire:model='tujuan_id' id="tujuan_id" class="form-control">
                                             <option value="">Pilih</option>
                                             @foreach ($kas as $data)
-                                            <option value="{{ $data->id }}">{{ $data->tipe }} - {{ $data->nama }}</option>
+                                            <option value="{{ $data->id }}">{{ $data->tipe }} - {{ $data->nama }} - @uang($data->saldo)</option>
                                             @endforeach
                                         </select>
                                     </div>

@@ -135,6 +135,58 @@ class KasirDetailPage extends Component
         $this->kasirID = $id;
     }
 
+    public function readbarcode()
+    {
+         if ($this->cariBarcode) {
+            $barcodeProduk = ProdukItem::with('produk')
+                ->Where('barcode1', $this->cariBarcode)
+                ->orWhere('barcode2', $this->cariBarcode)
+                ->orWhere('barcode3', $this->cariBarcode)
+                ->orWhere('barcode4', $this->cariBarcode)
+                ->orWhere('barcode5', $this->cariBarcode)
+                ->orWhere('barcode6', $this->cariBarcode);
+
+            $dataBarcode = $barcodeProduk->get();
+
+            if ($dataBarcode->count() > 1) {
+                // cari konversi terendah
+                $konversi_terendah = $dataBarcode->min('konversi');
+                $dataTerendah = $barcodeProduk->where('konversi', $konversi_terendah)->first();
+                // dd($dataTerendah);
+                // add data tambah barang dengan koonversi terendah
+                $id = $dataTerendah->id;
+                $this->addCardItem($id);
+                $this->itemID = null;
+                $this->cariBarcode = null;
+
+                // tampilkan data produk dari produk_id nya produk item barcode
+                // produk_id yang telah dikonversi
+                $produk_id_kon = $dataTerendah->produk_id;
+
+                $this->produkitem = ProdukItem::where('produk_id', $produk_id_kon)->get();
+                // dd($this->produkitem);
+            } elseif ($dataBarcode->count() == 1) {
+                // cek diskon
+                $dataFind = $barcodeProduk->first();
+                $id = $dataFind->id;
+                $this->addCardItem($id);
+                $this->itemID = null;
+                $this->cariBarcode = null;
+
+                // cari produk_id
+                $produk_id_kon = $dataFind->produk_id;
+                $this->produkitem = ProdukItem::where('produk_id', $produk_id_kon)->get();
+
+            } else {
+                $dataNama = $pi->whereRelation('produk', 'nama', 'like', '%' . $this->cariBarcode . '%')->first();
+                if ($dataNama) {
+                    $pi->whereRelation('produk', 'nama', 'like', '%' . $this->cariBarcode . '%');
+                }
+                $this->produkitem = $pi->take($this->takeprodukitem)->get();
+            }
+        }
+    }
+
     public function render()
     {
         $this->bills = Bill::get();
@@ -294,6 +346,7 @@ class KasirDetailPage extends Component
 
         return view('livewire.penjualan.kasir-detail-page')->extends('layouts.app')->section('content');
     }
+
 
     public $bayar_tunai_pending = false;
 

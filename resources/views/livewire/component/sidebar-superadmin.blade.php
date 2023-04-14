@@ -124,6 +124,16 @@
                             </p>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a href="{{ url('produk/cetak-harga') }}"
+                        class="nav-link @if (Request::is('produk/cetak-harga*')) active @endif">
+                            <i class="nav-icon fas fa-th"></i>
+                            <p>
+                                Cetak harga
+                                {{-- <span class="right badge badge-danger"> ! </span> --}}
+                            </p>
+                        </a>
+                    </li>
 
                     <li class="nav-item">
                         <a href="#" class="nav-link">

@@ -75,7 +75,7 @@ class ProdukStokPage extends Component
             $this->stokBeli = $produk->stok_beli;
             $this->stokBuku = $produk->stok_buku;
             $this->satuanNama = $produk->satuan->satuan;
-            $this->harga_pokok = $produk->harga_pokok;
+            $this->harga_pokok = $produk->harga_beli;
             $this->harga_jual = $produk->harga_jual;
 
             $jenis = StokJenis::where('nama', 'masuk')->first();

@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Produk;
 
 use App\Models\Catalog;
+use App\Models\CetakHarga;
 use App\Models\Kategori;
 use App\Models\Merek;
 use App\Models\Produk;
@@ -37,6 +38,19 @@ class ProdukEditPage extends Component
     public $e_barcode1, $e_barcode2, $e_barcode3, $e_barcode4, $e_barcode5, $e_barcode6, $e_satuan_id, $e_konversi = 1, $e_harga_pokok, $e_harga_jual;
 
     public $satuanDasar;
+
+    public $jml_cetak;
+
+    public function tambahCetakHarga()
+    {
+        $produk_id = $this->ID;
+        CetakHarga::create([
+            'user_id' => auth()->user()->id,
+            'produk_id' => $produk_id,
+        ]);
+        // nanti urutkan print orderBy produkID. jadi produk berurutan berapa kali cetak
+        $this->emit('success', ['pesan' => 'Berhasil tambah ke daftar cetak']);
+    }
 
     public function generateHargaPokok()
     {
@@ -123,6 +137,11 @@ class ProdukEditPage extends Component
 
     public function render()
     {
+        if ($this->ID) {
+            $this->jml_cetak = CetakHarga::where('produk_id', $this->ID)->count();
+        }
+
+
         $merek = Merek::latest();
         if ($this->merek_input) {
             $merek->where('nama', 'LIKE', '%' . $this->merek_input . '%');

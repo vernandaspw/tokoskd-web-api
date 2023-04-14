@@ -29,7 +29,7 @@ class KasTransaksiPage extends Component
 
         $jenisKeluar = KasTJenis::where('nama', 'keluar')->first();
         $this->jenisKeluar_id = $jenisKeluar->id;
-        $this->kategoriKeluar = KasTKategori::where('kas_t_jenis_id', $this->jenisKeluar_id)->get();
+        $this->kategoriKeluar = KasTKategori::where('kas_t_jenis_id', $this->jenisKeluar_id)->where('nama', '!=', 'titip uang')->get();
 
         return view('livewire.kas.kas-transaksi-page')->extends('layouts.app')->section('content');
     }

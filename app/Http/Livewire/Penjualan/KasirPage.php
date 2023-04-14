@@ -25,7 +25,7 @@ class KasirPage extends Component
 
     public $kasData;
 
-    public $kas_tutup, $selisih;
+    public $kas_tutup, $selisih, $kas_ditarik, $sisa_dikasir;
     // public $total_uang_masuk;
 
     public $take_report = 15;
@@ -43,7 +43,7 @@ class KasirPage extends Component
 
         $this->KasirReportAll = KasirReport::latest()->take($this->take_report)->get();
 
-        if ($this->kasiractive == NULL) {
+        if ($this->kasiractive == null) {
             // ada
             foreach ($this->kasiractive as $data) {
                 $dc = $data->kas->sum('saldo_selisih');
@@ -90,8 +90,15 @@ class KasirPage extends Component
             $this->kasData = $cekKasir->kas;
             $this->kas_akhir = $this->kasData->saldo;
 
-            $kas_tutup = $this->kas_tutup != null ? $this->kas_tutup : 0;
-            $this->selisih = $kas_tutup - $this->kas_akhir;
+            // $this->kas_tutup = ;
+            $this->selisih = ($this->kas_tutup != null ? $this->kas_tutup : 0) - $this->kas_akhir;
+
+            // ditarik
+            // sisa dikasir = $kas_tutup - ditarik
+            // $this->kas_ditarik = $this->kas_ditarik != null ? $this->kas_ditarik : 0;
+
+            $this->sisa_dikasir = $this->kas_ditarik != null ? ($this->kas_tutup != null ? $this->kas_tutup : 0) - ($this->kas_ditarik != null ? $this->kas_ditarik : 0) : 0;
+            // $this->sisa_dikasir = $kas_sisa_dikasir;
 
             // update saldo kas saat ini saat klik ismpan
             $this->saldo_kas = $this->kasData->saldo + $this->selisih;
@@ -105,6 +112,17 @@ class KasirPage extends Component
             $this->omset = $pen->get()->sum('omset');
             $this->untung = $pen->get()->sum('untung');
 
+        }
+
+        if ($this->terimaKasTutupID) {
+            $report = KasirReport::find($this->terimaKasTutupID);
+            if ($this->revisi_kas_ditarik) {
+                $revisi_kas_ditarik = $this->revisi_kas_ditarik;
+            } else {
+                $revisi_kas_ditarik = $report->kas_ditarik;
+                $this->revisi_kas_ditarik = $revisi_kas_ditarik;
+            }
+            $this->revisi_sisa_dikasir = $report->kas_tutup - $revisi_kas_ditarik;
         }
 
         return view('livewire.penjualan.kasir-page')->extends('layouts.app')->section('content');
@@ -177,7 +195,7 @@ class KasirPage extends Component
             ]);
         }
 
-        redirect('penjualan/kasir/'. $id);
+        redirect('penjualan/kasir/' . $id);
     }
 
     public $bukaKas_id, $tutupKas_id, $namaKasir;
@@ -229,91 +247,187 @@ class KasirPage extends Component
     public function tutup_kas_simpan()
     {
         $d = KasirReport::find($this->reportID);
-        $d->update([
-            'total_uang_masuk' => $this->total_uang_masuk,
-            'total_uang_keluar' => $this->total_uang_keluar,
-            'kas_akhir' => $this->kas_akhir,
-            'kas_tutup' => $this->kas_tutup,
-            'selisih' => $this->selisih,
-            'jumlah_transaksi' => $this->jumlah_penjualan,
-            'tagihan_utang' => $this->tagihan_utang,
-            'uang_tunai' => $this->uang_tunai,
-            'uang_nontunai' => $this->uang_nontunai,
-            'tagihan_utang' => $this->tagihan_utang,
-            'omset' => $this->omset,
-            'untung' => $this->untung,
-            'tutup_oleh' => auth()->user()->id,
-            'tutup_at' => now(),
-            'status' => 'pending',
-        ]);
-        // update kas
-        // $kasir = Kasir::find($this->kasirID);
-        // $kasKasir = Kas::find($kasir->kas_id);
-        // $kasKasir->update([
+        if ($this->kas_ditarik > $this->kas_ditarik) {
+            $this->emit('error', ['pesan' => 'jumlah kas ditarik tidak boleh melebihi jumlah tutup kas']);
+        } elseif ($this->kas_ditarik <= $this->kas_ditarik) {
+            $d->update([
+                'total_uang_masuk' => $this->total_uang_masuk,
+                'total_uang_keluar' => $this->total_uang_keluar,
+                'kas_akhir' => $this->kas_akhir,
+                'kas_tutup' => $this->kas_tutup,
+                'selisih' => $this->selisih,
+                'kas_ditarik' => $this->kas_ditarik,
+                'sisa_dikasir' => $this->sisa_dikasir,
+                'jumlah_transaksi' => $this->jumlah_penjualan,
+                'tagihan_utang' => $this->tagihan_utang,
+                'uang_tunai' => $this->uang_tunai,
+                'uang_nontunai' => $this->uang_nontunai,
+                'tagihan_utang' => $this->tagihan_utang,
+                'omset' => $this->omset,
+                'untung' => $this->untung,
+                'tutup_oleh' => auth()->user()->id,
+                'tutup_at' => now(),
+                'status' => 'pending',
+            ]);
+            // update kas
+            // $kasir = Kasir::find($this->kasirID);
+            // $kasKasir = Kas::find($kasir->kas_id);
+            // $kasKasir->update([
 
-        // ]);
+            // ]);
 
-        $this->emit('cetakStrukTutup', ['url' => url('penjualan/struk/kasir/tutup/' . $this->reportID), 'title' => 'struk laporan tutup kas']);
-        $this->close();
-    }
-
-    public function terimaKasTutup($id)
-    {
-        $report = KasirReport::find($id);
-
-        $kategori_id = KasTKategori::where('nama', 'tutup kasir')->first()->id;
-
-        $kas = Kas::find($report->kasir->kas_id);
-        $kasTujuan = Kas::find(1);
-
-        if ($report->selisih > 0) {
-            // jika selisih bertambah
-            $asal_saldo = $kas->saldo - ($report->kas_tutup - $report->selisih);
-            $asal_saldo_selisih = $kas->saldo_selisih + $report->selisih;
-        } else {
-            // jika berkurang
-            $asal_saldo = $kas->saldo - ($report->kas_tutup - $report->selisih);
-            $asal_saldo_selisih = $kas->saldo_selisih + $report->selisih;
+            $this->emit('cetakStrukTutup', ['url' => url('penjualan/struk/kasir/tutup/' . $this->reportID), 'title' => 'struk laporan tutup kas']);
+            $this->close();
         }
 
-        // ASAL
-        $jenisKeluar = KasTJenis::where('nama', 'keluar')->first();
-        $asal = KasTransaksi::create([
-            'kas_t_jenis_id' => $jenisKeluar->id,
-            'kas_t_kategori_id' => $kategori_id,
-            'kas_id' => $report->kasir->kas_id,
-            'nominal' => $report->kas_tutup,
-            'keterangan' => 'asal kas tutup',
-            'user_id' => auth()->user()->id,
-        ]);
+    }
 
-        $kas->update([
-            'saldo' => $asal_saldo,
-            'saldo_selisih' => $asal_saldo_selisih,
-        ]);
+    public $revisi_kas_ditarik;
 
-        $jenisMasuk = KasTJenis::where('nama', 'masuk')->first();
-        // Tujuan /masuk
+    public $terimaKasTutupID;
+    // jgn lupa reset jika telah Terima
 
-        $trx = KasTransaksi::create([
-            'kas_t_jenis_id' => $jenisMasuk->id,
-            'kas_t_kategori_id' => $kategori_id,
-            'kas_id' => $kasTujuan->id,
-            'nominal' => $report->kas_tutup,
-            'keterangan' => 'dari kas tutup',
-            'user_id' => auth()->user()->id,
-            'asal_id' => $asal->id,
-        ]);
+    public $terimaKasTutupPage = false;
 
-        $kasTujuan->update([
-            'saldo' => $kasTujuan->saldo + $report->kas_tutup,
-        ]);
+    public $kr_kas_awal,
+    $kr_total_uang_masuk,
+    $kr_total_uang_keluar,
+    $kr_kas_akhir,
+    $kr_kas_tutup,
+    $kr_selisih,
+    $kr_kas_ditarik,
+    $kr_sisa_dikasir,
+    $kr_jumlah_transaksi,
+    $kr_uang_tunai,
+    $kr_uang_nontunai,
+    $kr_tagihan_utang,
+    $kr_omset,
+    $kr_untung,
+    $kr_buka_oleh,
+    $kr_tutup_oleh,
+        $kr_tutup_at
+    ;
 
-        $report->update([
-            'status' => 'close',
-        ]);
+    public function resetTerimaTutupKas()
+    {
+        $this->terimaKasTutupID = null;
+        $this->kr_kas_awal = null;
+        $this->kr_total_uang_masuk = null;
+        $this->kr_total_uang_keluar = null;
+        $this->kr_kas_akhir = null;
+        $this->kr_kas_tutup = null;
+        $this->kr_selisih = null;
+        $this->kr_kas_ditarik = null;
+        $this->kr_sisa_dikasir = null;
+        $this->kr_jumlah_transaksi = null;
+        $this->kr_uang_tunai = null;
+        $this->kr_uang_nontunai = null;
+        $this->kr_tagihan_utang = null;
+        $this->kr_omset = null;
+        $this->kr_untung = null;
+        $this->kr_buka_oleh = null;
+        $this->kr_tutup_oleh = null;
+        $this->kr_tutup_at = null;
+    }
+    public function closeTutupTerimaKas()
+    {
+        $this->terimaKasTutupPage = false;
+        $this->resetTerimaTutupKas();
+    }
+    public function terimaKasTutupToggle($id)
+    {
+        $this->terimaKasTutupID = $id;
+        $this->terimaKasTutupPage = true;
 
-        $this->emit('success', ['pesan' => 'Berhasil terima uang dari tutup kasir']);
+        $report = KasirReport::find($id);
+        $this->kr_kas_awal = $report->kas_awal;
+        $this->kr_total_uang_masuk = $report->total_uang_masuk;
+        $this->kr_total_uang_keluar = $report->total_uang_keluar;
+        $this->kr_kas_akhir = $report->kas_akhir;
+        $this->kr_kas_tutup = $report->kas_tutup;
+        $this->kr_selisih = $report->selisih;
+        $this->kr_kas_ditarik = $report->kas_ditarik;
+        $this->kr_sisa_dikasir = $report->sisa_dikasir;
+        $this->kr_jumlah_transaksi = $report->jumlah_transaksi;
+        $this->kr_uang_tunai = $report->uang_tunai;
+        $this->kr_uang_nontunai = $report->uang_nontunai;
+        $this->kr_tagihan_utang = $report->tagihan_utang;
+        $this->kr_omset = $report->omset;
+        $this->kr_untung = $report->untung;
+        $this->kr_buka_oleh = $report->buka_oleh;
+        $this->kr_tutup_oleh = $report->tutup_oleh;
+        $this->kr_tutup_at = $report->tutup_at;
+    }
+
+    public $revisi_sisa_dikasir;
+    public function terimaKasTutup()
+    {
+        if ($this->terimaKasTutupID) {
+            $id = $this->terimaKasTutupID;
+            $report = KasirReport::find($id);
+
+            $kategori_id = KasTKategori::where('nama', 'tutup kasir')->first()->id;
+
+            $kas = Kas::find($report->kasir->kas_id);
+            $kasTujuan = Kas::find(1);
+
+            if ($this->revisi_kas_ditarik > $report->kas_tutup) {
+                $this->emit('error', ['pesan' => 'Jumlah tarik tidak boleh melebihi jumlah tutup kas']);
+            } elseif ($this->revisi_kas_ditarik <= $report->kas_tutup) {
+                // jika ada perubahan kas ditarik ketika terima
+                $revisi_kas_ditarik = $this->revisi_kas_ditarik != null ? $this->revisi_kas_ditarik : $report->kas_ditarik;
+                $revisi_sisa_dikasir = $report->kas_tutup - $revisi_kas_ditarik;
+
+                $asal_saldo = $kas->saldo - ($report->kas_tutup - $revisi_kas_ditarik);
+                // dd($asal_saldo);
+                $asal_saldo_selisih = $kas->saldo_selisih + $report->selisih;
+                // ASAL
+                $jenisKeluar = KasTJenis::where('nama', 'keluar')->first();
+                $asal = KasTransaksi::create([
+                    'kas_t_jenis_id' => $jenisKeluar->id,
+                    'kas_t_kategori_id' => $kategori_id,
+                    'kas_id' => $report->kasir->kas_id,
+                    'nominal' => $this->revisi_kas_ditarik,
+                    'keterangan' => 'asal kas tutup',
+                    'user_id' => auth()->user()->id,
+                ]);
+
+                $kas->update([
+                    'saldo' => $kas->saldo - $asal_saldo,
+                    'saldo_selisih' => $asal_saldo_selisih,
+                ]);
+
+                $jenisMasuk = KasTJenis::where('nama', 'masuk')->first();
+                // Tujuan /masuk
+
+                // LANJUT DISINI
+                $trx = KasTransaksi::create([
+                    'kas_t_jenis_id' => $jenisMasuk->id,
+                    'kas_t_kategori_id' => $kategori_id,
+                    'kas_id' => $kasTujuan->id,
+                    'nominal' => $this->revisi_kas_ditarik,
+                    'keterangan' => 'dari kas tutup',
+                    'user_id' => auth()->user()->id,
+                    'asal_id' => $asal->id,
+                ]);
+
+                $kasTujuan->update([
+                    'saldo' => $kasTujuan->saldo + $this->revisi_kas_ditarik,
+                ]);
+
+                $report->update([
+                    'kas_ditarik' => $revisi_kas_ditarik,
+                    'sisa_dikasir' => $revisi_sisa_dikasir,
+                    'status' => 'close',
+                ]);
+                $this->resetTerimaTutupKas();
+                $this->terimaKasTutupPage = false;
+                $this->emit('success', ['pesan' => 'Berhasil terima uang dari tutup kasir']);
+            }
+        } else {
+            $this->emit('error', ['pesan' => 'Tidak memiliki id kasir report']);
+        }
+
     }
 
     public function cetak()

@@ -269,6 +269,9 @@
                                 <div class="mb-2 d-flex justify-content-between">
                                     <h5>Produk Item</h5>
                                     <div class="">
+                                        <button type="button" wire:click.prevent="tambahCetakHarga()" class="btn btn-warning ">+Cetak Harga @if($jml_cetak)
+                                            <div class="badge badge-light">{{ $jml_cetak }}</div>
+                                        @endif </button>
                                         <button type="button" wire:click="generateHargaPokok()" class="btn btn-info">Generate Harga Pokok</button>
                                         <button type="button" wire:click="generateHargaJual()" class="btn btn-success">Generate Harga Jual</button>
                                         @if($tambahItem)
@@ -411,7 +414,6 @@
                                     </div>
                                     <div class="mt-2">
                                         <label for="" class="m-0">Harga pokok : @uang($harga_pokok == null ? 0 : $harga_pokok)</label>
-
                                         <input wire:model='harga_pokok' type="number" class="form-control form-control-sm" placeholder="harga pokok..">
                                     </div>
                                     <div class="mt-2">

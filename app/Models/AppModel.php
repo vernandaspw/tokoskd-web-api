@@ -11,13 +11,14 @@ class AppModel extends Model
 
     public static function getIP()
     {
-        $ip = $_SERVER['SERVER_ADDR'];
 
+        $ip = request()->server('SERVER_ADDR');
+        // $ip = '';
 
         $data = [
-           'ip' => $ip,
-           'url' => '/tokoskd/public',
-           'app_url' => 'http://'.$ip. env('SUB_URL'),
+            'ip' => $ip,
+            'url' => '/tokoskd/public',
+            'app_url' => 'http://' . $ip . env('SUB_URL'),
         ];
 
         return $data;
@@ -29,6 +30,5 @@ class AppModel extends Model
         $persen = 0;
         return $persen;
     }
-
 
 }

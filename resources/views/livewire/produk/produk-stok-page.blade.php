@@ -146,9 +146,9 @@
                                         </div>
                                         @if($perlu_ubah_harga)
                                         <div class="">
-                                            <label class="m-0" for="">Harga pokok saat ini : @uang($harga_pokok)</label>
+                                            <label class="m-0" for="">Harga beli saat ini : @uang($harga_pokok)</label>
                                         </div>
-                                        
+
                                         <div class="mb-1">
                                             <label for="" class="m-0">Harga beli baru</label>
                                             <input placeholder="(optional)" type="number" class="form-control form-control-sm" wire:model='harga_pokok_akhir'>

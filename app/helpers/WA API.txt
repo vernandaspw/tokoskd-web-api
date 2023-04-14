@@ -1,0 +1,12 @@
+https://api.whatsapp.com/send?phone=6289660741134&text=Saya%20*($Nama)*.%0AIsi%20Pesan:%20($pesan).
+
+%20 untuk spasi
+%3A untuk tanda titik 2
+%0A untuk enter/baris baru
+
+( * ) tebal. Misalnya *nama*
+( _ ) miring. Misalnya _nama_
+( ~ ) coret. Misalnya ~nama~
+
+
+https://api.whatsapp.com/send?phone=6282282998204&text=Saya%20Mau%20Pesan%20undangannya%20

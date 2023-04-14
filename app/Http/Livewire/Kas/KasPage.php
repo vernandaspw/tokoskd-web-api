@@ -55,6 +55,7 @@ class KasPage extends Component
             $kast->where('kas_t_jenis_id', $this->pilih_kas_jenis_id);
         }
         $kast->whereDate('created_at', $dateTransaksi);
+        
         $this->kasTransaksi = $kast->latest()->take($this->takeKasTransaksi)->get();
 
         return view('livewire.kas.kas-page')->extends('layouts.app')->section('content');

@@ -1,0 +1,115 @@
+ssh -p 65002 u206068608@153.92.13.153
+====================================================================
+EXPRESSS
+-------------------------------------------------------------------
+npm install express
+npm install -g express-generator
+express --no-view
+npm install express-session express-validator express-fileupload jsonwebtoken dotenv bcrypt cookie-parser cors mysql2 sequelize sequelize-cli nodemailer nodemon
+
+Bendera HttpOnly- untuk mencegah JavaScript membaca token.
+Sebuah tanda secure=trueyang akan menyebabkan data dikirim hanya melalui HTTPS.
+Bendera SameSite=strict harus digunakan sebisa mungkin untuk melindungi dari serangan CSRF.
+
+NO TRANSAKSI
+20221201122102293
+$make_no = date('Y') . date('m') . date('d') . date('H') . date('i')  . date('s')  . rand(001, 999);
+                    $cek = CustomerDompetTransaksi::where('no', $make_no)->first();
+                    if ($cek != null) {
+                        $make_no = 'C' .  date('Y') . date('m') . date('d') . date('H') . date('i')  . date('s')  . rand(001, 999);
+                    }
+=====================================================================
+DELETE FILE TMP LIVEWIRE
+------------------------------------------------------------------
+  $storage = Storage::disk('public');
+        if ($storage) {
+            foreach ($storage->allFiles('livewire-tmp') as $filePathname) {
+                $storage->delete($filePathname);
+            }
+        }
+=================================================================
+onclick="confirm('Anda yakin?') || event.stopImmediatePropagation()"
+============================================================
+MATA UANG - Provider
+------------------------------------------------------------
+ Schema::defaultStringLength(191);
+
+        Blade::directive('uang', function ($expression) {
+            return "Rp. {{ number_format($expression,0,',','.'); }}";
+        });
+        Blade::directive('uangold', function ($expression) {
+            return "Rp.  number_format($expression,0,',','.');";
+        });
+
+        Blade::directive('diskon', function ($expression) {
+            return "{{ number_format($expression,0,',','.'); }} %";
+        });
+
+        Blade::directive('rating', function ($expression) {
+            return "{{ number_format($expression,1,',','.'); }}";
+        });
+
+        Paginator::useBootstrap();
+==============================================================
+
+===========================================================
+AndroidManifest
+--------------------------------------------------------
+android/app/src/main/AndroidManifest.xml
+
+<uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+<manifest xlmns:android...>
+ ...
+ <uses-permission android:name="android.permission.INTERNET" />
+ <application ...
+</manifest>
+============================================================
+ln -s /home/u206068608/domains/vernandaspw.my.id/aplikasi-penjualan-prima-febian-mandiri/storage/app/public /home/u206068608/domains/vernandaspw.my.id/public_html/iramabaru/storage
+
+ln -s /home/u206068608/domains/beresdigital.com/beresdigitallaravel/storage/app/public /home/u206068608/domains/beresdigital.com/public_html/storage
+
+ln -s /home/u206068608/domains/lalandigital.com/lalandigital/storage/app/public /home/u206068608/domains/lalandigital.com/public_html/storage
+==============================================================
+$image = $req->file('img')->store('img/olahraga');
+==========================================================
+Edit config/app.php
+
+{{ \Carbon\Carbon::parse($data['estimasi'])->diffForHumans() }}
+{{ \Carbon\Carbon::parse($data)->isoFormat('D MMMM Y, HH:mm') }}
+
+$today = Carbon::now()->isoFormat('D MMMM Y');
+// "28 Juni 2020"
+
+$today = Carbon::now()->isoFormat('dddd, D MMMM Y');
+// "Minggu, 28 Juni 2020"
+
+$today = Carbon::now()->isoFormat('dddd, D MMM Y');
+// "Minggu, 28 Jun 2020"
+
+$registeredAt = $user->created_at->isoFormat('dddd, D MMMM Y');
+// "Minggu, 28 Juni 2020"
+
+$lastUpdated = $post->updated_at->diffForHumans(); 
+// "2 hari yang lalu"
+
+Format		Hasil		Penjelasan
+e		siang		am pm
+H		20		24 jam
+m 		3		Menit
+D		8		Tanggal dari 1-31
+DD		08		Tanggal dari 1-31
+d		3		Nomor hari (0 – 6) (Minggu – Sabtu)
+dd / ddd	Mg / Min	Nama hari disingkat
+dddd		Minggu		Nama hari
+M		6		Bulan dari 1-12
+MM		06		Bulan dari 01-12
+MMM		Jun		Nama bulan disingkat
+MMMM		Juni		Nama bulan
+Y		2021		Tahun
+======================================================================
+php artisan cache:clear 
+php artisan view:clear
+php artisan config:clear

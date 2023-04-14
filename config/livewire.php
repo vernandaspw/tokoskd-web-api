@@ -57,6 +57,7 @@ return [
     */
 
     // 'asset_url' => env('APP_URL'),
+    // 'asset_url' => AppModel::getIP()['app_url'],
     'asset_url' => AppModel::getIP()['app_url'],
 
     /*

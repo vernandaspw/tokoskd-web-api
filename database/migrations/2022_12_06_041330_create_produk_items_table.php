@@ -27,6 +27,7 @@ return new class extends Migration
             // $table->boolean('satuan_dasar')->default(0);
             $table->foreignId('satuan_id')->constrained('satuans')->onUpdate('cascade')->onDelete('cascade');
             $table->integer('konversi')->default(1);
+            $table->decimal('harga_beli', 14, 2)->default(0);
             $table->decimal('harga_pokok', 14, 2)->default(0);
             $table->decimal('harga_jual', 14, 2)->default(0);
 

@@ -133,18 +133,35 @@
                                 <input type="text" disabled value="@uang($d_hutang)" class="form-control" name="" id="">
                             </div>
                             <div class="">
+                                <label class="mb-0" for="">Titip uang usaha saya</label>
+                                <input type="text" disabled value="@uang($d_titip_uang_usaha)" class="form-control" name="" id="">
+                            </div>
+                            @if ($bayar_sisa_hutang_usaha > 0)
+                            <div class="">
                                 <label class="mb-0" for="">Pilih kas</label>
-                                <select required class="form-control" wire:model='d_kas_id' id="">
+                                <select
+                                @if ($bayar_sisa_hutang_usaha > 0)
+                                required
+                                @endif
+                                 class="form-control" wire:model='d_kas_id' id="">
                                     <option value="">Pilih</option>
                                     @foreach ($kas as $data)
                                         <option value="{{ $data->id }}">{{ $data->tipe }} - {{ $data->nama }} - @uang($data->saldo)</option>
                                     @endforeach
                                 </select>
                             </div>
+                            @endif
+
+                            <div class="mb-1 mt-1">
+                                <label for="sisa_hutang">Sisa hutang usaha : @uang($bayar_sisa_hutang_usaha != null ? $bayar_sisa_hutang_usaha : 0)</label>
+
+                            </div>
+                            @if ($bayar_sisa_hutang_usaha)
                             <div class="">
                                 <label class="mb-0" for="">jumlah (@uang($d_jumlah))</label>
-                                <input required type="number" wire:model.lazy='d_jumlah' class="form-control" name="" id="">
+                                <input max="{{ $bayar_sisa_hutang_usaha }}" required type="number" wire:model.lazy='d_jumlah' class="form-control" name="" id="">
                             </div>
+                            @endif
                             <div class="">
                                 <label class="mb-0" for="">Keterangan</label>
                                 <input type="text" wire:model='d_keterangan' class="form-control" name="" id="">
